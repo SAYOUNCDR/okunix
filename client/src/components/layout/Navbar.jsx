@@ -7,11 +7,24 @@ const Navbar = () => {
   const [stars, setStars] = useState(0);
 
   useEffect(() => {
-    // Fetch GitHub stars (replace with your actual repo)
-    fetch("https://api.github.com/repos/sayoun/okunix")
-      .then((res) => res.json())
-      .then((data) => setStars(data.stargazers_count || 0))
-      .catch(() => setStars(0));
+    // Fetch GitHub stars
+    const fetchStars = async () => {
+      try {
+        const res = await fetch(
+          "https://api.github.com/repos/#/okunix"
+        );
+        if (res.ok) {
+          const data = await res.json();
+          // Use nullish coalescing to allow 0 as a valid value
+          setStars(data.stargazers_count ?? 0);
+        }
+      } catch (error) {
+        console.error("Failed to fetch stars:", error);
+        setStars(0);
+      }
+    };
+
+    fetchStars();
   }, []);
 
   return (

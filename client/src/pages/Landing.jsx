@@ -1,13 +1,13 @@
-import React from "react";
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 const Landing = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
 
       {/* Hero Section Placeholder */}
-      <div className="pt-32 pb-20 px-6 text-center">
+      <div className="pt-32 pb-20 px-6 text-center grow">
         <h1 className="text-5xl font-bold text-gray-900 mb-6">
           Privacy-focused Analytics <br />
           <span className="text-[#F38020]">Made Simple</span>
@@ -20,6 +20,8 @@ const Landing = () => {
           Dashboard Preview Placeholder
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
