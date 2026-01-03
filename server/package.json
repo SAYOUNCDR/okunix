@@ -1,13 +1,14 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "A self-hosted, privacy-focused web analytics platform built with React, Express, PostgreSQL, and Docker.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Sayoun Parui",
+  "license": "MIT",
   "type": "commonjs"
 }
