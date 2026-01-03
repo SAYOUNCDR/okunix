@@ -4,43 +4,19 @@ import { Github } from "lucide-react";
 import Button from "../common/Button";
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [stars, setStars] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
     // Fetch GitHub stars (replace with your actual repo)
     fetch("https://api.github.com/repos/sayoun/okunix")
       .then((res) => res.json())
       .then((data) => setStars(data.stargazers_count || 0))
       .catch(() => setStars(0));
-
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center ${
-        isScrolled ? "pt-4" : ""
-      }`}
-    >
-      <nav
-        className={`
-          transition-all duration-300 
-          flex items-center justify-between 
-          px-6 py-3
-          ${
-            isScrolled
-              ? "w-[90%] max-w-6xl bg-white/80 backdrop-blur-md shadow-lg rounded-2xl border border-gray-200/50"
-              : "w-full bg-white border-b border-gray-100"
-          }
-        `}
-      >
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
+      <nav className="flex items-center justify-between px-6 py-3 w-full max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-0.5">
           <img
@@ -49,7 +25,7 @@ const Navbar = () => {
             className="h-8 w-auto object-contain"
           />
           <span className="font-bold text-xl tracking-tight text-gray-900">
-            kUnix
+            kunix
           </span>
         </Link>
 
@@ -62,12 +38,6 @@ const Navbar = () => {
             Features
           </Link>
           <Link
-            to="/pricing"
-            className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
-          >
-            Pricing
-          </Link>
-          <Link
             to="/docs"
             className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
           >
@@ -78,6 +48,12 @@ const Navbar = () => {
             className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
           >
             Blog
+          </Link>
+          <Link
+            to="/sponsor"
+            className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
+          >
+            Sponsor
           </Link>
         </div>
 
