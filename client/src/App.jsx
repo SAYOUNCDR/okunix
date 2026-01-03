@@ -1,9 +1,16 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+
 function App() {
   return (
-    <div>
-      <h1>Okunix</h1>
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        {/* Add more routes here later */}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
