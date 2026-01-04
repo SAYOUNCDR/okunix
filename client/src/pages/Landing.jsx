@@ -1,5 +1,7 @@
+import React from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
+import SimpleSetup from "../components/sections/SimpleSetup";
 
 const Landing = () => {
   return (
@@ -16,9 +18,11 @@ const Landing = () => {
           Track your website traffic without compromising user privacy. No
           cookies, no GDPR consent banners, just pure insights.
         </p>
-        <div className="h-96 bg-white rounded-2xl shadow-xl border border-gray-200 max-w-5xl mx-auto flex items-center justify-center text-gray-400">
+        <div className="h-96 bg-white rounded-2xl shadow-xl border border-gray-200 max-w-5xl mx-auto flex items-center justify-center text-gray-400 mb-20">
           Dashboard Preview Placeholder
         </div>
+
+        <SimpleSetup />
       </div>
 
       <Footer />
