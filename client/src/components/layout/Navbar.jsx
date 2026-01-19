@@ -10,9 +10,7 @@ const Navbar = () => {
     // Fetch GitHub stars
     const fetchStars = async () => {
       try {
-        const res = await fetch(
-          "https://api.github.com/repos/#/okunix"
-        );
+        const res = await fetch("https://api.github.com/repos/#/okunix");
         if (res.ok) {
           const data = await res.json();
           // Use nullish coalescing to allow 0 as a valid value
@@ -28,8 +26,8 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
-      <nav className="flex items-center justify-between px-6 py-3 w-full max-w-7xl mx-auto">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl shadow-sm">
+      <nav className="flex items-center justify-between px-6 py-3 w-full">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-0.5">
           <img

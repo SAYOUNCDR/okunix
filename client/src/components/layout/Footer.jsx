@@ -157,8 +157,7 @@ const Footer = () => {
           <div className="flex items-center gap-2 text-gray-500 text-sm">
             <span className="text-lg">🍪</span>
             <span>
-              Cookies are not set and no personal data is collected. Just pure
-              analytics.
+              Pure Analytics 
             </span>
           </div>
 
