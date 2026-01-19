@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-white pt-20 pb-10 border-t border-gray-100">
+    <footer className="pt-20 pb-10 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
           {/* Brand Column */}
@@ -42,7 +42,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/features"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Features
                   </Link>
@@ -50,7 +50,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/pricing"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Sponsor
                   </Link>
@@ -58,7 +58,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/login"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Login
                   </Link>
@@ -66,7 +66,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/register"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Sign up
                   </Link>
@@ -81,7 +81,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/docs"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Documentation
                   </Link>
@@ -89,7 +89,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/blog"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Blog
                   </Link>
@@ -97,7 +97,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/community"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Community
                   </Link>
@@ -107,7 +107,7 @@ const Footer = () => {
                     href="https://github.com/sayoun/okunix"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     GitHub
                   </a>
@@ -122,7 +122,7 @@ const Footer = () => {
                 <li>
                   <a
                     href="mailto:hello@okunix.com"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Email
                   </a>
@@ -132,7 +132,7 @@ const Footer = () => {
                     href="https://twitter.com/okunix"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     Twitter
                   </a>
@@ -142,7 +142,7 @@ const Footer = () => {
                     href="https://linkedin.com/company/okunix"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-[#F38020] transition-colors"
+                    className="text-gray-500 hover:text-yellow-600 transition-colors"
                   >
                     LinkedIn
                   </a>
@@ -156,21 +156,19 @@ const Footer = () => {
         <div className="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2 text-gray-500 text-sm">
             <span className="text-lg">🍪</span>
-            <span>
-              Pure Analytics 
-            </span>
+            <span>Pure Analytics</span>
           </div>
 
           <div className="flex items-center gap-6">
             <Link
               to="/privacy"
-              className="text-gray-500 hover:text-[#F38020] text-sm transition-colors"
+              className="text-gray-500 hover:text-yellow-600 text-sm transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               to="/terms"
-              className="text-gray-500 hover:text-[#F38020] text-sm transition-colors"
+              className="text-gray-500 hover:text-yellow-600 text-sm transition-colors"
             >
               Terms of Service
             </Link>

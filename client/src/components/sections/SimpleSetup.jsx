@@ -5,10 +5,10 @@ import Button from "../common/Button";
 
 const StepCard = ({ number, title, description, icon: Icon }) => (
   <div className="relative flex flex-col items-center text-center p-6">
-    <div className="absolute -top-4 bg-[#F38020] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg shadow-orange-200">
+    <div className="absolute -top-4 bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg shadow-yellow-200">
       {number}
     </div>
-    <div className="mt-4 mb-4 p-3 bg-orange-50 rounded-xl text-[#F38020]">
+    <div className="mt-4 mb-4 p-3 bg-yellow-50 rounded-xl text-yellow-600">
       <Icon size={32} strokeWidth={1.5} />
     </div>
     <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
@@ -18,12 +18,12 @@ const StepCard = ({ number, title, description, icon: Icon }) => (
 
 const SimpleSetup = () => {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Get up and running in{" "}
-            <span className="text-[#F38020]">minutes</span>
+            <span className="text-yellow-600">minutes</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             No complex configurations or heavy scripts. Start tracking your

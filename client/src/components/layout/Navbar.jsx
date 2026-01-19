@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Github } from "lucide-react";
+import { Github, Menu, X } from "lucide-react";
 import Button from "../common/Button";
 
 const Navbar = () => {
   const [stars, setStars] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Fetch GitHub stars
@@ -26,10 +27,14 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl shadow-sm">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl shadow-sm transition-all duration-300">
       <nav className="flex items-center justify-between px-6 py-3 w-full">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-0.5">
+        <Link
+          to="/"
+          className="flex items-center gap-0.5"
+          onClick={() => setIsMenuOpen(false)}
+        >
           <img
             src="/h.png"
             alt="OkUnix Logo"
@@ -40,29 +45,29 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Nav Links */}
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-8">
           <Link
             to="/features"
-            className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
           >
             Features
           </Link>
           <Link
             to="/docs"
-            className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
           >
             Docs
           </Link>
           <Link
             to="/blog"
-            className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
           >
             Blog
           </Link>
           <Link
             to="/sponsor"
-            className="text-gray-600 hover:text-[#F38020] font-medium transition-colors"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
           >
             Sponsor
           </Link>
@@ -92,8 +97,50 @@ const Navbar = () => {
               Sign Up
             </Button>
           </Link>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none p-1"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu Dropdown */}
+      {isMenuOpen && (
+        <div className="md:hidden border-t border-gray-200/50 px-6 py-4 flex flex-col gap-4 animate-in slide-in-from-top-2 fade-in duration-200">
+          <Link
+            to="/features"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Features
+          </Link>
+          <Link
+            to="/docs"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Docs
+          </Link>
+          <Link
+            to="/blog"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Blog
+          </Link>
+          <Link
+            to="/sponsor"
+            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Sponsor
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

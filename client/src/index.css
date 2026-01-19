@@ -3,3 +3,13 @@
 body {
   font-family: "Geist", sans-serif;
 }
+
+::selection {
+  background-color: #fef3c7;
+  color: #000000;
+}
+
+::-moz-selection {
+  background-color: #fef3c7;
+  color: #000000;
+}
