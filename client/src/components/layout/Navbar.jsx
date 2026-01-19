@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Github, Menu, X } from "lucide-react";
 import Button from "../common/Button";
+import LoginModal from "../auth/LoginModal";
+import RegisterModal from "../auth/RegisterModal";
 
 const Navbar = () => {
   const [stars, setStars] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   useEffect(() => {
     // Fetch GitHub stars
@@ -86,17 +90,21 @@ const Navbar = () => {
             <span className="font-medium">{stars}</span>
           </a>
 
-          <Link to="/login">
-            <Button variant="ghost" className="px-4!">
-              Login
-            </Button>
-          </Link>
+          <Button
+            variant="ghost"
+            className="px-4!"
+            onClick={() => setIsLoginOpen(true)}
+          >
+            Login
+          </Button>
 
-          <Link to="/register">
-            <Button variant="primary" className="px-5! py-2!">
-              Sign Up
-            </Button>
-          </Link>
+          <Button
+            variant="primary"
+            className="px-5! py-2!"
+            onClick={() => setIsRegisterOpen(true)}
+          >
+            Sign Up
+          </Button>
 
           {/* Mobile Menu Toggle */}
           <button
@@ -141,6 +149,24 @@ const Navbar = () => {
           </Link>
         </div>
       )}
+
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSwitchToRegister={() => {
+          setIsLoginOpen(false);
+          setIsRegisterOpen(true);
+        }}
+      />
+
+      <RegisterModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+        onSwitchToLogin={() => {
+          setIsRegisterOpen(false);
+          setIsLoginOpen(true);
+        }}
+      />
     </div>
   );
 };
