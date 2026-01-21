@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const authRoutes = require("./routes/Auth.route");
-  
+const authRoute = require("./routes/authRoute");
+
 const app = express();
 
 // Middleware
@@ -18,6 +18,6 @@ app.get("/test", (req, res) => {
 });
 
 // Routes
-app.use("/api/auth", authRoutes); 
+app.use("/api/auth", authRoute); 
 
 module.exports = app;
