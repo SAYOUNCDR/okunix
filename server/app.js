@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-
+const authRoutes = require("./routes/Auth.route");
+  
 const app = express();
 
 // Middleware
@@ -15,5 +16,8 @@ app.get("/test", (req, res) => {
     .status(200)
     .json({ message: "Server is running and test route is working!" });
 });
+
+// Routes
+app.use("/api/auth", authRoutes); 
 
 module.exports = app;
