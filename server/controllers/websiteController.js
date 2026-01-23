@@ -21,7 +21,11 @@ exports.getUserWebsites = async (req, res) => {
 }
 
 exports.getWebsite = async (req, res) => {
-    const websiteId = req.params.websiteId;
-    const website = await Website.findById(websiteId);
+    const _id = req.params.websiteId;
+    const userId = req.user.userId;
+    const website = await Website.findOne({ _id, userId });
+    if (!website) {
+        return res.status(404).json({ message: "Website not found" });
+    }
     res.status(200).json({ message: "Website fetched successfully", website });
 }
