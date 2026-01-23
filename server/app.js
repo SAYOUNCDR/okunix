@@ -11,13 +11,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-app.use("/api/auth", authRoute); 
+app.use("/api/auth", authRoute);
+app.use("/api/track", require("./routes/trackerRoute"));
+app.use("/scripts", express.static("./scripts")); // Serve tracker.js
 
 app.use("/api/website", verifyToken, websiteRoute);
 
 app.get("/api/test", verifyToken, (req, res) => {
     const user = req.user;
-    res.status(200).json({ message: "Test route is working!" , user});
+    res.status(200).json({ message: "Test route is working!", user });
 });
 
 module.exports = app;
