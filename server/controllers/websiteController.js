@@ -46,13 +46,3 @@ exports.deleteWebsite = async (req, res) => {
     await website.deleteOne();
     res.status(200).json({ message: "Website deleted successfully" });
 }
-
-exports.getTrackedData = async (req, res) => {
-    const _id = req.params.websiteId;
-    const website = await Website.findOne({ _id });
-    if (!website) {
-        return res.status(404).json({ message: "Website not found" });
-    }
-    const trackedData = await TrackedData.find({ websiteId: _id });
-    res.status(200).json({ message: "Tracked data fetched successfully", trackedData });
-}
