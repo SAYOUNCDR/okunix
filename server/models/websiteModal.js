@@ -11,11 +11,16 @@ const websiteSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        website_id: {
+        websiteId: {
             type: String,
             default: uuidv4,
             unique: true,
         },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        }
     },
     { timestamps: true },
 );

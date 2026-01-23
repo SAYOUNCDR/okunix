@@ -1,15 +1,15 @@
 const Website = require("../models/websiteModal");
 
-
 exports.createWebsite = async (req, res) => {
-    const { websiteName, domain} = req.body;
-    if(!websiteName || !domain){
-        return res.status(400).json({ message: "All fields are required" });
-    }
-    
-    const website = await Website.create({
+    const { websiteName, domain } = req.body;
+    const userId = req.user.userId;
+
+    const website = {
         websiteName,
         domain,
-    });
-    res.status(201).json({ message: "Website created successfully" });
+        userId,
+    }
+
+    const newWebsite = await Website.create(website);
+    res.status(201).json({ message: "Website created successfully", newWebsite });
 }

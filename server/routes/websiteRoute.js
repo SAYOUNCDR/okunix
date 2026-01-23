@@ -3,7 +3,7 @@ const router = express.Router();
 const verifyToken = require("../middleware/authMiddleware");
 const { createWebsite } = require("../controllers/websiteController");
 
-router.post("/create", createWebsite);
+router.post("/create", verifyToken, createWebsite);
 
 
 router.get("/getAllWebsites", verifyToken, (req, res) => {
