@@ -24,7 +24,7 @@ app.use("/api/auth", authRoute);
 
 // Protected routes
 // 1. Create webstite route
-app.use("/api/website", websiteRoute);
+app.use("/api/website", verifyToken,websiteRoute);
 
 // Testing auth middleware route
 app.get("/api/test", verifyToken, (req, res) => {
