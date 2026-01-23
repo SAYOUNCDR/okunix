@@ -49,11 +49,13 @@ exports.deleteWebsite = async (req, res) => {
 
 exports.getTrackedData = async (req, res) => {
     const websiteId = req.params.websiteId;
+    // Find website by its UUID (public ID)
     const website = await Website.findOne({ websiteId });
     if (!website) {
         return res.status(404).json({ message: "Website not found" });
     }
-    const trackedData = await TrackedData.find({ websiteId });
+    // Query TrackedData using the internal ObjectId (_id) of the website
+    const trackedData = await TrackedData.find({ websiteId: website._id });
     res.status(200).json({ message: "Tracked data fetched successfully", trackedData });
 }
 
