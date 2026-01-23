@@ -46,3 +46,26 @@ exports.deleteWebsite = async (req, res) => {
     await website.deleteOne();
     res.status(200).json({ message: "Website deleted successfully" });
 }
+
+exports.getTrackedData = async (req, res) => {
+    const websiteId = req.params.websiteId;
+    const website = await Website.findOne({ websiteId });
+    if (!website) {
+        return res.status(404).json({ message: "Website not found" });
+    }
+    const trackedData = await TrackedData.find({ websiteId });
+    res.status(200).json({ message: "Tracked data fetched successfully", trackedData });
+}
+
+exports.getTrackingScript = async (req, res) => {
+    const _id = req.params.websiteId;
+    // In a real env, use process.env.BASE_URL
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const scriptTag = `<script src="${baseUrl}/scripts/tracker.js" data-website-id="${_id}"></script>`;
+
+    res.status(200).json({
+        message: "Script generated successfully",
+        script: scriptTag,
+        instructions: "Copy the 'script' tag and paste it into the <head> of your website."
+    });
+}

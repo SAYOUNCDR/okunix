@@ -36,9 +36,15 @@
   - [x] **Todo**: Store data in `TrackedData` collection.
 
 - **Data Aggregation & Visualization**
+  - [x] **New**: endpoints for `getTrackingScript` (helper) and `getTrackedData` (verification).
   - [ ] **Current State**: Basic `getTrackedData` exists but raw dump only.
   - [ ] **Todo**: Implement aggregation queries for:
     - Unique Visitors (count distinct `sessionId`).
     - Real-time views.
     - Bounce rate calculation.
     - Time-series data (charts).
+
+## 📚 Guides
+
+- [x] `POSTMAN_GUIDE.md`: For API-only testing.
+- [x] `REAL_WORLD_TESTING.md`: For detailed end-to-end integration testing with a real site.
