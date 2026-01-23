@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/authRoute");
-
+const verifyToken = require("./middleware/authMiddleware");
+const websiteRoute = require("./routes/websiteRoute");
 const app = express();
 
 // Middleware
@@ -19,5 +20,15 @@ app.get("/test", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoute); 
+
+
+// Protected routes
+// 1. Create webstite route
+app.use("/api/website", websiteRoute);
+
+// Testing auth middleware route
+app.get("/api/test", verifyToken, (req, res) => {
+    res.status(200).json({ message: "Test route is working!" });
+});
 
 module.exports = app;
