@@ -19,3 +19,9 @@ exports.getUserWebsites = async (req, res) => {
     const websites = await Website.find({ userId });
     res.status(200).json({ message: "All websites fetched successfully", websites });
 }
+
+exports.getWebsite = async (req, res) => {
+    const websiteId = req.params.websiteId;
+    const website = await Website.findById(websiteId);
+    res.status(200).json({ message: "Website fetched successfully", website });
+}
