@@ -13,3 +13,9 @@ exports.createWebsite = async (req, res) => {
     const newWebsite = await Website.create(website);
     res.status(201).json({ message: "Website created successfully", newWebsite });
 }
+
+exports.getUserWebsites = async (req, res) => {
+    const userId = req.user.userId;
+    const websites = await Website.find({ userId });
+    res.status(200).json({ message: "All websites fetched successfully", websites });
+}

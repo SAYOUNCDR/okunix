@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middleware/authMiddleware");
-const { createWebsite } = require("../controllers/websiteController");
+const { createWebsite, getUserWebsites } = require("../controllers/websiteController");
 
-router.post("/create", verifyToken, createWebsite);
+router.post("/createWebsite", verifyToken, createWebsite);
 
-
-router.get("/getAllWebsites", verifyToken, (req, res) => {
-    res.status(200).json({ message: "All websites fetched successfully" });
-});
+router.get("/getUserWebsites", verifyToken, getUserWebsites);
 
 
 module.exports = router;
