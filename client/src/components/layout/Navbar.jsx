@@ -92,7 +92,7 @@ const Navbar = () => {
 
           <Button
             variant="ghost"
-            className="px-4!"
+            className="hidden md:inline-flex px-4!"
             onClick={() => setIsLoginOpen(true)}
           >
             Login
@@ -100,7 +100,7 @@ const Navbar = () => {
 
           <Button
             variant="primary"
-            className="px-5! py-2!"
+            className="hidden md:inline-flex px-5! py-2!"
             onClick={() => setIsRegisterOpen(true)}
           >
             Sign Up
@@ -147,6 +147,29 @@ const Navbar = () => {
           >
             Sponsor
           </Link>
+
+          <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
+            <Button
+              variant="ghost"
+              className="w-full justify-start px-0! text-gray-600 hover:text-gray-900"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsLoginOpen(true);
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              variant="primary"
+              className="w-full justify-center"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsRegisterOpen(true);
+              }}
+            >
+              Sign Up
+            </Button>
+          </div>
         </div>
       )}
 
