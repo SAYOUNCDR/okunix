@@ -28,18 +28,18 @@ const BarChart = () => {
           {
             label: "Visitors",
             data: [16, 9, 8, 4, 1, 0, 0],
-            backgroundColor: "#3b82f6", // blue-500 (light)
+            backgroundColor: "#ffdf5eff", // yellow-400 (light)
             borderRadius: 4,
-            barPercentage: 0.6,
-            categoryPercentage: 0.8,
+            barPercentage: 0.8,
+            categoryPercentage: 0.6,
           },
           {
             label: "Views",
             data: [27, 28, 1, 6, 2, 0, 0],
-            backgroundColor: "#1e3a8a", // blue-900 (dark)
+            backgroundColor: "#ffb515ff", // yellow-600 (dark)
             borderRadius: 4,
-            barPercentage: 0.6,
-            categoryPercentage: 0.8,
+            barPercentage: 0.8,
+            categoryPercentage: 0.6,
           },
         ],
       },
@@ -89,8 +89,7 @@ const BarChart = () => {
           },
           y: {
             grid: {
-              color: "#f3f4f6", // gray-100
-              borderDash: [4, 4],
+              color: "#e2e8f0", // slate-200
               drawBorder: false,
             },
             ticks: {
