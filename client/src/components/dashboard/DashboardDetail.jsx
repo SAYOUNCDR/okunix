@@ -9,6 +9,7 @@ import {
   ArrowUp,
   ArrowDown,
   ChevronDown,
+  Globe,
 } from "lucide-react";
 
 const StatCard = ({ title, value, change, trend, trendColor }) => {
@@ -18,7 +19,7 @@ const StatCard = ({ title, value, change, trend, trendColor }) => {
   const Icon = isUp ? ArrowUp : ArrowDown;
 
   return (
-    <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col items-start justify-between min-h-[120px]">
+    <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col items-start justify-between min-h-30">
       <h3 className="text-sm font-medium text-gray-500">{title}</h3>
       <div className="text-3xl font-bold text-gray-900 mt-2">{value}</div>
       <div
@@ -45,7 +46,7 @@ const TimeFilter = () => {
     <div className="relative">
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-[140px] justify-between"
+        className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-35 justify-between"
       >
         <span className="text-sm font-medium text-gray-700">{selected}</span>
         <ChevronDown size={14} className="text-gray-500" />
@@ -84,7 +85,7 @@ const ChartFilter = () => {
     <div className="relative">
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-[100px] justify-between"
+        className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-25 justify-between"
       >
         <span className="text-sm font-medium text-gray-700">{selected}</span>
         <ChevronDown size={14} className="text-gray-500" />
@@ -218,6 +219,61 @@ const DashboardDetail = () => {
               <BarChart />
             </div>
           </div>
+
+          {/* Sources Section */}
+          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-6 text-start">
+              Sources
+            </h3>
+
+            <div className="flex flex-col">
+              <div className="flex justify-between items-center mb-4 px-2">
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Referrer
+                </span>
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Visitors
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                {[
+                  { name: "t.co", count: 10, percent: "38%" },
+                  { name: "com.linkedin.android", count: 6, percent: "23%" },
+                  { name: "google.com", count: 5, percent: "19%" },
+                  { name: "sayoun.studio", count: 4, percent: "15%" },
+                  { name: "research.keabase.com", count: 1, percent: "4%" },
+                ].map((source, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gray-100 text-gray-600 rounded-lg group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-gray-200">
+                        <Globe size={16} />
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">
+                        {source.name}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-bold text-gray-900">
+                        {source.count}
+                      </span>
+                      <span className="text-gray-300 text-sm">|</span>
+                      <span className="text-sm text-gray-500 min-w-[3ch] text-right">
+                        {source.percent}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Location section */}
+          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm"></div>
         </div>
       </main>
     </div>
