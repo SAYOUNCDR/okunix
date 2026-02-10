@@ -1,7 +1,6 @@
-import React from "react";
 import Button from "../common/Button";
 import Sidebar from "../layout/Sidebar";
-import { Plus, Search, Globe } from "lucide-react";
+import { Plus, Search, Globe, Cog } from "lucide-react";
 
 const DashboardOverview = () => {
   // Mock data for websites
@@ -72,9 +71,9 @@ const DashboardOverview = () => {
                       {site.domain}
                     </div>
                     <div className="col-span-2 flex justify-end">
-                      <button className="text-gray-400 hover:text-gray-900 transition-colors p-1 rounded-md hover:bg-gray-100">
-                        Edit
-                      </button>
+                      <Button>
+                        <Cog size={18}/>
+                      </Button>
                     </div>
                   </div>
                 ))}
