@@ -7,6 +7,7 @@ import ChartFilter from "../components/dashboard/ChartFilter";
 import LocationSection from "../components/dashboard/LocationSection";
 import SourcesSection from "../components/dashboard/SourcesSection";
 import TrafficHeatmap from "../components/dashboard/TrafficHeatmap";
+import EntryExitPages from "../components/dashboard/EntryExitpages";
 import { Cog, ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -126,6 +127,9 @@ const DashboardDetail = () => {
 
           {/* Location section */}
           <LocationSection />
+
+          {/* Entry/Exit Pages Section */}
+          <EntryExitPages />
         </div>
       </main>
     </div>
