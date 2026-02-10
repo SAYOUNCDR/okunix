@@ -1,7 +1,14 @@
 import { useState } from "react";
 import Sidebar from "../layout/Sidebar";
 import Button from "../common/Button";
-import { Cog, ArrowLeft, ArrowUp, ArrowDown, ChevronDown } from "lucide-react";
+import {
+  Cog,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
+  ChevronDown,
+} from "lucide-react";
 
 const StatCard = ({ title, value, change, trend, trendColor }) => {
   const isUp = trend === "up";
@@ -24,10 +31,45 @@ const StatCard = ({ title, value, change, trend, trendColor }) => {
 };
 
 const TimeFilter = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("Last 24 hours");
+  const options = [
+    "Last 24 hours",
+    "Last 7 days",
+    "Last 30 days",
+    "Last 3 months",
+  ];
+
   return (
-    <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm">
-      <span className="text-sm font-medium text-gray-700">Last 24 hours</span>
-      <ChevronDown size={14} className="text-gray-500" />
+    <div className="relative">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-[140px] justify-between"
+      >
+        <span className="text-sm font-medium text-gray-700">{selected}</span>
+        <ChevronDown size={14} className="text-gray-500" />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 py-1 flex flex-col">
+          {options.map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                setSelected(option);
+                setIsOpen(false);
+              }}
+              className={`text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                selected === option
+                  ? "text-gray-900 font-medium bg-gray-50"
+                  : "text-gray-600"
+              }`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -72,7 +114,13 @@ const DashboardDetail = () => {
         <div className="flex-1 overflow-y-auto p-8">
           {/* General Stats Section */}
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-end items-center gap-2">
+              <button className="flex items-center justify-center w-9 h-9 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg cursor-pointer hover:bg-gray-50 shadow-sm">
+                <ArrowLeft size={16} />
+              </button>
+              <button className="flex items-center justify-center w-9 h-9 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg cursor-pointer hover:bg-gray-50 shadow-sm">
+                <ArrowRight size={16} />
+              </button>
               <TimeFilter />
             </div>
 
