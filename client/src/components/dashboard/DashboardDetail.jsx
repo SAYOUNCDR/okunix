@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Sidebar from "../layout/Sidebar";
 import Button from "../common/Button";
+import BarChart from "../charts/BarChart";
 import {
   Cog,
   ArrowLeft,
@@ -74,11 +75,50 @@ const TimeFilter = () => {
   );
 };
 
+const ChartFilter = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("Day");
+  const options = ["Day", "Hour"];
+
+  return (
+    <div className="relative">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-[100px] justify-between"
+      >
+        <span className="text-sm font-medium text-gray-700">{selected}</span>
+        <ChevronDown size={14} className="text-gray-500" />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full right-0 mt-1 w-32 bg-white border border-gray-200 rounded-xl shadow-lg z-10 py-1 flex flex-col">
+          {options.map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                setSelected(option);
+                setIsOpen(false);
+              }}
+              className={`text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                selected === option
+                  ? "text-gray-900 font-medium bg-gray-50"
+                  : "text-gray-600"
+              }`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const DashboardDetail = () => {
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden overflow-y-auto">
         {/* Header Section */}
         <header className="px-8 py-6">
           <div className="mb-6">
@@ -110,8 +150,7 @@ const DashboardDetail = () => {
         {/* Horizontal Line */}
         <div className="h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 p-8">
           {/* General Stats Section */}
           <div className="space-y-4">
             <div className="flex justify-end items-center gap-2">
@@ -164,6 +203,19 @@ const DashboardDetail = () => {
                 trend="down"
                 trendColor="red"
               />
+            </div>
+          </div>
+
+          {/* Chart section  */}
+          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">Activity</h3>
+              <div className="flex items-center gap-2">
+                <ChartFilter />
+              </div>
+            </div>
+            <div className="h-80 w-full">
+              <BarChart />
             </div>
           </div>
         </div>
