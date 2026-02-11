@@ -62,7 +62,6 @@ const WebsiteSetting = () => {
                 <p>sayoun.studio</p>
               </div>
             </div>
-
             <div>
               <button className="mt-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
                 Save changes
@@ -71,12 +70,35 @@ const WebsiteSetting = () => {
           </div>
 
           {/* Tracking code dov */}
-          <div></div>
+          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <div className="mb-2">
+              <h3>Tracking Code</h3>
+              <p className="py-4 px-2">
+                To track stats for this website, place the following code in the
+                "head" section of your website's HTML.
+              </p>
+              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg flex items-center justify-between">
+                <p>
+                  {`<script
+                      src="https://cloud.umami.is/script.js"
+                      data-website-id="ac6d1abf-aa4c-4c91-8b2a-d0d7b15de840"
+                    ></script>`}
+                </p>
+                <Copy
+                  size={16}
+                  className="ml-2 text-gray-500 cursor-pointer hover:text-gray-900 transition-colors"
+                />
+              </div>
+            </div>
+          </div>
 
           {/* Share div */}
           <div></div>
 
           {/* Danger zone div like reset website or delete website */}
+          <div>
+            
+          </div>
         </div>
       </main>
     </div>
