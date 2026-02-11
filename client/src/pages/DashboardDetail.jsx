@@ -21,7 +21,7 @@ const DashboardDetail = () => {
         <header className="px-8 py-6">
           <div className="mb-6">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/dashboard")}
               className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm"
             >
               <ArrowLeft size={16} /> Back to Dashboard
