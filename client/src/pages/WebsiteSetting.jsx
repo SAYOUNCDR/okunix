@@ -1,6 +1,5 @@
 import Sidebar from "../components/layout/Sidebar";
-import Button from "../components/common/Button";
-import { Cog, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Copy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const WebsiteSetting = () => {
@@ -32,11 +31,6 @@ const WebsiteSetting = () => {
                 devcalendar.sayoun.studio
               </a>
             </div>
-
-            <Button className="flex items-center gap-2">
-              <Cog size={16} />
-              Edit
-            </Button>
           </div>
         </header>
 
@@ -44,7 +38,45 @@ const WebsiteSetting = () => {
         <div className="h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
         <div className="flex-1 p-8">
-          
+          {/* Website Id, domain, name div*/}
+          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <div className="mb-2">
+              <h3>Website Id</h3>
+              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg flex items-center justify-between">
+                <p>ac6d1abf-aa4c-4c91-8b2a-d0d7b15de840</p>
+                <Copy
+                  size={16}
+                  className="ml-2 text-gray-500 cursor-pointer hover:text-gray-900 transition-colors"
+                />
+              </div>
+            </div>
+            <div className="mb-2">
+              <h3>Name</h3>
+              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
+                <p>Portfolio</p>
+              </div>
+            </div>
+            <div className="mb-2">
+              <h3>Domain</h3>
+              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
+                <p>sayoun.studio</p>
+              </div>
+            </div>
+
+            <div>
+              <button className="mt-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
+                Save changes
+              </button>
+            </div>
+          </div>
+
+          {/* Tracking code dov */}
+          <div></div>
+
+          {/* Share div */}
+          <div></div>
+
+          {/* Danger zone div like reset website or delete website */}
         </div>
       </main>
     </div>
