@@ -96,8 +96,33 @@ const WebsiteSetting = () => {
           <div></div>
 
           {/* Danger zone div like reset website or delete website */}
-          <div>
-            
+          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 className="text-red-600">Danger Zone</h3>
+            <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h3 className="font-bold">Reset website</h3>
+                <p className="text-sm">
+                  All statistics for this website will be deleted, but your
+                  settings will remain intact.
+                </p>
+              </div>
+              <div>
+                <button className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm">
+                  Reset Website
+                </button>
+              </div>
+            </div>
+            <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h3 className="font-bold">Delete website</h3>
+                <p className="text-sm">All website data will be deleted.</p>
+              </div>
+              <div>
+                <button className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm">
+                  Delete Website
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>
