@@ -47,7 +47,16 @@ exports.register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      role: "user",
+      isEmailVerified: false,
     });
+
+    // Email verification token (will be used for email verification process)
+    const verificationToken = jwt.sign(
+      { userId: newUser._id },
+      process.env.EMAIL_VERIFICATION_SECRET,
+      { expiresIn: "1d" },
+    );
 
     const userResponse = {
       _id: newUser._id,
