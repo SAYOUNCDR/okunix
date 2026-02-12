@@ -7,7 +7,6 @@ const { sendEmail } = require("../lib/email");
 const { generateTokens } = require("../lib/token");
 const { generateAccessToken, generateRefreshToken } = require("../lib/token");
 
-
 function getAppUrl() {
   if (process.env.NODE_ENV === "development") {
     return `http://localhost:${process.env.PORT}`;
@@ -137,12 +136,18 @@ exports.login = async (req, res) => {
         .json({ message: "Please verify your email before logging in" });
     }
 
+    const accessToken = generateAccessToken(
+      user._id,
+      user.role,
+      user.tokenVersion,
+    );
+    const refreshToken = generateRefreshToken(user._id, user.tokenVersion);
 
-    const { accessToken, refreshToken } = generateTokens(user);
+    const isProduction = process.env.NODE_ENV === "production";
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development", // HTTPS only in production
+      secure: isProduction,
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
