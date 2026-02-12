@@ -19,6 +19,14 @@ const generateTokens = (user) => {
   return { accessToken, refreshToken };
 };
 
+
+function getAppUrl() {
+    if (process.env.NODE_ENV === "development") {
+        return `http://localhost:${process.env.PORT}`;
+    }
+    return process.env.APP_URL || `http://localhost:${process.env.PORT}`;
+}
+
 exports.register = async (req, res) => {
   const result = userSchema.safeParse(req.body);
   if (!result.success) {
