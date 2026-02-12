@@ -2,7 +2,7 @@ const User = require("../models/userModal");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
-const z = require("../config/zod");
+const { userSchema } = require("../config/zod");
 
 const generateTokens = (user) => {
   const accessToken = jwt.sign(
@@ -20,15 +20,15 @@ const generateTokens = (user) => {
 };
 
 exports.register = async (req, res) => {
-  const validation = z.userSchema.safeParse(req.body);
-  if (!validation.success) {
+  const result = userSchema.safeParse(req.body);
+  if (!result.success) {
     return res
       .status(400)
-      .json({ message: validation.error.flatten().fieldErrors });
+      .json({ message: "Invalid Data", error: result.error.flatten() });
   }
 
   try {
-    const { username, email, password } = sanitize(req.body);
+    const { username, email, password } = sanitize(result.data);
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
