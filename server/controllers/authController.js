@@ -66,6 +66,22 @@ exports.register = async (req, res) => {
       { expiresIn: "1d" },
     );
 
+    const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const userResponse = {
       _id: newUser._id,
       username: newUser.username,
