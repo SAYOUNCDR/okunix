@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const { sendEmail } = require("../lib/email");
-const { generateTokens } = require("../lib/token");
 const { generateAccessToken, generateRefreshToken } = require("../lib/token");
 
 function getAppUrl() {
@@ -91,8 +90,10 @@ exports.verifyEmail = async (req, res) => {
 
     const user = await User.findById(payload.userId); // this was coded as { userId: newUser._id } which is mongoose Id, so we can directly use findById
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
+      return res
+        .status(400)
+        .json({ message: "Invalid Credentials: User not found" }); // will remove this later -> User not found
+    } 
 
     if (user.isEmailVerified) {
       return res.status(400).json({ message: "Email is already verified" });
