@@ -18,12 +18,12 @@ const userSchema = z.object({
     .trim()
     .min(2, "Name must be at least 2 characters long")
     .max(50, "Name must be at most 50 characters long"),
-  email: z.string().trim().email("Invalid email address"),
+  email: z.string().trim().toLowerCase().email("Invalid email address"),
   password: passwordSchema,
 });
 
 const loginSchema = z.object({
-  email: z.string().trim().email("Invalid email address"),
+  email: z.string().trim().toLowerCase().email("Invalid email address"),
   password: z.string(),
 });
 
