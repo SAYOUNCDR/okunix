@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { userSchema } = require("../config/zod");
+const { sendEmail } = require("../lib/email");
 
 const generateTokens = (user) => {
   const accessToken = jwt.sign(
@@ -19,12 +20,11 @@ const generateTokens = (user) => {
   return { accessToken, refreshToken };
 };
 
-
 function getAppUrl() {
-    if (process.env.NODE_ENV === "development") {
-        return `http://localhost:${process.env.PORT}`;
-    }
-    return process.env.APP_URL || `http://localhost:${process.env.PORT}`;
+  if (process.env.NODE_ENV === "development") {
+    return `http://localhost:${process.env.PORT}`;
+  }
+  return process.env.APP_URL || `http://localhost:${process.env.PORT}`;
 }
 
 exports.register = async (req, res) => {
@@ -68,24 +68,18 @@ exports.register = async (req, res) => {
 
     const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    await sendEmail(
+      email,
+      "Verify your email",
+      `<p>Please click on the link below to verify your email:</p>
+       <p><a href="${verifyUrl}">Verify Email</a></p>`,
+    );
 
     const userResponse = {
       _id: newUser._id,
       username: newUser.username,
       email: newUser.email,
+      isEmailVerified: newUser.isEmailVerified,
     };
 
     res.status(201).json({
@@ -97,6 +91,14 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+
+
+
+
+
 
 exports.login = async (req, res) => {
   try {
@@ -129,6 +131,7 @@ exports.login = async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      isEmailVerified: user.isEmailVerified,
     };
 
     res.status(200).json({
