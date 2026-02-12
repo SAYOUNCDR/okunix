@@ -22,5 +22,9 @@ const userSchema = z.object({
   password: passwordSchema,
 });
 
+const loginSchema = z.object({
+  email: z.string().trim().email("Invalid email address"),
+  password: z.string(),
+});
 
-module.exports = { userSchema };
+module.exports = { userSchema, loginSchema };
