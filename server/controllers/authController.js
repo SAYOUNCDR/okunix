@@ -4,21 +4,8 @@ const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const { sendEmail } = require("../lib/email");
+const { generateTokens} = require("../lib/token");
 
-const generateTokens = (user) => {
-  const accessToken = jwt.sign(
-    { userId: user._id },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" },
-  );
-
-  const refreshToken = jwt.sign(
-    { userId: user._id },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "7d" },
-  );
-  return { accessToken, refreshToken };
-};
 
 function getAppUrl() {
   if (process.env.NODE_ENV === "development") {
@@ -142,6 +129,13 @@ exports.login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid password" });
     }
+
+    if (!user.isEmailVerified) {
+      return res
+        .status(400)
+        .json({ message: "Please verify your email before logging in" });
+    }
+
 
     const { accessToken, refreshToken } = generateTokens(user);
 
