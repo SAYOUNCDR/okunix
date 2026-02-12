@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const { sendEmail } = require("../lib/email");
-const { generateTokens} = require("../lib/token");
+const { generateTokens } = require("../lib/token");
+const { generateAccessToken, generateRefreshToken } = require("../lib/token");
 
 
 function getAppUrl() {
