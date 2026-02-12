@@ -79,6 +79,7 @@ exports.register = async (req, res) => {
       _id: newUser._id,
       username: newUser.username,
       email: newUser.email,
+      role: newUser.role,
       isEmailVerified: newUser.isEmailVerified,
     };
 
@@ -92,13 +93,31 @@ exports.register = async (req, res) => {
   }
 };
 
+exports.verifyEmail = async (req, res) => {
+  const token = req.query.token;
+  if (!token) {
+    return res.status(400).json({ message: "Verification token is missing" });
+  }
 
+  try {
+    const payload = jwt.verify(token, process.env.EMAIL_VERIFICATION_SECRET);
 
+    const user = await User.findById(payload.userId); // this was coded as { userId: newUser._id } which is mongoose Id, so we can directly use findById
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
 
+    if (user.isEmailVerified) {
+      return res.status(400).json({ message: "Email is already verified" });
+    }
 
-
-
-
+    user.isEmailVerified = true;
+    await user.save();
+    res.status(200).json({ message: "Email verified successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 exports.login = async (req, res) => {
   try {
@@ -132,6 +151,7 @@ exports.login = async (req, res) => {
       username: user.username,
       email: user.email,
       isEmailVerified: user.isEmailVerified,
+      role: user.role,
     };
 
     res.status(200).json({
