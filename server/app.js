@@ -10,6 +10,9 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/test", (req, res) => {
+  res.status(200).json({ message: "API is working!" });
+});
 
 app.use("/api/auth", authRoute);
 app.use("/api/track", require("./routes/trackerRoute"));
