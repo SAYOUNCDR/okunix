@@ -29,4 +29,18 @@ const verifyAccessToken = (token) => {
   }
 };
 
-module.exports = { generateAccessToken, generateRefreshToken, verifyAccessToken };
+const verifyRefreshToken = (token) => {
+  try {
+    const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    return payload;
+  } catch (error) {
+    return null;
+  }
+};
+
+module.exports = {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken,
+};
