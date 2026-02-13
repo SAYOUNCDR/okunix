@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
-const { sendEmail } = require("../lib/email");
+const sendEmail = require("../lib/email");
 const { generateAccessToken, generateRefreshToken } = require("../lib/token");
 
 function getAppUrl() {
