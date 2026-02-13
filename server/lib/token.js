@@ -17,7 +17,9 @@ const generateRefreshToken = (userId, tokenVersion) => {
     id: userId,
     tokenVersion,
   };
-  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+  return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
 };
 
 module.exports = { generateAccessToken, generateRefreshToken };
