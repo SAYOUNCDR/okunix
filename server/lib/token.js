@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { id } = require("zod/v4/locales");
 
 const generateAccessToken = (userId, role, tokenVersion) => {
   const payload = {
@@ -22,4 +21,12 @@ const generateRefreshToken = (userId, tokenVersion) => {
   });
 };
 
-module.exports = { generateAccessToken, generateRefreshToken };
+const verifyAccessToken = (token) => {
+  try {
+    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  } catch (error) {
+    return null;
+  }
+};
+
+module.exports = { generateAccessToken, generateRefreshToken, verifyAccessToken };
