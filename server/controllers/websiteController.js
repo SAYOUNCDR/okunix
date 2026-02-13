@@ -70,8 +70,9 @@ exports.getTrackedData = async (req, res) => {
 
 exports.getTrackingScript = async (req, res) => {
   const _id = req.params.websiteId;
-  // In a real env, use process.env.BASE_URL
-  const baseUrl = req.protocol + "://" + req.get("host");
+
+  // Use APP_URL from env for consistent production URLs (handling Nginx proxies correctly)
+  const baseUrl = process.env.APP_URL || req.protocol + "://" + req.get("host");
   const scriptTag = `<script src="${baseUrl}/scripts/tracker.js" data-website-id="${_id}"></script>`;
 
   res.status(200).json({
