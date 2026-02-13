@@ -93,7 +93,7 @@ exports.verifyEmail = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Invalid Credentials: User not found" }); // will remove this later -> User not found
-    } 
+    }
 
     if (user.isEmailVerified) {
       return res.status(400).json({ message: "Email is already verified" });
@@ -174,7 +174,7 @@ exports.login = async (req, res) => {
 
 exports.refreshToken = (req, res) => {
   try {
-    const cookie = req.cookies.jwt;
+    const cookie = req.cookies.refreshToken;
     if (!cookie) {
       return res.status(400).json({ message: "No refresh token found" });
     }
