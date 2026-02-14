@@ -9,7 +9,7 @@ const Landing = () => {
       <Navbar />
 
       {/* Hero Section Placeholder */}
-      <div className="pt-32 pb-20 px-6 text-center grow">
+      <div className="pt-32 pb-20 text-center grow">
         <h1 className="text-5xl font-bold text-gray-900 mb-6">
           Privacy-focused Analytics <br />
           <span className="text-orange-500">Made Simple</span>

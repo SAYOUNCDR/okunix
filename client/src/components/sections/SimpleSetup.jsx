@@ -14,9 +14,9 @@ const FeatureCard = ({
   icon: Icon,
   linkText = "Learn More",
 }) => (
-  <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+  <div className="p-4 flex flex-col h-full bg-orange-100/20">
     {/* Image Placeholder */}
-    <div className="bg-orange-50/50 rounded-xl h-48 mb-6 flex items-center justify-center border-2 border-dashed border-orange-100 overflow-hidden relative">
+    <div className="rounded-xl h-58 mb-6 flex items-center justify-center overflow-hidden relative bg-white shadow-sm border border-gray-200">
       <div className="text-orange-200 absolute inset-0 flex items-center justify-center">
         {Icon ? <Icon size={64} strokeWidth={1} /> : "Isometric Image"}
       </div>
@@ -37,52 +37,41 @@ const FeatureCard = ({
 
 const SimpleSetup = () => {
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="max-w-xl">
-            <span className="text-orange-500 font-medium tracking-wide uppercase text-sm mb-2 block">
-              Getting Started
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
-              Simple Setup Process
-            </h2>
+    <section className="bg-white border-y border-gray-200">
+      <div className="max-w-6xl mx-auto  px-6">
+        <div className="max-w-5xl mx-auto border border-gray-200 grid grid-cols-1 md:grid-cols-2 bg-white">
+          <div className="border-b md:border-r border-gray-200">
+            <FeatureCard
+              title="Register & Login"
+              description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
+              icon={UserPlus}
+              linkText="Get Started"
+            />
           </div>
-          <div className="max-w-md">
-            <p className="text-gray-500 text-lg">
-              We help you track, analyze, and refine your digital presence with
-              privacy-focused expertise and transparent metrics.
-            </p>
+          <div className="border-b border-gray-200">
+            <FeatureCard
+              title="Generate Script"
+              description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
+              icon={Code2}
+              linkText="View Documentation"
+            />
           </div>
-        </div>
-
-        {/* 2x2 Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          <FeatureCard
-            title="Register & Login"
-            description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
-            icon={UserPlus}
-            linkText="Get Started"
-          />
-          <FeatureCard
-            title="Generate Script"
-            description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
-            icon={Code2}
-            linkText="View Documentation"
-          />
-          <FeatureCard
-            title="Embed Tracking Code"
-            description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
-            icon={ClipboardCopy}
-            linkText="Installation Guide"
-          />
-          <FeatureCard
-            title="View Real-time Analytics"
-            description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
-            icon={BarChart3}
-            linkText="Explore Demo"
-          />
+          <div className="md:border-r border-gray-200">
+            <FeatureCard
+              title="Embed Tracking Code"
+              description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
+              icon={ClipboardCopy}
+              linkText="Installation Guide"
+            />
+          </div>
+          <div>
+            <FeatureCard
+              title="View Real-time Analytics"
+              description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
+              icon={BarChart3}
+              linkText="Explore Demo"
+            />
+          </div>
         </div>
       </div>
     </section>
