@@ -1,67 +1,88 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { UserPlus, Code2, BarChart3, ArrowRight } from "lucide-react";
-import Button from "../common/Button";
+import {
+  ArrowRight,
+  UserPlus,
+  Code2,
+  ClipboardCopy,
+  BarChart3,
+} from "lucide-react";
 
-const StepCard = ({ number, title, description, icon: Icon }) => (
-  <div className="relative flex flex-col items-center text-center p-6">
-    <div className="absolute -top-4 bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg shadow-yellow-200">
-      {number}
+const FeatureCard = ({
+  title,
+  description,
+  icon: Icon,
+  linkText = "Learn More",
+}) => (
+  <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+    {/* Image Placeholder */}
+    <div className="bg-orange-50/50 rounded-xl h-48 mb-6 flex items-center justify-center border-2 border-dashed border-orange-100 overflow-hidden relative">
+      <div className="text-orange-200 absolute inset-0 flex items-center justify-center">
+        {Icon ? <Icon size={64} strokeWidth={1} /> : "Isometric Image"}
+      </div>
     </div>
-    <div className="mt-4 mb-4 p-3 bg-yellow-50 rounded-xl text-yellow-600">
-      <Icon size={32} strokeWidth={1.5} />
+
+    <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+    <p className="text-gray-500 mb-6 grow leading-relaxed text-sm">
+      {description}
+    </p>
+
+    <div className="mt-auto">
+      <span className="inline-flex items-center text-orange-600 font-semibold text-sm hover:translate-x-1 transition-transform cursor-pointer">
+        {linkText} <ArrowRight className="w-4 h-4 ml-1" />
+      </span>
     </div>
-    <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-    <p className="text-gray-500 leading-relaxed">{description}</p>
   </div>
 );
 
 const SimpleSetup = () => {
   return (
-    <section className="py-24">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Get up and running in{" "}
-            <span className="text-yellow-600">minutes</span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            No complex configurations or heavy scripts. Start tracking your
-            privacy-focused analytics in three simple steps.
-          </p>
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="max-w-xl">
+            <span className="text-orange-500 font-medium tracking-wide uppercase text-sm mb-2 block">
+              Getting Started
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
+              Simple Setup Process
+            </h2>
+          </div>
+          <div className="max-w-md">
+            <p className="text-gray-500 text-lg">
+              We help you track, analyze, and refine your digital presence with
+              privacy-focused expertise and transparent metrics.
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16 relative">
-          {/* Connecting Line (Desktop only) */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -z-10 -translate-y-1/2 transform scale-x-75" />
-
-          <StepCard
-            number="1"
+        {/* 2x2 Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <FeatureCard
+            title="Register & Login"
+            description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
             icon={UserPlus}
-            title="Create Account"
-            description="Sign up for a free OkUnix account. No credit card required to get started."
+            linkText="Get Started"
           />
-          <StepCard
-            number="2"
+          <FeatureCard
+            title="Generate Script"
+            description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
             icon={Code2}
-            title="Add Script"
-            description="Copy our lightweight, privacy-friendly tracking snippet into your website's head tag."
+            linkText="View Documentation"
           />
-          <StepCard
-            number="3"
+          <FeatureCard
+            title="Embed Tracking Code"
+            description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
+            icon={ClipboardCopy}
+            linkText="Installation Guide"
+          />
+          <FeatureCard
+            title="View Real-time Analytics"
+            description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
             icon={BarChart3}
-            title="See Insights"
-            description="Watch real-time data flow into your dashboard instantly. It's that simple."
+            linkText="Explore Demo"
           />
-        </div>
-
-        <div className="flex justify-center">
-          <Link to="/register">
-            <Button variant="primary" className="px-8! py-3! text-lg! group">
-              Get Started Now
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
         </div>
       </div>
     </section>

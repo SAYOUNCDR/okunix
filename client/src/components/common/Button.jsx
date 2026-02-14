@@ -14,23 +14,23 @@ const Button = ({
 
   const variants = {
     primary: `
-      bg-linear-to-b from-yellow-200 via-yellow-300 to-yellow-400 
-      text-black 
-      border-b border-amber-500 
+      bg-linear-to-b from-orange-300 via-orange-400 to-orange-500 
+      text-white 
+      border-b border-orange-600 
       shadow-sm hover:shadow-md 
-      text-shadow-2xs text-shadow-amber-400
+      text-shadow-2xs text-shadow-orange-700
     `,
     outline: `
       bg-transparent 
-      text-yellow-600 
-      border-2 border-yellow-500
-      hover:bg-yellow-50
+      text-orange-600 
+      border-2 border-orange-500
+      hover:bg-orange-50
     `,
     ghost: `
       bg-transparent 
       text-gray-600 
-      hover:bg-yellow-50
-      hover:text-yellow-600
+      hover:bg-orange-50
+      hover:text-orange-600
     `,
   };
 

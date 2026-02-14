@@ -26,11 +26,11 @@ const TrafficHeatmap = () => {
 
   const getColorClass = (value) => {
     if (value === 0) return "bg-gray-100";
-    if (value < 20) return "bg-yellow-100";
-    if (value < 40) return "bg-yellow-200";
-    if (value < 60) return "bg-yellow-300";
-    if (value < 80) return "bg-yellow-400";
-    return "bg-yellow-500";
+    if (value < 20) return "bg-orange-100";
+    if (value < 40) return "bg-orange-200";
+    if (value < 60) return "bg-orange-300";
+    if (value < 80) return "bg-orange-400";
+    return "bg-orange-500";
   };
 
   return (
@@ -92,11 +92,11 @@ const TrafficHeatmap = () => {
         <span>Less</span>
         <div className="flex gap-1">
           <div className="w-3 h-3 rounded-sm bg-gray-100"></div>
-          <div className="w-3 h-3 rounded-sm bg-yellow-100"></div>
-          <div className="w-3 h-3 rounded-sm bg-yellow-200"></div>
-          <div className="w-3 h-3 rounded-sm bg-yellow-300"></div>
-          <div className="w-3 h-3 rounded-sm bg-yellow-400"></div>
-          <div className="w-3 h-3 rounded-sm bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-sm bg-orange-100"></div>
+          <div className="w-3 h-3 rounded-sm bg-orange-200"></div>
+          <div className="w-3 h-3 rounded-sm bg-orange-300"></div>
+          <div className="w-3 h-3 rounded-sm bg-orange-400"></div>
+          <div className="w-3 h-3 rounded-sm bg-orange-500"></div>
         </div>
         <span>More</span>
       </div>

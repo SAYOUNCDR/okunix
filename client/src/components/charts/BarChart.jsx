@@ -28,7 +28,7 @@ const BarChart = () => {
           {
             label: "Visitors",
             data: [16, 9, 8, 4, 1, 0, 0],
-            backgroundColor: "#ffdf5eff", // yellow-400 (light)
+            backgroundColor: "#fb923cff", // orange-400 (light)
             borderRadius: 4,
             barPercentage: 0.8,
             categoryPercentage: 0.6,
@@ -36,7 +36,7 @@ const BarChart = () => {
           {
             label: "Views",
             data: [27, 28, 1, 6, 2, 0, 0],
-            backgroundColor: "#ffb515ff", // yellow-600 (dark)
+            backgroundColor: "#ea580cff", // orange-600 (dark)
             borderRadius: 4,
             barPercentage: 0.8,
             categoryPercentage: 0.6,

@@ -24,7 +24,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-yellow-500 transition-colors"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="John Doe"
             required
           />
@@ -38,7 +38,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-yellow-500 transition-colors"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="you@example.com"
             required
           />
@@ -52,7 +52,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-yellow-500 transition-colors"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="Min. 8 characters"
             required
             minLength={8}
@@ -61,11 +61,11 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
         <div className="text-sm text-gray-500 leading-relaxed">
           By creating an account, you agree to our{" "}
-          <a href="/terms" className="text-yellow-600 hover:text-yellow-700">
+          <a href="/terms" className="text-orange-600 hover:text-orange-700">
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="/privacy" className="text-yellow-600 hover:text-yellow-700">
+          <a href="/privacy" className="text-orange-600 hover:text-orange-700">
             Privacy Policy
           </a>
           .
@@ -83,7 +83,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
               onClose();
               onSwitchToLogin?.();
             }}
-            className="text-yellow-600 hover:text-yellow-700 font-medium cursor-pointer"
+            className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"
           >
             Sign in
           </button>

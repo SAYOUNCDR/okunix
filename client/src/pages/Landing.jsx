@@ -12,7 +12,7 @@ const Landing = () => {
       <div className="pt-32 pb-20 px-6 text-center grow">
         <h1 className="text-5xl font-bold text-gray-900 mb-6">
           Privacy-focused Analytics <br />
-          <span className="text-yellow-500">Made Simple</span>
+          <span className="text-orange-500">Made Simple</span>
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
           Track your website traffic without compromising user privacy. No

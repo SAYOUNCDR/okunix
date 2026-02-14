@@ -23,7 +23,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-yellow-500 transition-colors"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="you@example.com"
             required
           />
@@ -37,7 +37,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-yellow-500 transition-colors"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="••••••••"
             required
           />
@@ -47,13 +47,13 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
-              className="rounded border-gray-300 text-yellow-600 focus:ring-yellow-500"
+              className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
             />
             <span className="text-gray-600">Remember me</span>
           </label>
           <button
             type="button"
-            className="text-yellow-600 hover:text-yellow-700 font-medium cursor-pointer"
+            className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"
           >
             Forgot password?
           </button>
@@ -71,7 +71,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               onClose();
               onSwitchToRegister?.();
             }}
-            className="text-yellow-600 hover:text-yellow-700 font-medium cursor-pointer"
+            className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"
           >
             Sign up
           </button>

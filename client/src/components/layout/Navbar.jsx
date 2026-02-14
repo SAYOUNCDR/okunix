@@ -53,25 +53,25 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8">
           <Link
             to="/features"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
           >
             Features
           </Link>
           <Link
             to="/docs"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
           >
             Docs
           </Link>
           <Link
             to="/blog"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
           >
             Blog
           </Link>
           <Link
             to="/sponsor"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
           >
             Sponsor
           </Link>
@@ -121,28 +121,28 @@ const Navbar = () => {
         <div className="md:hidden border-t border-gray-200/50 px-6 py-4 flex flex-col gap-4 animate-in slide-in-from-top-2 fade-in duration-200">
           <Link
             to="/features"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
             Features
           </Link>
           <Link
             to="/docs"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
             Docs
           </Link>
           <Link
             to="/blog"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
             Blog
           </Link>
           <Link
             to="/sponsor"
-            className="text-gray-600 hover:text-yellow-600 font-medium transition-colors"
+            className="text-gray-600 hover:text-orange-600 font-medium transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
             Sponsor
