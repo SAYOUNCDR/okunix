@@ -5,6 +5,7 @@ import DashboardDetail from "./pages/DashboardDetail";
 import WebsiteSetting from "./pages/WebsiteSetting";
 import UserSetting from "./pages/UserSetting";
 import Blogs from "./pages/Blogs";
+import Sponsor from "./pages/Sponsor";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/blog" element={<Blogs />} />
+        <Route path="/sponsor" element={<Sponsor />} />
         <Route path="/dashboard" element={<DashboardOverview />} />
         {/* Test route for dashboard details */}
         <Route path="/dashboard/detail" element={<DashboardDetail />} />
