@@ -12,14 +12,19 @@ const FeatureCard = ({
   title,
   description,
   icon: Icon,
+  image,
   linkText = "Learn More",
 }) => (
-  <div className="p-4 flex flex-col h-full bg-orange-100/20">
+  <div className="p-4 flex flex-col h-full bg-orange-100/20 text-left">
     {/* Image Placeholder */}
-    <div className="rounded-xl h-58 mb-6 flex items-center justify-center overflow-hidden relative bg-white shadow-sm border border-gray-200">
-      <div className="text-orange-200 absolute inset-0 flex items-center justify-center">
-        {Icon ? <Icon size={64} strokeWidth={1} /> : "Isometric Image"}
-      </div>
+    <div className="rounded-xl h-68 mb-6 flex items-center justify-center overflow-hidden relative bg-white shadow-sm border border-gray-200">
+      {image ? (
+        <img src={image} alt={title} className="w-full h-full object-cover" />
+      ) : (
+        <div className="text-orange-200 absolute inset-0 flex items-center justify-center">
+          {Icon ? <Icon size={64} strokeWidth={1} /> : "Isometric Image"}
+        </div>
+      )}
     </div>
 
     <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
@@ -45,6 +50,7 @@ const SimpleSetup = () => {
               title="Register & Login"
               description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
               icon={UserPlus}
+              image="/onboading.png"
               linkText="Get Started"
             />
           </div>
@@ -53,6 +59,7 @@ const SimpleSetup = () => {
               title="Generate Script"
               description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
               icon={Code2}
+              image="/GenerateScript.png"
               linkText="View Documentation"
             />
           </div>
@@ -61,6 +68,7 @@ const SimpleSetup = () => {
               title="Embed Tracking Code"
               description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
               icon={ClipboardCopy}
+              image="/deploy.png"
               linkText="Installation Guide"
             />
           </div>
@@ -69,6 +77,7 @@ const SimpleSetup = () => {
               title="View Real-time Analytics"
               description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
               icon={BarChart3}
+              image="/Analytics.png"
               linkText="Explore Demo"
             />
           </div>
