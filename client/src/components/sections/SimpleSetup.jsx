@@ -42,9 +42,18 @@ const FeatureCard = ({
 
 const SimpleSetup = () => {
   return (
-    <section className="bg-white border-y border-gray-200">
-      <div className="max-w-6xl mx-auto  px-6">
-        <div className="max-w-5xl mx-auto border border-gray-200 grid grid-cols-1 md:grid-cols-2 bg-white">
+    <section className="border-y border-gray-200 relative overflow-hidden bg-white">
+      {/* Stripe Pattern Background */}
+      <div
+        className="absolute inset-0 z-0 opacity-10"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(-45deg, #000 0, #000 1px, transparent 1px, transparent 10px)",
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10 ">
+        <div className="max-w-5xl mx-auto border border-gray-200 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm relative z-20">
           <div className="border-b md:border-r border-gray-200">
             <FeatureCard
               title="Register & Login"
