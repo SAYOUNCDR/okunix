@@ -90,7 +90,7 @@ const Blogs = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
 
       <main className="grow pt-32 pb-20 px-6">
