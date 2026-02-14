@@ -70,8 +70,8 @@ const UserSetting = () => {
             {/* Change password */}
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h3 className="font-bold">Change password</h3>
-                <p className="text-sm">Change your account password.</p>
+                <h3 className="font-bold text-sm">Change password</h3>
+                <p className="text-xs">Change your account password.</p>
               </div>
               <div>
                 <button className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
@@ -83,8 +83,8 @@ const UserSetting = () => {
             {/* Change email */}
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h3 className="font-bold">Change email</h3>
-                <p className="text-sm">Change your account email.</p>
+                <h3 className="font-bold text-sm">Change email</h3>
+                <p className="text-xs">Change your account email.</p>
               </div>
               <div>
                 <button className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
@@ -96,8 +96,8 @@ const UserSetting = () => {
             {/* Delete account */}
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h3 className="font-bold">Delete account</h3>
-                <p className="text-sm">
+                <h3 className="font-bold text-sm">Delete account</h3>
+                <p className="text-xs">
                   Your account along with all your data will be deleted.
                 </p>
               </div>
