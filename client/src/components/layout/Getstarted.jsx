@@ -20,8 +20,8 @@ const Getstarted = () => {
           </Link>
           <Link to="/sponsor">
             <Button
-              variant="outline"
-              className="w-full sm:w-auto text-white border-gray-700 hover:bg-gray-800 hover:text-white"
+              variant="ghost"
+              className="w-full sm:w-auto text-white border border-gray-500 shadow-lg shadow-gray-800/50"
             >
               Support Our Mission
             </Button>

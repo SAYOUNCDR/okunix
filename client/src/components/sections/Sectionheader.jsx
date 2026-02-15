@@ -1,6 +1,6 @@
 const Sectionheader = () => {
   return (
-      <div className="flex flex-row items-start justify-between max-w-5xl mx-auto px-4">
+    <div className="flex flex-row items-start justify-between max-w-5xl mx-auto px-4">
       <div className="mb-4">
         <span className="text-orange-500 font-medium text-sm mb-3 block tracking-wide">
           How It Works
@@ -9,10 +9,10 @@ const Sectionheader = () => {
           Your Trusted <br />
           <span className="text-orange-600">Analytics Partner & Growth</span>
         </h2>
-      </div>
-      <div className="max-w-md text-gray-500 text-lg leading-relaxed mb-2 pt-12">
-        We help you monitor, analyze, and improve your digital presence with
-        reliable metrics and transparent data flow.
+        <p className="text-lg md:text-md text-gray-600 mt-4 max-w-3xl leading-relaxed">
+          We help you monitor, analyze, and improve your digital presence with
+          reliable metrics and transparent data flow.
+        </p>
       </div>
     </div>
   );
