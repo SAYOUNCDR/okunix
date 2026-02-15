@@ -20,14 +20,14 @@ const Hero = () => {
 
           <div className="flex flex-row gap-4 justify-center lg:justify-start">
             <Link to="/features">
-              <Button className="w-auto px-4! py-2! text-md! h-auto  bg-orange-600 text-white hover:bg-orange-700 hover:border-orange-700 shadow-lg shadow-orange-200/50">
+              <Button className="w-auto px-4! py-2! text-md! h-auto  bg-orange-600 text-white hover:bg-orange-700 hover:border-orange-700 shadow-lg shadow-orange-200/50 ">
                 Start Free Trial
               </Button>
             </Link>
             <Link to="/features">
               <Button
                 variant="ghost"
-                className="w-auto px-4! py-2! text-md! h-auto  bg-slate-300 text-gray-700 border border-gray-300"
+                className="w-auto px-4! py-2! text-md! h-auto  bg-slate-300 text-gray-700 border border-gray-300 shadow-sm "
               >
                 Learn More
               </Button>
