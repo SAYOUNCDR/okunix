@@ -42,9 +42,7 @@ const FeatureCard = ({
 
 const SimpleSetup = () => {
   return (
-    <section className="border-y border-gray-200 relative overflow-hidden ">
-      
-
+    <section className="border-y border-gray-200 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 relative z-10 ">
         <div className="max-w-5xl mx-auto border border-gray-200 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm relative z-20">
           <div className="border-b md:border-r border-gray-200">
