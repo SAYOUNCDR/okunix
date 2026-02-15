@@ -39,11 +39,11 @@ const Hero = () => {
       {/* Image Section - 70% width, negative margin for overlap */}
       <div className="w-full lg:w-[70%] lg:-ml-[15%] mt-12 lg:mt-0 relative z-10">
         <div className="relative">
-             <img
-              src="/dashboard.png"
-              alt="OkUnix Analytics Dashboard"
-              className="w-full h-auto"
-            />
+          <img
+            src="/Analytics-Photoroom.png"
+            alt="OkUnix Analytics Dashboard"
+            className="w-full h-auto"
+          />
         </div>
       </div>
     </section>
