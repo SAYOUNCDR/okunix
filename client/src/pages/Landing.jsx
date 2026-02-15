@@ -3,7 +3,6 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import SimpleSetup from "../components/sections/SimpleSetup";
 import Hero from "../components/sections/Hero";
-import Sectionheader from "../components/sections/Sectionheader";
 import Getstarted from "../components/layout/Getstarted";
 
 const Landing = () => {

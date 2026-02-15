@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Github, Menu, X } from "lucide-react";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import Button from "../common/Button";
 import LoginModal from "../auth/LoginModal";
 import RegisterModal from "../auth/RegisterModal";
@@ -11,13 +10,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 20);
-  });
 
   useEffect(() => {
     // Fetch GitHub stars
@@ -39,48 +31,8 @@ const Navbar = () => {
   }, []);
 
   return (
-    <motion.div
-      initial={{
-        width: "100%",
-        top: 0,
-        borderRadius: 0,
-        backgroundColor: "rgba(255, 255, 255, 0)",
-        backdropFilter: "blur(0px)",
-        border: "1px solid rgba(255, 255, 255, 0)",
-        boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
-      }}
-      animate={{
-        width: isScrolled ? "min(95%, 64rem)" : "100%", // 64rem = max-w-5xl
-        top: isScrolled ? "1rem" : 0,
-        borderRadius: isScrolled ? "1rem" : 0,
-        backgroundColor: isScrolled
-          ? "rgba(255, 255, 255, 0.8)"
-          : "rgba(255, 255, 255, 0)",
-        backdropFilter: isScrolled ? "blur(12px)" : "blur(0px)",
-        border: isScrolled
-          ? "1px solid rgba(229, 231, 235, 0.5)"
-          : "1px solid rgba(255, 255, 255, 0)",
-        boxShadow: isScrolled
-          ? "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
-          : "0 0 0 rgba(0, 0, 0, 0)",
-      }}
-      transition={{
-        duration: 0.5,
-        ease: "easeInOut",
-      }}
-      className="fixed z-50 left-1/2 -translate-x-1/2"
-    >
-      <motion.nav
-        animate={{
-          paddingTop: isScrolled ? "0.75rem" : "1.5rem",
-          paddingBottom: isScrolled ? "0.75rem" : "1.5rem",
-        }}
-        transition={{
-          duration: 0.5,
-          ease: "easeInOut",
-        }}
-        className="flex items-center justify-between px-6 w-full max-w-7xl mx-auto"
-      >
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl shadow-sm transition-all duration-300">
+      <nav className="flex items-center justify-between px-6 py-3 w-full">
         {/* Logo */}
         <Link
           to="/"
@@ -162,7 +114,7 @@ const Navbar = () => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
@@ -238,7 +190,7 @@ const Navbar = () => {
           setIsLoginOpen(true);
         }}
       />
-    </motion.div>
+    </div>
   );
 };
 
