@@ -1,168 +1,296 @@
 import React from "react";
 import {
-  BarChart3,
-  Shield,
-  Globe,
-  Zap,
-  Smartphone,
-  Lock,
-  Users,
   Eye,
-  ArrowRight,
+  Users,
+  Activity,
+  Router,
+  MapPin,
+  Smartphone,
+  Type,
+  Filter,
+  Clock,
+  Users2,
+  Zap,
+  Database,
+  Tag,
+  Share2,
+  BarChart,
+  PieChart,
+  Link as LinkIcon,
+  BoxSelect,
+  GitCompare,
+  GitMerge,
+  ListFilter,
+  RotateCcw,
+  Target,
+  Map,
+  DollarSign,
+  Network,
+  ShieldCheck,
+  UserX,
+  Cookie,
+  DatabaseZap,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import Button from "../components/common/Button";
 import Getstarted from "../components/layout/Getstarted";
 
-const FeatureCard = ({ icon: Icon, title, description, colorClass }) => (
-  <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
-    <div
-      className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colorClass}`}
-    >
-      <Icon className="w-6 h-6" />
+const FeatureCard = ({ icon: Icon, title, description }) => (
+  <div className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 h-full">
+    <div className="flex items-center gap-3 mb-3">
+      {Icon && <Icon className="w-5 h-5 text-gray-900" />}
+      <h3 className="text-sm font-bold text-gray-900">{title}</h3>
     </div>
-    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
-      {title}
-    </h3>
-    <p className="text-gray-600 leading-relaxed">{description}</p>
+    <p className="text-gray-500 text-sm leading-relaxed">{description}</p>
+  </div>
+);
+
+const Section = ({ title, description, features }) => (
+  <div className="mb-24">
+    <div className="mb-8">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">{title}</h2>
+      <p className="text-gray-500 max-w-2xl text-sm">{description}</p>
+    </div>
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {features.map((feature, index) => (
+        <FeatureCard key={index} {...feature} />
+      ))}
+    </div>
   </div>
 );
 
 const Features = () => {
-  const mainFeatures = [
+  const analyticsFeatures = [
     {
-      icon: Shield,
-      title: "Privacy-First Analytics",
+      icon: Eye,
+      title: "Page views",
       description:
-        "No cookies, no IP tracking, no fingerprinting. compliant with GDPR, CCPA, and PECR out of the box.",
-      colorClass: "bg-green-100 text-green-600",
+        "Knowing which of your pages gets the most traffic is essential to improving your website content.",
     },
     {
-      icon: Zap,
-      title: "Lightweight Script",
+      icon: Users,
+      title: "Visitors",
       description:
-        "Our tracking script is less than 1KB gzipped. It loads asynchronously and won't slow down your site.",
-      colorClass: "bg-orange-100 text-orange-600",
+        "Get detailed information about your visitors like their device, browser, OS and location.",
     },
     {
-      icon: Globe,
-      title: "Real-time Data",
+      icon: Activity,
+      title: "Bounce rate",
       description:
-        "See current visitors and pageviews as they happen. Watch your traffic spike when you launch.",
-      colorClass: "bg-blue-100 text-blue-600",
+        "See which pages keep your visitors engaged versus those they are abandoning.",
     },
     {
-      icon: BarChart3,
-      title: "Simple Dashboard",
+      icon: Router,
+      title: "Traffic sources",
       description:
-        "All the metrics you need on a single page. No complex menus or training required to understand your data.",
-      colorClass: "bg-purple-100 text-purple-600",
+        "See where your traffic is coming from to better understand where you should be spending your effort.",
+    },
+    {
+      icon: MapPin,
+      title: "Location",
+      description:
+        "Find out where your visitors are coming from including the city, region and country.",
     },
     {
       icon: Smartphone,
-      title: "Device & Browser Tracking",
+      title: "Devices",
       description:
-        "Understand what devices, browsers, and operating systems your visitors are using to optimize their experience.",
-      colorClass: "bg-pink-100 text-pink-600",
+        "See the most popular devices used by visitors to help you optimize your pages.",
     },
     {
-      icon: Lock,
-      title: "Data Ownership",
+      icon: Type,
+      title: "Languages",
       description:
-        "You own your data completely. We don't sell it, monetize it, or look at it. Export it whenever you want.",
-      colorClass: "bg-gray-100 text-gray-600",
+        "Know which languages are the most popular among your visitors to help you tailor your content.",
+    },
+    {
+      icon: Filter,
+      title: "Filtering",
+      description:
+        "Gain further insight into your data by applying filters like country, browser, and URL.",
+    },
+    {
+      icon: Clock,
+      title: "Realtime data",
+      description:
+        "Data available in seconds, not days. The data that OkUnix collects is immediately available on your dashboard.",
+    },
+    {
+      icon: Users2,
+      title: "Teams",
+      description:
+        "The teams feature allows you to securely share websites access with different team members.",
+    },
+    {
+      icon: Zap,
+      title: "Custom events",
+      description:
+        "Track everything that happens on your website like signups and cart checkouts using custom events.",
+    },
+    {
+      icon: Database,
+      title: "Custom data",
+      description:
+        "Use custom data properties to help you further analyze your data.",
+    },
+    {
+      icon: Tag,
+      title: "UTM tracking",
+      description:
+        "Measure the effectiveness of your campaign by analyzing UTM query parameters that are automatically collected.",
+    },
+    {
+      icon: Share2,
+      title: "Sharing",
+      description:
+        "Easily share your stats with others through a secure, uniquely generated URL.",
+    },
+    {
+      icon: BarChart,
+      title: "Insights",
+      description:
+        "Build insights for specific websites and date ranges to cover all your data needs.",
+    },
+    {
+      icon: PieChart,
+      title: "Segments",
+      description:
+        "Save commonly used filters, so you can quickly reapply them without setting criteria each time.",
+    },
+    {
+      icon: Users,
+      title: "Cohorts",
+      description:
+        "Group your users based on specific actions, helping you uncover trends and measure engagement more effectively.",
+    },
+    {
+      icon: LinkIcon,
+      title: "Links",
+      description:
+        "Monitor and record clicks on URLs to show where visitors come from and how they interact with your links.",
+    },
+    {
+      icon: BoxSelect,
+      title: "Pixels",
+      description: "Embed a tracking pixel anywhere to start collecting data.",
     },
   ];
 
-  const additionalFeatures = [
+  const insightsFeatures = [
     {
-      icon: Users,
-      title: "Visitor Flows",
+      icon: GitCompare,
+      title: "Compare",
       description:
-        "See where your users are coming from and what pages they visit most often.",
+        "See your metric performance compared against previous date ranges.",
     },
     {
-      icon: Eye,
-      title: "Event Tracking",
+      icon: GitMerge,
+      title: "Breakdown",
+      description: "Dive deeper into your data by using segments and filters.",
+    },
+    {
+      icon: ListFilter,
+      title: "Funnels",
+      description: "Understand the conversion and drop-off rate of users.",
+    },
+    {
+      icon: RotateCcw,
+      title: "Retention",
       description:
-        "Track custom events like button clicks, form submissions, and more with simple attributes.",
+        "Measure your website stickiness by tracking how often users return.",
+    },
+    {
+      icon: Tag,
+      title: "UTM",
+      description: "Track your campaigns through UTM parameters.",
+    },
+    {
+      icon: Target,
+      title: "Goals",
+      description: "Track your goals for pageviews and events.",
+    },
+    {
+      icon: Map,
+      title: "Journey",
+      description: "Look into your revenue data and how users are spending.",
+    },
+    {
+      icon: DollarSign,
+      title: "Revenue",
+      description: "Understand how users navigate through your website.",
+    },
+    {
+      icon: Network,
+      title: "Attribution",
+      description:
+        "See how users engage with your marketing and what drives conversions.",
+    },
+  ];
+
+  const privacyFeatures = [
+    {
+      icon: ShieldCheck,
+      title: "GDPR & CCPA",
+      description:
+        "OkUnix never collects any personal information from your visitors so it is fully compliant with GDPR and CCPA.",
+    },
+    {
+      icon: UserX,
+      title: "Data anonymization",
+      description:
+        "All visitor data is anonymized to protect your visitors' privacy.",
+    },
+    {
+      icon: Cookie,
+      title: "No cookies",
+      description:
+        "OkUnix does not use any cookies so no annoying cookie banner is required.",
+    },
+    {
+      icon: DatabaseZap,
+      title: "Data ownership",
+      description:
+        "Data is always in your control with OkUnix. You can self-host on your own infrastructure or export your data.",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
-      <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+      <main className="pt-32 pb-24 px-6 md:px-12 max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-block px-3 py-1 bg-orange-100 text-orange-600 text-sm font-semibold rounded-full mb-4">
-            Powerful Features
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-            Everything you need, <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-orange-600 to-orange-400">
-              nothing you don't
-            </span>
+          <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
+            Features
           </h1>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            OkUnix provides essential insights without tracking personal data.
-            Simple, fast, and privacy-friendly web analytics.
+          <p className="text-md text-gray-500 leading-relaxed">
+            An overview of all the core features OkUnix provides.
           </p>
         </div>
 
-        {/* Main Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
-          {mainFeatures.map((feature, index) => (
-            <FeatureCard key={index} {...feature} />
-          ))}
-        </div>
+        <Section
+          title="Analytics"
+          description="OkUnix collects all the metrics you care about to help you make better decisions."
+          features={analyticsFeatures}
+        />
 
-        {/* Big Feature Block - Integration */}
-        <div className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-sm mb-24 overflow-hidden relative">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1 z-10">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Installs in seconds
-              </h2>
-              <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-                Just add a single line of code to your website's header. Works
-                with React, Vue, Next.js, WordPress, and any other framework.
-              </p>
+        <Section
+          title="Insights"
+          description="OkUnix comes with out of the box insights that enables you to gain deep understanding of all your website data."
+          features={insightsFeatures}
+        />
 
-              <div className="bg-gray-900 rounded-xl p-4 md:p-6 shadow-xl mb-6 font-mono text-sm text-gray-300 overflow-x-auto">
-                <span className="text-purple-400">&lt;script</span>{" "}
-                <span className="text-blue-400">defer</span>{" "}
-                <span className="text-blue-400">data-domain</span>=
-                <span className="text-green-400">"your-site.com"</span>{" "}
-                <span className="text-blue-400">src</span>=
-                <span className="text-green-400">
-                  "https://okunix.com/js/tracker.js"
-                </span>
-                <span className="text-purple-400">&gt;&lt;/script&gt;</span>
-              </div>
-
-              <Link to="/docs">
-                <Button>
-                  View Documentation <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-
-            <div className="flex-1 relative">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl"></div>
-              <div className="relative bg-white border border-gray-200 rounded-xl shadow-lg p-6">
-                {/* Visual representation of data flow or chart */}
-                <img src="/Analytics.png" alt="" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <Section
+          title="Privacy"
+          description="OkUnix is private by default and helps you stay compliant with data privacy laws."
+          features={privacyFeatures}
+        />
 
         {/* CTA */}
-       <Getstarted />
+        <div className="mt-20">
+          <Getstarted />
+        </div>
       </main>
       <Footer />
     </div>
