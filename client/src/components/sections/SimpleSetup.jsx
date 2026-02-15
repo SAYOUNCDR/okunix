@@ -7,6 +7,7 @@ import {
   ClipboardCopy,
   BarChart3,
 } from "lucide-react";
+import Sectionheader from "./Sectionheader";
 
 const FeatureCard = ({
   title,
@@ -15,7 +16,8 @@ const FeatureCard = ({
   image,
   linkText = "Learn More",
 }) => (
-  <div className="p-4 flex flex-col h-full bg-orange-100/20 text-left">
+  <div className="p-4 flex flex-col h-full text-left">
+    {/*  bg-orange-100/20 */}
     {/* Image Placeholder */}
     <div className="rounded-xl h-68 mb-6 flex items-center justify-center overflow-hidden relative bg-white shadow-sm border border-gray-200">
       {image ? (
@@ -42,10 +44,10 @@ const FeatureCard = ({
 
 const SimpleSetup = () => {
   return (
-    <section className="border-y border-gray-200 relative overflow-hidden">
+    <section className="relative overflow-hidden">
+      <Sectionheader />
       <div className="max-w-6xl mx-auto px-6 relative z-10 ">
-        <div className="max-w-5xl mx-auto border border-gray-200 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm relative z-20">
-          <div className="border-b md:border-r border-gray-200">
+        <div className="max-w-5xl mx-auto  grid grid-cols-1 md:grid-cols-2  relative z-20">
             <FeatureCard
               title="Register & Login"
               description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
@@ -53,8 +55,6 @@ const SimpleSetup = () => {
               image="/onboading.png"
               linkText="Get Started"
             />
-          </div>
-          <div className="border-b border-gray-200">
             <FeatureCard
               title="Generate Script"
               description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
@@ -62,8 +62,6 @@ const SimpleSetup = () => {
               image="/GenerateScript.png"
               linkText="View Documentation"
             />
-          </div>
-          <div className="md:border-r border-gray-200">
             <FeatureCard
               title="Embed Tracking Code"
               description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
@@ -71,8 +69,6 @@ const SimpleSetup = () => {
               image="/deploy.png"
               linkText="Installation Guide"
             />
-          </div>
-          <div>
             <FeatureCard
               title="View Real-time Analytics"
               description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
@@ -80,7 +76,6 @@ const SimpleSetup = () => {
               image="/Analytics.png"
               linkText="Explore Demo"
             />
-          </div>
         </div>
       </div>
     </section>

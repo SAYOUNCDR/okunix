@@ -10,8 +10,6 @@ const Landing = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       <Hero />
-      {/* Header Section */}
-      <Sectionheader />
       <div className="pb-20">
         <SimpleSetup />
       </div>
