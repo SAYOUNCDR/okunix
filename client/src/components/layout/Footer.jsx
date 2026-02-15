@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -49,26 +48,10 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/pricing"
+                    to="/sponsor"
                     className="text-gray-500 hover:text-orange-600 transition-colors"
                   >
                     Sponsor
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/login"
-                    className="text-gray-500 hover:text-orange-600 transition-colors"
-                  >
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/register"
-                    className="text-gray-500 hover:text-orange-600 transition-colors"
-                  >
-                    Sign up
                   </Link>
                 </li>
               </ul>
@@ -104,7 +87,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/sayoun/okunix"
+                    href="https://github.com/SAYOUNCDR/okunix"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-orange-600 transition-colors"
@@ -121,7 +104,7 @@ const Footer = () => {
               <ul className="space-y-3">
                 <li>
                   <a
-                    href="mailto:hello@okunix.com"
+                    href="mailto:sayounparui45@gmail.com"
                     className="text-gray-500 hover:text-orange-600 transition-colors"
                   >
                     Email
@@ -129,7 +112,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://twitter.com/okunix"
+                    href="https://x.com/DriftNBlde"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-orange-600 transition-colors"
@@ -139,7 +122,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://linkedin.com/company/okunix"
+                    href="https://www.linkedin.com/in/sayoun-parui-868b4228b/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-orange-600 transition-colors"
