@@ -6,8 +6,8 @@ import Footer from "../components/layout/Footer";
 import Button from "../components/common/Button";
 
 const BenefitItem = ({ icon: Icon, title, description }) => (
-  <div className="flex gap-4 items-start">
-    <div className="p-2 bg-orange-50 text-orange-600 rounded-lg shrink-0">
+  <div className="flex gap-4 items-start group border border-gray-200 shadow-sm p-4 rounded-xl">
+    <div className="p-2 bg-gray-100 text-gray-600 rounded-lg shrink-0 group-hover:bg-white group-hover:shadow-sm">
       <Icon size={24} />
     </div>
     <div>
@@ -59,8 +59,8 @@ const TierCard = ({
     </ul>
 
     <Button
-      variant={recommended ? "primary" : "outline"}
-      className="w-full justify-center"
+      variant={recommended ? "primary" : "ghost"}
+      className="w-full justify-center border border-gray-200 shadow-sm"
     >
       Sponsor
     </Button>
@@ -82,8 +82,8 @@ const Sponsor = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Become a <span className="text-orange-600">Sponsor</span>
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              OkUnix is proudly open source. Your sponsorship helps keep the
+            <p className="text-md text-gray-600 leading-relaxed">
+              Okunix is proudly open source. Your sponsorship helps keep the
               servers running, supports development of privacy-focused features,
               and ensures the project remains independent and sustainable.
             </p>
@@ -162,10 +162,10 @@ const Sponsor = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Button variant="outline">Star on GitHub</Button>
+                <Button variant="primary">Star on GitHub</Button>
               </a>
               <Link to="/contact">
-                <Button variant="ghost">Contact Us</Button>
+                <Button variant="ghost" className="border border-gray-200 shadow-sm">Contact Us</Button>
               </Link>
             </div>
           </div>
