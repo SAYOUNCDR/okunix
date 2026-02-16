@@ -17,7 +17,6 @@ const DashboardDetail = () => {
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden overflow-y-auto">
-        {/* Header Section */}
         <header className="px-8 py-6">
           <div className="mb-6">
             <button
@@ -48,11 +47,9 @@ const DashboardDetail = () => {
           </div>
         </header>
 
-        {/* Horizontal Line */}
         <div className="h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
         <div className="flex-1 p-8">
-          {/* General Stats Section */}
           <div className="space-y-4">
             <div className="flex justify-end items-center gap-2">
               <button className="flex items-center justify-center w-9 h-9 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg cursor-pointer hover:bg-gray-50 shadow-sm">
@@ -107,7 +104,6 @@ const DashboardDetail = () => {
             </div>
           </div>
 
-          {/* Chart section  */}
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Activity</h3>
@@ -122,13 +118,10 @@ const DashboardDetail = () => {
 
           <TrafficHeatmap />
 
-          {/* Sources Section */}
           <SourcesSection />
 
-          {/* Location section */}
           <LocationSection />
 
-          {/* Entry/Exit Pages Section */}
           <EntryExitPages />
         </div>
       </main>

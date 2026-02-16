@@ -8,11 +8,8 @@ const TrafficHeatmap = () => {
     return `${hour}${period}`;
   });
 
-  // Generate mock data: 7 days x 24 hours
-  // Value between 0 and 100 representing traffic intensity
   const data = days.map((day) =>
     hours.map((hour) => {
-      // Simulate higher traffic during work hours (9am - 5pm)
       const hourIndex = parseInt(hour);
       const isWorkHour =
         (hour.includes("am") && [9, 10, 11].includes(hourIndex)) ||
@@ -40,29 +37,23 @@ const TrafficHeatmap = () => {
       </h3>
 
       <div className="flex flex-col">
-        {/* Header Row (Hours) */}
         <div className="flex mb-2 ml-12">
           {hours.map((hour, i) => (
             <div key={hour} className="flex-1 text-center min-w-5">
-              {/* Show label every 2 hours or periodically */}
               <span className="text-[10px] text-gray-400 font-medium block">
-                {/* Only show every 2th or 3rd label to avoid crowding if needed, or just condensed */}
                 {i % 2 === 0 ? hour : ""}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Rows (Days) */}
         <div className="flex flex-col gap-1.5">
           {days.map((day, dayIndex) => (
             <div key={day} className="flex items-center gap-1.5">
-              {/* Day Label */}
               <div className="w-12 text-xs font-semibold text-gray-500 shrink-0">
                 {day}
               </div>
 
-              {/* Data Points */}
               <div className="flex flex-1 gap-1.5">
                 {data[dayIndex].map((value, hourIndex) => (
                   <div
@@ -73,7 +64,6 @@ const TrafficHeatmap = () => {
                       className={`w-full h-full rounded-sm transition-colors duration-200 ${getColorClass(value)}`}
                     ></div>
 
-                    {/* Tooltip */}
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block z-20 pointer-events-none">
                       <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-lg">
                         {value} visitors • {day} {hours[hourIndex]}
@@ -87,7 +77,6 @@ const TrafficHeatmap = () => {
         </div>
       </div>
 
-      {/* Legend */}
       <div className="flex justify-end items-center mt-4 gap-2 text-xs text-gray-500 font-medium">
         <span>Less</span>
         <div className="flex gap-1">

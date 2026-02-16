@@ -8,7 +8,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement login logic
     console.log("Login with:", { email, password });
   };
 

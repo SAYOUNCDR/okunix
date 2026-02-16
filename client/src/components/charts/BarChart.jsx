@@ -28,7 +28,7 @@ const BarChart = () => {
           {
             label: "Visitors",
             data: [16, 9, 8, 4, 1, 0, 0],
-            backgroundColor: "#fb923cff", // orange-400 (light)
+            backgroundColor: "#fb923cff",
             borderRadius: 4,
             barPercentage: 0.8,
             categoryPercentage: 0.6,
@@ -36,7 +36,7 @@ const BarChart = () => {
           {
             label: "Views",
             data: [27, 28, 1, 6, 2, 0, 0],
-            backgroundColor: "#ea580cff", // orange-600 (dark)
+            backgroundColor: "#ea580cff",
             borderRadius: 4,
             barPercentage: 0.8,
             categoryPercentage: 0.6,
@@ -58,7 +58,7 @@ const BarChart = () => {
                 size: 12,
                 family: "'Geist', sans-serif",
               },
-              color: "#6b7280", // gray-500
+              color: "#6b7280",
             },
           },
           tooltip: {
@@ -81,7 +81,7 @@ const BarChart = () => {
               drawBorder: false,
             },
             ticks: {
-              color: "#9ca3af", // gray-400
+              color: "#9ca3af",
               font: {
                 size: 11,
               },
@@ -89,18 +89,18 @@ const BarChart = () => {
           },
           y: {
             grid: {
-              color: "#e2e8f0", // slate-200
+              color: "#e2e8f0",
               drawBorder: false,
             },
             ticks: {
-              color: "#9ca3af", // gray-400
+              color: "#9ca3af",
               font: {
                 size: 11,
               },
               stepSize: 5,
             },
             beginAtZero: true,
-            max: 45, // Match image roughly
+            max: 45,
           },
         },
         interaction: {

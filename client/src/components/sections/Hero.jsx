@@ -5,7 +5,6 @@ import Button from "../common/Button";
 const Hero = () => {
   return (
     <section className="pt-24 pb-16 pl-4 w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center overflow-x-hidden md:overflow-visible ">
-      {/* Text Section - 45% width, high z-index for overlap */}
       <div className="w-full lg:w-[45%] text-center lg:text-left z-20  shrink-0 pointer-events-none">
         <div className="pointer-events-auto">
           <h1 className="text-4xl md:text-4xl font-extrabold text-gray-900 mb-12 leading-[1.1] tracking-tight">
@@ -36,7 +35,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Image Section - 70% width, negative margin for overlap */}
       <div className="w-full lg:w-[70%] lg:-ml-[15%] mt-12 lg:mt-0 relative z-10">
         <div className="relative">
           <img

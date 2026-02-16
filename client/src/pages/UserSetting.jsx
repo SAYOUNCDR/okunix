@@ -8,7 +8,6 @@ const UserSetting = () => {
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden overflow-y-auto">
-        {/* Header Section */}
         <header className="px-8 py-6">
           <div className="mb-4">
             <button
@@ -25,7 +24,6 @@ const UserSetting = () => {
         </header>
 
         <div className="flex-1 px-8">
-          {/* User details*/}
           <div className="mt-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-2">
               <h3>Account Id</h3>
@@ -63,11 +61,9 @@ const UserSetting = () => {
             </div>
           </div>
 
-          {/* Danger zone div like reset passsword, change email, Delete account*/}
           <div className="mt-8 mb-4 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h3 className="text-red-600">Danger Zone</h3>
 
-            {/* Change password */}
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h3 className="font-bold text-sm">Change password</h3>
@@ -80,7 +76,6 @@ const UserSetting = () => {
               </div>
             </div>
 
-            {/* Change email */}
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h3 className="font-bold text-sm">Change email</h3>
@@ -93,7 +88,6 @@ const UserSetting = () => {
               </div>
             </div>
 
-            {/* Delete account */}
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h3 className="font-bold text-sm">Delete account</h3>

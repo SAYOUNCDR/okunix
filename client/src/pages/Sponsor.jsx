@@ -74,7 +74,6 @@ const Sponsor = () => {
 
       <main className="grow pt-32 pb-20 px-6">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-20">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 text-orange-600 text-sm font-medium mb-6">
               <Heart size={16} className="fill-orange-600" />
@@ -90,7 +89,6 @@ const Sponsor = () => {
             </p>
           </div>
 
-          {/* Benefits Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 max-w-5xl mx-auto">
             <BenefitItem
               icon={Zap}
@@ -109,7 +107,6 @@ const Sponsor = () => {
             />
           </div>
 
-          {/* Tiers */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20">
             <TierCard
               name="Supporter"
@@ -150,7 +147,6 @@ const Sponsor = () => {
             />
           </div>
 
-          {/* FAQ or Bottom CTA */}
           <div className="bg-white rounded-3xl p-10 md:p-16 text-center border border-gray-100 shadow-sm max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               Other ways to support

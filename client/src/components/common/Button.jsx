@@ -7,7 +7,7 @@ const Button = ({
   type = "button",
   className = "",
   disabled = false,
-  variant = "primary", // primary, outline, ghost
+  variant = "primary", 
 }) => {
   const baseStyles =
     "px-6 py-2 rounded-lg font-semibold transition-all duration-200 active:translate-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2";

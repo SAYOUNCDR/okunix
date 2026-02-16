@@ -32,7 +32,6 @@ const Sidebar = ({ className }) => {
         isCollapsed ? "w-16" : "w-64"
       } ${className || ""}`}
     >
-      {/* Header / Logo Area */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
@@ -51,7 +50,6 @@ const Sidebar = ({ className }) => {
         )}
       </div>
 
-      {/* Navigation Links */}
       <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
@@ -84,7 +82,6 @@ const Sidebar = ({ className }) => {
         })}
       </nav>
 
-      {/* User / Footer Area */}
       <div className="border-t border-gray-100 p-3">
         <div
           className={`flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors ${

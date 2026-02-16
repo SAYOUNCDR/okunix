@@ -4,7 +4,6 @@ import WebsiteList from "../components/dashboard/WebsiteList";
 import { Plus, Search } from "lucide-react";
 
 const DashboardOverview = () => {
-  // Mock data for websites
   const websites = [
     { name: "Dev Calendar", domain: "devcalendar.sayoun.studio" },
     { name: "Portfolio", domain: "sayoun.studio" },
@@ -15,7 +14,6 @@ const DashboardOverview = () => {
       <Sidebar />
 
       <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Header Area */}
         <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-8">
           <h1 className="text-2xl font-bold text-gray-900">Websites</h1>
           <Button variant="primary" className="flex items-center gap-2">
@@ -24,9 +22,7 @@ const DashboardOverview = () => {
           </Button>
         </div>
 
-        {/* Content Area */}
         <div className="flex-1 overflow-y-auto p-8">
-          {/* Search and Filters */}
           <div className="mb-6">
             <div className="relative max-w-sm">
               <Search
@@ -41,7 +37,6 @@ const DashboardOverview = () => {
             </div>
           </div>
 
-          {/* Websites List */}
           <WebsiteList websites={websites} />
         </div>
       </main>

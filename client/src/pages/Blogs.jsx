@@ -7,7 +7,6 @@ import Footer from "../components/layout/Footer";
 const BlogItem = ({ title, date, readTime, description, image, slug }) => (
   <div className="group relative py-8 first:pt-0 last:pb-0">
     <div className="flex flex-col sm:flex-row gap-6 items-start">
-      {/* Thumbnail */}
       <div className="shrink-0">
         <div className="w-15 h-15 rounded-lg overflow-hidden flex items-center justify-center">
           {image ? (
@@ -24,9 +23,7 @@ const BlogItem = ({ title, date, readTime, description, image, slug }) => (
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 min-w-0 w-full">
-        {/* Header Row */}
         <div className="flex items-start justify-between gap-4 mb-1">
           <h3 className="text-lg font-bold text-gray-900 group-hover:text-orange-600 transition-colors flex items-center gap-2">
             <Link to={`/blog/${slug}`} className="focus:outline-none">
@@ -43,17 +40,14 @@ const BlogItem = ({ title, date, readTime, description, image, slug }) => (
           </span>
         </div>
 
-        {/* Date Row */}
         <div className="text-xs text-gray-400 mb-3 font-medium">{date}</div>
 
-        {/* Description Row */}
         <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
           {description}
         </p>
       </div>
     </div>
 
-    {/* Divider */}
     <div className="absolute bottom-0 left-0 w-full border-b border-dashed border-gray-200 group-last:hidden mt-8" />
   </div>
 );
@@ -67,7 +61,7 @@ const Blogs = () => {
       readTime: "5 min read",
       description:
         "Understanding the implications of the new data transfer framework between the EU and US, and what it means for your business compliance strategy.",
-      image: null, // Using placeholder for now
+      image: null,
     },
     {
       slug: "open-source-analytics",

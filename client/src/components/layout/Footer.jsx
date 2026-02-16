@@ -5,7 +5,6 @@ const Footer = () => {
     <footer className="pt-20 pb-10 border-t border-gray-100 ">
       <div className="max-w-5xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
-          {/* Brand Column */}
           <div className="col-span-1 md:col-span-4">
             <div className="flex items-center gap-1 mb-6">
               <img
@@ -32,9 +31,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Links Columns */}
           <div className="col-span-1 md:col-span-5 md:col-start-8 grid grid-cols-2 md:grid-cols-3 gap-8">
-            {/* Product */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Product</h3>
               <ul className="space-y-3">
@@ -57,7 +54,6 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Resources */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Resources</h3>
               <ul className="space-y-3">
@@ -98,7 +94,6 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Connect */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Connect</h3>
               <ul className="space-y-3">
@@ -135,7 +130,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2 text-gray-500 text-sm">
             <span className="text-lg">🍪</span>

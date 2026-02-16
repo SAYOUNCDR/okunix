@@ -6,7 +6,6 @@ const EntryExitPages = () => {
 
   const tabs = ["Path", "Entry", "Exit"];
 
-  // Mock data based on the image
   const data = {
     Path: [
       { path: "/", count: 30, percent: "77%" },

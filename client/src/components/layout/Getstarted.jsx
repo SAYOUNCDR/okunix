@@ -29,7 +29,7 @@ const Getstarted = () => {
         </div>
       </div>
 
-      {/* Background decoration */}
+      
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-600 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600 rounded-full blur-3xl"></div>

@@ -12,13 +12,11 @@ const Navbar = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch GitHub stars
     const fetchStars = async () => {
       try {
         const res = await fetch("https://api.github.com/repos/#/okunix");
         if (res.ok) {
           const data = await res.json();
-          // Use nullish coalescing to allow 0 as a valid value
           setStars(data.stargazers_count ?? 0);
         }
       } catch (error) {
@@ -33,7 +31,6 @@ const Navbar = () => {
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl shadow-sm transition-all duration-300">
       <nav className="flex items-center justify-between px-6 py-3 w-full">
-        {/* Logo */}
         <Link
           to="/"
           className="flex items-center gap-0.5"
@@ -49,7 +46,6 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-8">
           <Link
             to="/features"
@@ -77,9 +73,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Right Actions */}
         <div className="flex items-center gap-4">
-          {/* GitHub Stars */}
           <a
             href="https://github.com/SAYOUNCDR/okunix"
             target="_blank"
@@ -106,7 +100,6 @@ const Navbar = () => {
             Sign Up
           </Button>
 
-          {/* Mobile Menu Toggle */}
           <button
             className="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none p-1"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -116,7 +109,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
         <div className="md:hidden border-t border-gray-200/50 px-6 py-4 flex flex-col gap-4 animate-in slide-in-from-top-2 fade-in duration-200">
           <Link

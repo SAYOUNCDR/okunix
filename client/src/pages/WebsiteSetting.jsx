@@ -8,7 +8,6 @@ const WebsiteSetting = () => {
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden overflow-y-auto">
-        {/* Header Section */}
         <header className="px-8 py-6">
           <div className="mb-6">
             <button
@@ -34,11 +33,9 @@ const WebsiteSetting = () => {
           </div>
         </header>
 
-        {/* Horizontal Line */}
         <div className="h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
         <div className="flex-1 p-8">
-          {/* Website Id, domain, name div*/}
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-2">
               <h3>Website Id</h3>
@@ -69,7 +66,6 @@ const WebsiteSetting = () => {
             </div>
           </div>
 
-          {/* Tracking code dov */}
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-2">
               <h3>Tracking Code</h3>
@@ -92,10 +88,8 @@ const WebsiteSetting = () => {
             </div>
           </div>
 
-          {/* Share div */}
           <div></div>
 
-          {/* Danger zone div like reset website or delete website */}
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h3 className="text-red-600">Danger Zone</h3>
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

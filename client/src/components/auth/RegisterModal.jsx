@@ -9,7 +9,6 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement register logic
     console.log("Register with:", { name, email, password });
   };
 

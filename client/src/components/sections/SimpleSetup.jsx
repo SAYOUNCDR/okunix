@@ -17,8 +17,6 @@ const FeatureCard = ({
   linkText = "Learn More",
 }) => (
   <div className="p-4 flex flex-col h-full text-left">
-    {/*  bg-orange-100/20 */}
-    {/* Image Placeholder */}
     <div className="rounded-xl h-68 mb-6 flex items-center justify-center overflow-hidden relative bg-white shadow-sm border border-gray-200">
       {image ? (
         <img src={image} alt={title} className="w-full h-full object-cover" />

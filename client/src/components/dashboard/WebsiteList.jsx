@@ -1,22 +1,18 @@
 import Button from "../common/Button"; // Check Button import path
 import { Cog, Globe } from "lucide-react";
 
-// Assuming Button is in  ../common/Button.jsx relative to components/dashboard/
-// Double checking existing DashboardOverview.jsx import: import Button from "../common/Button";
 
 const WebsiteList = ({ websites = [] }) => {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       {websites.length > 0 ? (
         <div className="divide-y divide-gray-100">
-          {/* Table Header */}
           <div className="grid grid-cols-12 px-6 py-3 bg-gray-50/50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
             <div className="col-span-4">Name</div>
             <div className="col-span-6">Domain</div>
             <div className="col-span-2 text-right">Action</div>
           </div>
 
-          {/* Rows */}
           {websites.map((site, index) => (
             <div
               key={index}
