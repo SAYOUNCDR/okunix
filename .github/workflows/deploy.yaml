@@ -78,19 +78,23 @@ jobs:
             mv ~/deploy.tar.gz ~/projects/okunix/deploy.tar.gz
             cd ~/projects/okunix
 
-            # 1. Backup
+            # 1. Backup the current working version
             [ -d "server" ] && tar -czf backup_$(date +%Y%m%d_%H%M%S).tar.gz server client-dist 2>/dev/null || true
             
-            # 2. CLEANUP: Remove old folders to ensure no ghost files
+            # --- THE MISSING LINE GOES HERE ---
+            # 2. Rotate backups: keep only the 5 most recent ones
+            ls -t backup_*.tar.gz 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
+            
+            # 3. CLEANUP: Clear old folders for a fresh extraction
             rm -rf server client-dist ecosystem.config.js
             
-            # 3. Extract
+            # 4. Extract the new bundle
             tar -xzf deploy.tar.gz -C .
             
-            # 4. Inject Backend Secrets
+            # 5. Inject Backend Secrets
             echo "${{ secrets.SERVER_ENV }}" > server/.env
 
-            # 5. Reload (This will now work with the fixed secret)
+            # 6. Reload PM2
             pm2 startOrReload ecosystem.config.js
             pm2 save
 
