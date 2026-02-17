@@ -10,3 +10,5 @@ connectDB().then(() => {
     console.log(`Server running on port ${PORT}`);
   });
 });
+
+// Github actions deployment test
