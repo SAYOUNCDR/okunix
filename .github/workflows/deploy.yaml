@@ -75,23 +75,23 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # --- FIX 2: Correct paths for move and extract ---
             mkdir -p ~/projects/okunix
-            # Move bundle from home to project folder
             mv ~/deploy.tar.gz ~/projects/okunix/deploy.tar.gz
             cd ~/projects/okunix
 
-            # Backup current state (Keep only 5 most recent backups)
+            # 1. Backup
             [ -d "server" ] && tar -czf backup_$(date +%Y%m%d_%H%M%S).tar.gz server client-dist 2>/dev/null || true
-            ls -t backup_*.tar.gz 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
             
-            # Extract new bundle
+            # 2. CLEANUP: Remove old folders to ensure no ghost files
+            rm -rf server client-dist ecosystem.config.js
+            
+            # 3. Extract
             tar -xzf deploy.tar.gz -C .
             
-            # Inject Backend Env Secrets
+            # 4. Inject Backend Secrets
             echo "${{ secrets.SERVER_ENV }}" > server/.env
 
-            # Reload Apps
+            # 5. Reload (This will now work with the fixed secret)
             pm2 startOrReload ecosystem.config.js
             pm2 save
 
