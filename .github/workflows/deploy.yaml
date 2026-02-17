@@ -58,6 +58,16 @@ jobs:
         with:
           name: okunix-bundle
 
+      # --- FIX 1: Add SCP to actually upload the file to your VM ---
+      - name: Upload Bundle to VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "deploy.tar.gz"
+          target: "~/" # Uploads to /home/azureuser/deploy.tar.gz
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -65,14 +75,15 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # --- FIX 2: Correct paths for move and extract ---
             mkdir -p ~/projects/okunix
-            # Move the bundle from home to the project folder
-            mv ~/deploy.tar.gz ~/projects/okunix/deploy.tar.gz || true
+            # Move bundle from home to project folder
+            mv ~/deploy.tar.gz ~/projects/okunix/deploy.tar.gz
             cd ~/projects/okunix
 
             # Backup current state (Keep only 5 most recent backups)
             [ -d "server" ] && tar -czf backup_$(date +%Y%m%d_%H%M%S).tar.gz server client-dist 2>/dev/null || true
-            ls -t backup_*.tar.gz | tail -n +6 | xargs rm -f 2>/dev/null || true
+            ls -t backup_*.tar.gz 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
             
             # Extract new bundle
             tar -xzf deploy.tar.gz -C .
