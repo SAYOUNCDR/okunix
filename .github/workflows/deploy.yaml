@@ -19,27 +19,22 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      # 1. Build Frontend (Variables are baked in here)
       - name: Build Frontend
         working-directory: ./client
         run: |
           npm install
-          # Vite MUST have this file during 'npm run build'
           echo "VITE_API_URL=https://okunix-api.sayoun.studio" > .env
           npm run build
 
-      # 2. Prepare Backend
       - name: Prepare Backend
         working-directory: ./server
         run: npm install --omit=dev
 
-      # 3. Create bundle (Using PM2_CONF secret instead of a file)
       - name: Create Package
         run: |
           mkdir -p deploy
           cp -r server deploy/
           cp -r client/dist deploy/client-dist
-          # Create the ecosystem file from your GitHub Secret
           echo "${{ secrets.PM2_CONF }}" > deploy/ecosystem.config.js
           tar -czf deploy.tar.gz -C deploy .
 
@@ -68,23 +63,26 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             mkdir -p ~/projects/okunix
+            # Move the bundle from home to the project folder
+            mv ~/deploy.tar.gz ~/projects/okunix/deploy.tar.gz || true
             cd ~/projects/okunix
 
-            # Backup current state
-            [ -d "server" ] && tar -czf backup_$(date +%F).tar.gz server client-dist 2>/dev/null || true
+            # Backup current state (Keep only 5 most recent backups)
+            [ -d "server" ] && tar -czf backup_$(date +%Y%m%d_%H%M%S).tar.gz server client-dist 2>/dev/null || true
+            ls -t backup_*.tar.gz | tail -n +6 | xargs rm -f 2>/dev/null || true
             
-            # Extract new bundle (includes the secret ecosystem file)
-            tar -xzf ~/deploy.tar.gz -C .
+            # Extract new bundle
+            tar -xzf deploy.tar.gz -C .
             
             # Inject Backend Env Secrets
             echo "${{ secrets.SERVER_ENV }}" > server/.env
 
-            # Reload Apps using the new config
+            # Reload Apps
             pm2 startOrReload ecosystem.config.js
             pm2 save
-        
+
       - name: Rollback on failure
-        if: failure() # This ensures it only runs if the step above errors out
+        if: failure()
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
