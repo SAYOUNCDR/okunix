@@ -82,3 +82,23 @@ jobs:
             # Reload Apps using the new config
             pm2 startOrReload ecosystem.config.js
             pm2 save
+        
+      - name: Rollback on failure
+        if: failure() # This ensures it only runs if the step above errors out
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/projects/okunix
+            echo "Deployment failed! Rolling back..."
+            LATEST_BACKUP=$(ls -t backup_*.tar.gz 2>/dev/null | head -1)
+            if [ -n "$LATEST_BACKUP" ]; then
+              tar -xzf "$LATEST_BACKUP" -C .
+              pm2 startOrReload ecosystem.config.js
+              echo "✅ Successfully rolled back to $LATEST_BACKUP"
+            else
+              echo "❌ No backup found to roll back to!"
+              exit 1
+            fi
