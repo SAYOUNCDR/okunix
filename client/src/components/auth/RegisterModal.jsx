@@ -24,7 +24,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
-            placeholder="John Doe"
+            placeholder="User name"
             required
           />
         </div>
