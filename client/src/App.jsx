@@ -7,6 +7,7 @@ import UserSetting from "./pages/UserSetting";
 import Blogs from "./pages/Blogs";
 import Sponsor from "./pages/Sponsor";
 import Features from "./pages/Features";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
 
 function App() {
   return (
@@ -16,11 +17,14 @@ function App() {
         <Route path="/blog" element={<Blogs />} />
         <Route path="/sponsor" element={<Sponsor />} />
         <Route path="/features" element={<Features />} />
-        <Route path="/dashboard" element={<DashboardOverview />} />
-        {/* Test route for dashboard details */}
-        <Route path="/dashboard/detail" element={<DashboardDetail />} />
-        <Route path="/dashboard/setting" element={<WebsiteSetting />} />
-        <Route path="/dashboard/setting/user" element={<UserSetting />} />
+
+        {/* Protected Dashboard Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardOverview />} />
+          <Route path="/dashboard/detail" element={<DashboardDetail />} />
+          <Route path="/dashboard/setting" element={<WebsiteSetting />} />
+          <Route path="/dashboard/setting/user" element={<UserSetting />} />
+        </Route>
       </Routes>
     </Router>
   );

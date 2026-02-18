@@ -1,19 +1,44 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login with:", { email, password });
+    setError("");
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      onClose();
+      navigate("/dashboard");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Welcome back">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {error && (
+          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md">
+            {error}
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
             Email address

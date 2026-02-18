@@ -11,10 +11,12 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ className }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -35,7 +37,7 @@ const Sidebar = ({ className }) => {
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
-            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-white font-bold text-sm">O</span>
             </div>
             <span className="font-bold text-lg text-gray-900 truncate">
@@ -66,7 +68,7 @@ const Sidebar = ({ className }) => {
             >
               <item.icon
                 size={20}
-                className={`flex-shrink-0 transition-colors ${
+                className={`shrink-0 transition-colors ${
                   isActive
                     ? "text-gray-900"
                     : "text-gray-500 group-hover:text-gray-900"
@@ -87,14 +89,20 @@ const Sidebar = ({ className }) => {
           className={`flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors ${
             isCollapsed ? "justify-center" : ""
           }`}
+          onClick={logout}
+          title="Logout"
         >
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 text-gray-600">
+          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center shrink-0 text-gray-600">
             <User size={16} />
           </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <p className="text-sm font-medium text-gray-900 truncate">User</p>
-              <p className="text-xs text-gray-500 truncate">user@example.com</p>
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {user?.username || "User"}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
+                {user?.email || "user@example.com"}
+              </p>
             </div>
           )}
         </div>
