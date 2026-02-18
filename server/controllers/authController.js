@@ -148,8 +148,8 @@ exports.login = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: isProduction, // Secure in production (HTTPS)
-      sameSite: isProduction ? "None" : "Lax", // "None" allowed cross-site cookies if frontend/backend are on diff domains
+      secure: false, // Allow http on localhost
+      sameSite: "Lax", 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 

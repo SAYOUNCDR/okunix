@@ -38,8 +38,18 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Prevent infinite loops if refresh token endpoint itself fails
+    if (originalRequest.url.includes("/auth/refresh-token")) {
+      return Promise.reject(error);
+    }
+
     // If error is 401 and we haven't tried to refresh yet
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Also ignore login errors (401 on login means wrong password, not expire token)
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/login")
+    ) {
       originalRequest._retry = true;
 
       try {
