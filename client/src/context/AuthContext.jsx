@@ -20,7 +20,8 @@ export const AuthProvider = ({ children }) => {
 
         // Fetch user details
         const response = await api.get("/auth/me");
-        setUser(response.data);
+        // Ensure we handle response structure correctly: assume API returns { user: ... }
+        setUser(response.data.user || response.data); 
       } catch (error) {
         // If anything fails (no cookie, invalid token), user is not logged in
         setUser(null);

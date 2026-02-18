@@ -149,7 +149,7 @@ exports.login = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false, // Allow http on localhost
-      sameSite: "Lax", 
+      sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -172,20 +172,45 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.refreshToken = (req, res) => {
+exports.refreshToken = async (req, res) => {
   try {
     const cookie = req.cookies.refreshToken;
     if (!cookie) {
-      return res.status(400).json({ message: "No refresh token found" });
+      return res.status(401).json({ message: "No refresh token found" });
     }
 
     const decoded = jwt.verify(cookie, process.env.REFRESH_TOKEN_SECRET);
-    const accessToken = jwt.sign(
-      { userId: decoded.userId },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" },
+    if (!decoded) {
+      return res.status(401).json({ message: "Invalid refresh token" });
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    if (user.tokenVersion !== decoded.tokenVersion) {
+      return res.status(401).json({ message: "Token is invalid" });
+    }
+
+    const accessToken = generateAccessToken(
+      user._id,
+      user.role,
+      user.tokenVersion,
     );
-    res.json({ accessToken });
+
+    res.json({
+      accessToken,
+      user: {
+        // Send updated user object as well, useful for frontend
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
