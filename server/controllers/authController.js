@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const sendEmail = require("../lib/email");
+const { getVerificationEmailTemplate } = require("../lib/emailTemplates");
 const { generateAccessToken, generateRefreshToken } = require("../lib/token");
 
 function getAppUrl() {
@@ -54,12 +55,9 @@ exports.register = async (req, res) => {
 
     const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
 
-    await sendEmail(
-      email,
-      "Verify your email",
-      `<p>Please click on the link below to verify your email:</p>
-       <p><a href="${verifyUrl}">Verify Email</a></p>`,
-    );
+    const emailTemplate = getVerificationEmailTemplate(verifyUrl);
+
+    await sendEmail(email, "Verify your email - Okunix", emailTemplate);
 
     const userResponse = {
       _id: newUser._id,

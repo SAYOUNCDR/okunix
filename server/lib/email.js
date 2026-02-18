@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 // Create a transporter using your email service credentials
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, html) => {
   if (
     !process.env.SMTP_HOST ||
     !process.env.SMTP_PORT ||
@@ -32,7 +32,7 @@ const sendEmail = async (to, subject, text) => {
     from,
     to,
     subject,
-    text,
+    html,
   };
 
   await transporter.sendMail(mailOptions);
