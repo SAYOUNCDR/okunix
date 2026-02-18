@@ -3,6 +3,15 @@ import axios from "axios";
 // Ensure you have VITE_API_URL in your .env file or fallback to localhost
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+// In-memory token storage (Secure against XSS logic)
+let accessToken = null;
+
+export const setAccessToken = (token) => {
+  accessToken = token;
+};
+
+export const getAccessToken = () => accessToken;
+
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true, // Important for cookies (refreshToken)
@@ -11,9 +20,8 @@ const api = axios.create({
 // Request interceptor to add the access token to headers
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -37,20 +45,20 @@ api.interceptors.response.use(
       try {
         // Attempt to get a new access token using the refresh token (cookie)
         const response = await api.post("/auth/refresh-token");
-        const { accessToken } = response.data;
+        const newAccessToken = response.data.accessToken;
 
-        // Save new token
-        localStorage.setItem("accessToken", accessToken);
+        // Save new token in memory
+        setAccessToken(newAccessToken);
 
         // Update authorization header and retry original request
-        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+        api.defaults.headers.common["Authorization"] =
+          `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
       } catch (refreshError) {
-        // If refresh fails, clear token and redirect to login (handled by AuthContext or UI)
-        localStorage.removeItem("accessToken");
-        // Optional: window.location.href = '/login';
+        // If refresh fails, clear token
+        setAccessToken(null);
         return Promise.reject(refreshError);
       }
     }
