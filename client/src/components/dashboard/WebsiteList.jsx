@@ -15,22 +15,27 @@ const WebsiteList = ({ websites = [] }) => {
 
           {websites.map((site, index) => (
             <div
-              key={index}
-              className="grid grid-cols-12 px-6 py-4 items-center hover:bg-gray-50 transition-colors group"
+              key={site._id || index}
+              className="grid grid-cols-12 px-6 py-4 items-center hover:bg-gray-50 transition-colors group border-b border-gray-50 last:border-b-0"
             >
               <div className="col-span-4 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 uppercase">
                   <span className="font-bold text-xs">
-                    {site.name.charAt(0)}
+                    {(site.name || site.websiteName || "?").charAt(0)}
                   </span>
                 </div>
-                <span className="font-medium text-gray-900">{site.name}</span>
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-900">{site.name || site.websiteName}</span>
+                  <span className="text-xs text-gray-400 font-mono hidden group-hover:block transition-all">{site.websiteId}</span>
+                </div>
               </div>
               <div className="col-span-6 text-gray-600 text-sm">
-                {site.domain}
+                <a href={`https://${site.domain}`} target="_blank" rel="noreferrer" className="hover:text-blue-600 hover:underline">
+                    {site.domain}
+                </a>
               </div>
               <div className="col-span-2 flex justify-end">
-                <Button>
+                <Button variant="ghost" className="p-2!">
                   <Cog size={18} />
                 </Button>
               </div>

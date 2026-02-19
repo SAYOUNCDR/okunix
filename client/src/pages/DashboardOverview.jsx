@@ -1,20 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../components/common/Button";
 import Sidebar from "../components/layout/Sidebar";
 import WebsiteList from "../components/dashboard/WebsiteList";
 import AddWebsiteModal from "../components/dashboard/AddWebsiteModal";
 import { Plus, Search } from "lucide-react";
+import { getUserWebsites, createWebsite } from "../services/websiteApi";
 
 const DashboardOverview = () => {
-  const [websites, setWebsites] = useState([
-    { name: "Dev Calendar", domain: "devcalendar.sayoun.studio" },
-    { name: "Portfolio", domain: "sayoun.studio" },
-  ]);
+  const [websites, setWebsites] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleAddWebsite = (newWebsite) => {
-    setWebsites([...websites, newWebsite]);
-    setIsModalOpen(false);
+  // Fetch websites on mount
+  useEffect(() => {
+    fetchWebsites();
+  }, []);
+
+  const fetchWebsites = async () => {
+    try {
+      setLoading(true);
+      const data = await getUserWebsites();
+      // Assuming data is an array of websites or data.websites is the array
+      // Adjust based on your actual API response structure
+      setWebsites(Array.isArray(data) ? data : data.websites || []);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to fetch websites:", err);
+      setError("Failed to load websites");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddWebsite = async (newWebsiteData) => {
+    try {
+      // API call to create website
+      const createdWebsite = await createWebsite({
+        websiteName: newWebsiteData.name,
+        domain: newWebsiteData.domain
+      });
+      
+      // Update local state with the returned full website object
+      // (which includes _id, websiteId, etc.)
+      const newSite = createdWebsite.website || createdWebsite;
+
+      // Optimistically update the list
+      setWebsites(prev => [...prev, newSite]);
+      setIsModalOpen(false);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to create website:", err);
+      setError(typeof err === 'string' ? err : "Failed to create website");
+    }
   };
 
   return (
@@ -41,6 +79,12 @@ const DashboardOverview = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto p-8">
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">
+              {error}
+            </div>
+          )}
+          
           <div className="mb-6">
             <div className="relative max-w-sm">
               <Search
@@ -55,7 +99,13 @@ const DashboardOverview = () => {
             </div>
           </div>
 
-          <WebsiteList websites={websites} />
+          {loading ? (
+             <div className="flex items-center justify-center p-12">
+               <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+             </div>
+          ) : (
+            <WebsiteList websites={websites} />
+          )}
         </div>
       </main>
     </div>
