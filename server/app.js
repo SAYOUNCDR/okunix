@@ -46,7 +46,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // ENABLE PRE-FLIGHT FOR ALL ROUTES (Critical for Nginx Proxy)
-app.options("*", dashboardCors);
+app.options(/(.*)/, dashboardCors);
 
 app.get("/test", (req, res) => {
   res.status(200).json({ message: "API is working!" });
