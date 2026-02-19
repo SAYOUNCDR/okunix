@@ -10,11 +10,26 @@ const app = express();
 app.set("trust proxy", true);
 
 // 1. Strict CORS for Dashboard (Login, Settings, Viewing Data)
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.APP_URL,
+  "https://okunix.sayoun.studio",
+  "https://okunix.tech",
+  "http://localhost:5173",
+].filter(Boolean); // Remove undefined/null values
+
 const dashboardCors = cors({
-  origin:
-    process.env.NODE_ENV === "production"
-      ? process.env.FRONTEND_URL
-      : "http://localhost:5173",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests) - Optional: remove if strict
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin); // Helpful for debugging on server logs
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 });
 
