@@ -159,8 +159,8 @@ exports.login = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false, // Allow http on localhost
-      sameSite: "Lax",
+      secure: isProduction, // True in production
+      sameSite: isProduction ? "None" : "Lax", // "None" allows cross-site cookies
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -230,10 +230,12 @@ exports.refreshToken = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: false, // Allow http on localhost
-      sameSite: "Lax",
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
     });
 
     res.status(200).json({ message: "Logged out successfully" });
