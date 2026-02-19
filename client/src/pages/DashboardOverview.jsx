@@ -11,6 +11,7 @@ const DashboardOverview = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Fetch websites on mount
   useEffect(() => {
@@ -94,7 +95,9 @@ const DashboardOverview = () => {
               <input
                 type="text"
                 placeholder="Search websites..."
-                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
@@ -104,7 +107,18 @@ const DashboardOverview = () => {
               <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : (
-            <WebsiteList websites={websites} />
+            <WebsiteList
+              websites={websites.filter((site) => {
+                const query = searchQuery.toLowerCase();
+                const name = (
+                  site.name ||
+                  site.websiteName ||
+                  ""
+                ).toLowerCase();
+                const domain = (site.domain || "").toLowerCase();
+                return name.includes(query) || domain.includes(query);
+              })}
+            />
           )}
         </div>
       </main>

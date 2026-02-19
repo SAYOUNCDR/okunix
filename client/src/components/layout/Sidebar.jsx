@@ -40,18 +40,18 @@ const Sidebar = ({ className }) => {
     >
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
         {!isCollapsed && (
-          <div className="flex items-center gap-2 overflow-hidden">
-            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center shrink-0">
-              <span className="text-white font-bold text-sm">O</span>
+          <div className="flex items-center gap-0.5 overflow-hidden">
+            <div className="h-8 w-8">
+              <img src="/header.png" alt="" />
             </div>
             <span className="font-bold text-lg text-gray-900 truncate">
-              OkUnix
+              kunix
             </span>
           </div>
         )}
         {isCollapsed && (
           <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center mx-auto">
-            <span className="text-white font-bold text-sm">O</span>
+            <img src="/header.png" alt="" />
           </div>
         )}
       </div>
