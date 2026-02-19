@@ -1,22 +1,40 @@
+import { useState } from "react";
 import Button from "../components/common/Button";
 import Sidebar from "../components/layout/Sidebar";
 import WebsiteList from "../components/dashboard/WebsiteList";
+import AddWebsiteModal from "../components/dashboard/AddWebsiteModal";
 import { Plus, Search } from "lucide-react";
 
 const DashboardOverview = () => {
-  const websites = [
+  const [websites, setWebsites] = useState([
     { name: "Dev Calendar", domain: "devcalendar.sayoun.studio" },
     { name: "Portfolio", domain: "sayoun.studio" },
-  ];
+  ]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddWebsite = (newWebsite) => {
+    setWebsites([...websites, newWebsite]);
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Sidebar />
 
+      <AddWebsiteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAddWebsite}
+      />
+
       <main className="flex-1 flex flex-col overflow-hidden">
         <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-8">
           <h1 className="text-2xl font-bold text-gray-900">Websites</h1>
-          <Button variant="primary" className="flex items-center gap-2">
+          <Button
+            variant="primary"
+            className="flex items-center gap-2"
+            onClick={() => setIsModalOpen(true)}
+          >
             <Plus size={18} />
             <span>Add Website</span>
           </Button>
