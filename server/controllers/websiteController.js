@@ -11,10 +11,18 @@ exports.createWebsite = async (req, res) => {
         .status(400)
         .json({ message: "Website name and domain are required" });
     }
-    const website = await Website.findOne({ websiteName, domain });
-    if (website) {
-      return res.status(400).json({ message: "Website already exists" });
+    const existingWebsite = await Website.findOne({
+      $or: [{ websiteName }, { domain }],
+    });
+
+    if (existingWebsite) {
+      const message =
+        existingWebsite.domain === domain
+          ? "Domain already registered"
+          : "Website name already exists";
+      return res.status(400).json({ message });
     }
+
     const newWebsite = await Website.create({ websiteName, domain, userId });
     res
       .status(201)
