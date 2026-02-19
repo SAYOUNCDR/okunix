@@ -66,9 +66,11 @@ const DashboardOverview = () => {
         onAdd={handleAddWebsite}
       />
 
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-8">
-          <h1 className="text-2xl font-bold text-gray-900">Websites</h1>
+      <main className="flex-1 flex flex-col overflow-hidden w-full relative">
+        <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-4 sm:px-8 pl-14 lg:pl-8 shrink-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Websites
+          </h1>
           <Button
             variant="primary"
             className="flex items-center gap-2"
@@ -79,7 +81,7 @@ const DashboardOverview = () => {
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8">
           {error && (
             <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">
               {error}
@@ -87,7 +89,7 @@ const DashboardOverview = () => {
           )}
 
           <div className="mb-6">
-            <div className="relative max-w-sm">
+            <div className="relative w-full max-w-sm">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                 size={18}
