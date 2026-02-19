@@ -162,14 +162,14 @@ const Sidebar = ({ className }) => {
                   <Settings size={16} />
                   Settings
                 </Link>
-                <a
-                  href="#"
+                <Link
+                  to="/docs"
                   className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
                   onClick={() => setIsProfileMenuOpen(false)}
                 >
                   <FileText size={16} />
                   Documentation
-                </a>
+                </Link>
                 <Link
                   to="/support"
                   className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"

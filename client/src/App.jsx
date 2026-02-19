@@ -9,6 +9,7 @@ import Sponsor from "./pages/Sponsor";
 import Features from "./pages/Features";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import Support from "./pages/Support";
+import Docs from "./pages/Docs";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/blog" element={<Blogs />} />
         <Route path="/sponsor" element={<Sponsor />} />
         <Route path="/features" element={<Features />} />
+        <Route path="/docs" element={<Docs />} />
 
         {/* Protected Dashboard Routes */}
         <Route element={<ProtectedRoute />}>
