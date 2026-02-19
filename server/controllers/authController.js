@@ -5,6 +5,7 @@ const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const sendEmail = require("../lib/email");
 const { getVerificationEmailTemplate } = require("../lib/emailTemplates");
+const { getEmailVerifiedPage, getErrorPage } = require("../lib/htmlPages");
 const { generateAccessToken, generateRefreshToken } = require("../lib/token");
 
 function getAppUrl() {
@@ -80,28 +81,40 @@ exports.register = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   const token = req.query.token;
   if (!token) {
-    return res.status(400).json({ message: "Verification token is missing" });
+    return res.status(400).send(getErrorPage("Verification token is missing"));
   }
 
   try {
     const payload = jwt.verify(token, process.env.EMAIL_VERIFICATION_SECRET);
 
-    const user = await User.findById(payload.userId); // this was coded as { userId: newUser._id } which is mongoose Id, so we can directly use findById
+    const user = await User.findById(payload.userId);
     if (!user) {
       return res
         .status(400)
-        .json({ message: "Invalid Credentials: User not found" }); // will remove this later -> User not found
+        .send(getErrorPage("Invalid Credentials: User not found"));
     }
 
     if (user.isEmailVerified) {
-      return res.status(400).json({ message: "Email is already verified" });
+      // If already verified, still show success page but maybe just redirect immediately
+      return res.send(
+        getEmailVerifiedPage(
+          process.env.FRONTEND_URL || "http://localhost:5173",
+        ),
+      );
     }
 
     user.isEmailVerified = true;
     await user.save();
-    res.status(200).json({ message: "Email verified successfully" });
+
+    // Redirect to frontend dashboard or login page
+    // We send a nice HTML page that does the redirect via JS/Meta refresh
+    res.send(
+      getEmailVerifiedPage(process.env.FRONTEND_URL || "http://localhost:5173"),
+    );
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .send(getErrorPage("Invalid or expired verification token."));
   }
 };
 
