@@ -8,6 +8,7 @@ import Blogs from "./pages/Blogs";
 import Sponsor from "./pages/Sponsor";
 import Features from "./pages/Features";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import Support from "./pages/Support";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardOverview />} />
           <Route path="/dashboard/detail" element={<DashboardDetail />} />
           <Route path="/dashboard/setting" element={<WebsiteSetting />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/dashboard/setting/user" element={<UserSetting />} />
         </Route>
       </Routes>

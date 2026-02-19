@@ -128,14 +128,14 @@ const Sidebar = ({ className }) => {
                 <FileText size={16} />
                 Documentation
               </a>
-              <a
-                href="#"
+              <Link
+                to="/support"
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
                 onClick={() => setIsProfileMenuOpen(false)}
               >
                 <HelpCircle size={16} />
                 Support
-              </a>
+              </Link>
               <div className="h-px bg-gray-100 my-1"></div>
               <button
                 onClick={() => {
