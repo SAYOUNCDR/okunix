@@ -53,16 +53,14 @@ const Sidebar = ({ className }) => {
       )}
 
       {/* Mobile Toggle Button (Visible only on small screens) */}
-      <button
-        onClick={toggleMobileSidebar}
-        className="fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-sm border border-gray-200 lg:hidden"
-      >
-        {isMobileOpen ? (
-          <PanelLeftClose size={20} />
-        ) : (
-          <PanelLeftOpen size={20} />
-        )}
-      </button>
+      {!isMobileOpen && (
+        <button
+          onClick={toggleMobileSidebar}
+          className="fixed bottom-4 left-4 z-50 p-3 bg-white rounded-full shadow-lg border border-gray-200 lg:hidden text-gray-600 hover:text-gray-900"
+        >
+          <PanelLeftOpen size={24} />
+        </button>
+      )}
 
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-50 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col 
@@ -224,13 +222,23 @@ const Sidebar = ({ className }) => {
           </div>
 
           <button
-            onClick={toggleSidebar}
-            className={`mt-2 w-full hidden lg:flex items-center p-2 rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-colors ${
-              isCollapsed ? "justify-center" : "justify-end"
+            onClick={() =>
+              isMobileOpen ? toggleMobileSidebar() : toggleSidebar()
+            }
+            className={`mt-2 w-full flex items-center p-2 rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-colors ${
+              isCollapsed && !isMobileOpen ? "justify-center" : "justify-end"
             }`}
-            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={
+              isMobileOpen
+                ? "Close sidebar"
+                : isCollapsed
+                  ? "Expand sidebar"
+                  : "Collapse sidebar"
+            }
           >
-            {isCollapsed ? (
+            {isMobileOpen ? (
+              <PanelLeftClose size={20} />
+            ) : isCollapsed ? (
               <PanelLeftOpen size={20} />
             ) : (
               <PanelLeftClose size={20} />
