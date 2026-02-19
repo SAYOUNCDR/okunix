@@ -10,6 +10,8 @@ router.post("/login", authController.login);
 
 router.post("/refresh-token", authController.refreshToken);
 
+router.post("/logout", authController.logout);
+
 router.get("/verify-email", authController.verifyEmail);
 
 router.get("/me", verifyToken, authController.getMe);

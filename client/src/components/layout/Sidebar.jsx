@@ -10,11 +10,15 @@ import {
   User,
   PanelLeftClose,
   PanelLeftOpen,
+  HelpCircle,
+  FileText,
+  ChevronUp,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ className }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const location = useLocation();
   const { user, logout } = useAuth();
 
@@ -84,19 +88,81 @@ const Sidebar = ({ className }) => {
         })}
       </nav>
 
-      <div className="border-t border-gray-100 p-3">
+      <div className="border-t border-gray-100 p-3 relative">
+        {/* Profile Menu Dropdown (Drop-up) */}
+        {isProfileMenuOpen && (
+          <>
+            {/* Overlay to close menu when clicking outside */}
+            <div
+              className="fixed inset-0 z-50"
+              onClick={() => setIsProfileMenuOpen(false)}
+            ></div>
+
+            <div
+              className={`absolute bottom-full mb-2 bg-white rounded-lg shadow-lg border border-gray-100 py-1 overflow-hidden z-60 ${
+                isCollapsed ? "left-14 w-48 bottom-0" : "left-3 w-56"
+              }`}
+            >
+              <div className="px-4 py-3 border-b border-gray-100 block md:hidden">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {user?.username || "User"}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {user?.email || "user@example.com"}
+                </p>
+              </div>
+
+              <Link
+                to="/dashboard/setting/user"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                onClick={() => setIsProfileMenuOpen(false)}
+              >
+                <Settings size={16} />
+                Settings
+              </Link>
+              <a
+                href="#"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                onClick={() => setIsProfileMenuOpen(false)}
+              >
+                <FileText size={16} />
+                Documentation
+              </a>
+              <a
+                href="#"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                onClick={() => setIsProfileMenuOpen(false)}
+              >
+                <HelpCircle size={16} />
+                Support
+              </a>
+              <div className="h-px bg-gray-100 my-1"></div>
+              <button
+                onClick={() => {
+                  logout();
+                  setIsProfileMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          </>
+        )}
+
         <div
-          className={`flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors ${
+          className={`flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors relative z-51 ${
             isCollapsed ? "justify-center" : ""
           }`}
-          onClick={logout}
-          title="Logout"
+          onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+          title="User Profile"
         >
           <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center shrink-0 text-gray-600">
             <User size={16} />
           </div>
           {!isCollapsed && (
-            <div className="overflow-hidden">
+            <div className="overflow-hidden flex-1">
               <p className="text-sm font-medium text-gray-900 truncate">
                 {user?.username || "User"}
               </p>
@@ -104,6 +170,12 @@ const Sidebar = ({ className }) => {
                 {user?.email || "user@example.com"}
               </p>
             </div>
+          )}
+          {!isCollapsed && (
+            <ChevronUp
+              size={16}
+              className={`text-gray-400 transition-transform duration-200 ${isProfileMenuOpen ? "rotate-180" : ""}`}
+            />
           )}
         </div>
 

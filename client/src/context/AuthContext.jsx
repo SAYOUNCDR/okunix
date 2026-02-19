@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         // Fetch user details
         const response = await api.get("/auth/me");
         // Ensure we handle response structure correctly: assume API returns { user: ... }
-        setUser(response.data.user || response.data); 
+        setUser(response.data.user || response.data);
       } catch (error) {
         // If anything fails (no cookie, invalid token), user is not logged in
         setUser(null);
@@ -55,12 +55,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Clear cookie on backend (optional but recommended implementation)
-      // await api.post('/auth/logout');
+      await api.post("/auth/logout");
     } catch (error) {
       console.error("Logout error", error);
     } finally {
       setAccessToken(null);
+      setUser(null);
     }
   };
 
