@@ -26,7 +26,7 @@ jobs:
         working-directory: ./client
         run: |
           npm install
-          echo "VITE_API_URL=https://okunix-api.sayoun.studio" > .env
+          echo "VITE_API_URL=https://okunix-api.sayoun.studio/api" > .env
           npm run build
 
       - name: Prepare Backend
