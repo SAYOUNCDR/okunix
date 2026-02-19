@@ -36,22 +36,22 @@ const DashboardOverview = () => {
   const handleAddWebsite = async (newWebsiteData) => {
     try {
       // API call to create website
-      const createdWebsite = await createWebsite({
+      const response = await createWebsite({
         websiteName: newWebsiteData.name,
-        domain: newWebsiteData.domain
+        domain: newWebsiteData.domain,
       });
-      
-      // Update local state with the returned full website object
-      // (which includes _id, websiteId, etc.)
-      const newSite = createdWebsite.website || createdWebsite;
+
+      // Based on success response structure: { message, newWebsite: {...} }
+      const newSite = response.newWebsite;
 
       // Optimistically update the list
-      setWebsites(prev => [...prev, newSite]);
-      setIsModalOpen(false);
+      setWebsites((prev) => [...prev, newSite]);
       setError(null);
+      return Promise.resolve(); // Signal success to modal
     } catch (err) {
       console.error("Failed to create website:", err);
-      setError(typeof err === 'string' ? err : "Failed to create website");
+      // Propagate error to modal so it can display it
+      return Promise.reject(err);
     }
   };
 
@@ -84,7 +84,7 @@ const DashboardOverview = () => {
               {error}
             </div>
           )}
-          
+
           <div className="mb-6">
             <div className="relative max-w-sm">
               <Search
@@ -100,9 +100,9 @@ const DashboardOverview = () => {
           </div>
 
           {loading ? (
-             <div className="flex items-center justify-center p-12">
-               <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-             </div>
+            <div className="flex items-center justify-center p-12">
+              <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
           ) : (
             <WebsiteList websites={websites} />
           )}

@@ -51,7 +51,6 @@ const WebsiteList = ({ websites = [] }) => {
           <p className="text-sm mt-1 mb-6">
             Get started by adding your first website.
           </p>
-          <Button variant="outline">Add Website</Button>
         </div>
       )}
     </div>
