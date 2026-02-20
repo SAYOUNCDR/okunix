@@ -28,7 +28,8 @@ const WebsiteList = ({ websites = [] }) => {
           {websites.map((site, index) => (
             <div
               key={site._id || index}
-              className="grid grid-cols-12 px-4 sm:px-6 py-5 items-center hover:bg-gray-50/80 transition-all duration-200 group border-b border-gray-50 last:border-b-0 cursor-default"
+              onClick={() => navigate(`/dashboard/detail/${site._id}`)}
+              className="grid grid-cols-12 px-4 sm:px-6 py-5 items-center hover:bg-gray-50/80 transition-all duration-200 group border-b border-gray-50 last:border-b-0 cursor-pointer"
             >
               <div className="col-span-8 sm:col-span-5 flex items-center gap-3 sm:gap-4">
                 <div className="w-10 h-10 shrink-0 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 uppercase group-hover:bg-white group-hover:shadow-md group-hover:shadow-gray-100 group-hover:text-gray-900 transition-all duration-300 border border-gray-100 group-hover:border-gray-200">
@@ -68,7 +69,10 @@ const WebsiteList = ({ websites = [] }) => {
               </div>
 
               {/* Domain - Hidden on small screens, shown on sm+ */}
-              <div className="hidden sm:block sm:col-span-5 text-gray-600 text-sm pl-0">
+              <div
+                className="hidden sm:block sm:col-span-5 text-gray-600 text-sm pl-0"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <a
                   href={`https://${site.domain}`}
                   target="_blank"
@@ -88,7 +92,10 @@ const WebsiteList = ({ websites = [] }) => {
                 <Button
                   variant="ghost"
                   className="p-2!"
-                  onClick={() => navigate(`/dashboard/setting/${site._id}`)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/dashboard/setting/${site._id}`);
+                  }}
                 >
                   <Cog size={18} />
                 </Button>

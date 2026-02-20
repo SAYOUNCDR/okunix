@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -13,19 +13,44 @@ import {
   HelpCircle,
   FileText,
   ChevronUp,
+  BarChart2,
+  ChevronDown,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { getUserWebsites } from "../../services/websiteApi";
 
 const Sidebar = ({ className }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false); // New state for mobile
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isWebsitesDropdownOpen, setIsWebsitesDropdownOpen] = useState(false);
+  const [websites, setWebsites] = useState([]);
   const location = useLocation();
   const { user, logout } = useAuth();
 
+  // Extract website ID from URL if present (e.g., /dashboard/setting/:id or /dashboard/detail/:id)
+  // We exclude "user" specifically to avoid showing website items on the User Settings page
+  const websiteIdMatch = location.pathname.match(
+    /\/dashboard\/(?:setting|detail)\/(?!user)([a-zA-Z0-9-]+)/,
+  );
+  const currentWebsiteId = websiteIdMatch ? websiteIdMatch[1] : null;
+
+  useEffect(() => {
+    const fetchWebsites = async () => {
+      try {
+        const data = await getUserWebsites();
+        setWebsites(Array.isArray(data) ? data : data.websites || []);
+      } catch (err) {
+        console.error("Failed to fetch websites for sidebar:", err);
+      }
+    };
+    fetchWebsites();
+  }, []);
+
   // Close mobile sidebar on route change
-  React.useEffect(() => {
+  useEffect(() => {
     setIsMobileOpen(false);
+    // Close dropdown on route change if needed
   }, [location.pathname]);
 
   const toggleSidebar = () => {
@@ -36,11 +61,30 @@ const Sidebar = ({ className }) => {
     setIsMobileOpen(!isMobileOpen);
   };
 
-  const navItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-    { icon: Globe, label: "Websites", path: "/websites" },
-    { icon: Settings, label: "Settings", path: "/settings" },
-  ];
+  const navItems = currentWebsiteId
+    ? []
+    : [{ icon: Settings, label: "Settings", path: "/dashboard/setting/user" }];
+
+  // Current website object for display
+  const currentWebsite = websites.find(
+    (w) => w._id === currentWebsiteId || w.websiteId === currentWebsiteId,
+  );
+
+  // Website context items (only shown when visiting a specific website's pages)
+  const websiteItems = currentWebsiteId
+    ? [
+        {
+          icon: BarChart2,
+          label: "Stats",
+          path: `/dashboard/detail/${currentWebsiteId}`,
+        },
+        {
+          icon: Settings,
+          label: "Website Settings",
+          path: `/dashboard/setting/${currentWebsiteId}`,
+        },
+      ]
+    : [];
 
   return (
     <>
@@ -94,6 +138,92 @@ const Sidebar = ({ className }) => {
         </div>
 
         <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto overflow-x-hidden">
+          {/* Websites Dropdown / Link */}
+          <div>
+            <div
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group cursor-pointer ${
+                location.pathname === "/dashboard"
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+              } ${!isMobileOpen && isCollapsed ? "justify-center px-2" : ""}`}
+              onClick={() => {
+                if (currentWebsiteId) {
+                  setIsWebsitesDropdownOpen(!isWebsitesDropdownOpen);
+                } else {
+                  setIsMobileOpen(false);
+                  window.location.href = "/dashboard";
+                }
+              }}
+            >
+              <LayoutDashboard
+                size={20}
+                className={`shrink-0 ${
+                  location.pathname === "/dashboard"
+                    ? "text-gray-900"
+                    : "text-gray-500 group-hover:text-gray-900"
+                }`}
+              />
+              {(isMobileOpen || !isCollapsed) && (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="font-medium text-sm truncate flex-1"
+                    onClick={(e) => {
+                      if (currentWebsiteId) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsWebsitesDropdownOpen(!isWebsitesDropdownOpen);
+                      }
+                    }}
+                  >
+                    {currentWebsiteId
+                      ? currentWebsite?.websiteName || "Websites"
+                      : "Websites"}
+                  </Link>
+                  {currentWebsiteId && (
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 ${isWebsitesDropdownOpen ? "rotate-180" : ""}`}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Websites Dropdown List */}
+            {currentWebsiteId &&
+              isWebsitesDropdownOpen &&
+              (isMobileOpen || !isCollapsed) && (
+                <div className="mt-1 ml-4 border-l border-gray-100 pl-2 space-y-1">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsWebsitesDropdownOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                  >
+                    <Globe size={14} />
+                    View All Websites
+                  </Link>
+                  {websites.map((site) => (
+                    <Link
+                      key={site._id}
+                      to={`/dashboard/detail/${site._id}`}
+                      onClick={() => setIsWebsitesDropdownOpen(false)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                        site._id === currentWebsiteId ||
+                        site.websiteId === currentWebsiteId
+                          ? "text-gray-900 bg-gray-50"
+                          : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                      <span className="truncate">{site.websiteName}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+          </div>
+
+          {/* Main Navigation */}
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             const showLabel = isMobileOpen || !isCollapsed;
@@ -126,6 +256,54 @@ const Sidebar = ({ className }) => {
               </Link>
             );
           })}
+
+          {/* Website-specific Navigation Section */}
+          {currentWebsiteId && (
+            <div className="mt-8">
+              {(isMobileOpen || !isCollapsed) && (
+                <p className="px-3 mb-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Website
+                </p>
+              )}
+              <div
+                className={`h-px bg-gray-100 mb-2 ${!isMobileOpen && isCollapsed ? "mx-2" : "hidden"}`}
+              />
+              <div className="space-y-1">
+                {websiteItems.map((item) => {
+                  const isActive = location.pathname === item.path;
+                  const showLabel = isMobileOpen || !isCollapsed;
+
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsMobileOpen(false)}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group whitespace-nowrap ${
+                        isActive
+                          ? "bg-gray-100 text-gray-900"
+                          : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                      } ${!showLabel ? "justify-center px-2" : ""}`}
+                      title={!showLabel ? item.label : ""}
+                    >
+                      <item.icon
+                        size={20}
+                        className={`shrink-0 transition-colors ${
+                          isActive
+                            ? "text-gray-900"
+                            : "text-gray-500 group-hover:text-gray-900"
+                        }`}
+                      />
+                      {showLabel && (
+                        <span className="font-medium text-sm truncate">
+                          {item.label}
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </nav>
 
         <div className="border-t border-gray-100 p-3 relative shrink-0">

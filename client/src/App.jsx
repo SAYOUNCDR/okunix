@@ -24,8 +24,14 @@ function App() {
         {/* Protected Dashboard Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardOverview />} />
-          <Route path="/dashboard/detail" element={<DashboardDetail />} />
-          <Route path="/dashboard/setting/:websiteId" element={<WebsiteSetting />} />
+          <Route
+            path="/dashboard/detail/:websiteId"
+            element={<DashboardDetail />}
+          />
+          <Route
+            path="/dashboard/setting/:websiteId"
+            element={<WebsiteSetting />}
+          />
           <Route path="/support" element={<Support />} />
           <Route path="/dashboard/setting/user" element={<UserSetting />} />
         </Route>
