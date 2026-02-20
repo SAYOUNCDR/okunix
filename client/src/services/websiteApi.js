@@ -49,3 +49,13 @@ export const getTrackingScript = async (websiteId) => {
     throw error.response?.data?.message || "Failed to fetch tracking script";
   }
 };
+
+// Delete a website
+export const deleteWebsite = async (websiteId) => {
+  try {
+    const response = await api.delete(`/website/deleteWebsite/${websiteId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to delete website";
+  }
+};

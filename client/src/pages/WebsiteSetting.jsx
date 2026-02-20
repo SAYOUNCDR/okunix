@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getWebsite } from "../services/websiteApi";
+import { getWebsite, deleteWebsite } from "../services/websiteApi";
 
 const WebsiteSetting = () => {
   const navigate = useNavigate();
@@ -47,6 +47,26 @@ const WebsiteSetting = () => {
     } else {
       setCopiedScript(true);
       setTimeout(() => setCopiedScript(false), 2000);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this website? This action cannot be undone.",
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await deleteWebsite(websiteId);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Failed to delete website:", err);
+      setError(typeof err === "string" ? err : "Failed to delete website");
+      setLoading(false);
     }
   };
 
@@ -230,7 +250,10 @@ const WebsiteSetting = () => {
                 <p className="text-sm">All website data will be deleted.</p>
               </div>
               <div>
-                <button className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm">
+                <button
+                  onClick={handleDelete}
+                  className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm"
+                >
                   Delete Website
                 </button>
               </div>
