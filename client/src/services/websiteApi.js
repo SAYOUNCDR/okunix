@@ -59,3 +59,15 @@ export const deleteWebsite = async (websiteId) => {
     throw error.response?.data?.message || "Failed to delete website";
   }
 };
+
+export const updateWebsite = async (websiteId, websiteData) => {
+  try {
+    const response = await api.put(
+      `/website/updateWebsite/${websiteId}`,
+      websiteData,
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to update website";
+  }
+};
