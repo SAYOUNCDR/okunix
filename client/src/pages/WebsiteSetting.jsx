@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getWebsite, deleteWebsite } from "../services/websiteApi";
+import {
+  getWebsite,
+  deleteWebsite,
+  getTrackingScript,
+} from "../services/websiteApi";
 
 const WebsiteSetting = () => {
   const navigate = useNavigate();
@@ -12,22 +16,29 @@ const WebsiteSetting = () => {
   const [error, setError] = useState(null);
   const [copiedId, setCopiedId] = useState(false);
   const [copiedScript, setCopiedScript] = useState(false);
+  const [trackingScript, setTrackingScript] = useState("");
 
   // Edit states
   const [editName, setEditName] = useState("");
   const [editDomain, setEditDomain] = useState("");
 
   useEffect(() => {
-    const fetchWebsite = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await getWebsite(websiteId);
-        setWebsite(data.website);
-        setEditName(data.website.websiteName);
-        setEditDomain(data.website.domain);
+        // Fetch both website details and the dynamic tracking script in parallel
+        const [websiteRes, scriptRes] = await Promise.all([
+          getWebsite(websiteId),
+          getTrackingScript(websiteId),
+        ]);
+
+        setWebsite(websiteRes.website);
+        setEditName(websiteRes.website.websiteName);
+        setEditDomain(websiteRes.website.domain);
+        setTrackingScript(scriptRes.script);
         setError(null);
       } catch (err) {
-        console.error("Failed to fetch website:", err);
+        console.error("Failed to fetch website data:", err);
         setError("Failed to load website details");
       } finally {
         setLoading(false);
@@ -35,7 +46,7 @@ const WebsiteSetting = () => {
     };
 
     if (websiteId) {
-      fetchWebsite();
+      fetchData();
     }
   }, [websiteId]);
 
@@ -198,19 +209,10 @@ const WebsiteSetting = () => {
               </p>
               <div className="bg-gray-100 p-3 border border-slate-200 rounded-lg flex items-center justify-between font-mono text-xs">
                 <p className="break-all whitespace-pre-wrap">
-                  {`<script
-  defer
-  data-website-id="${website.websiteId}"
-  src="http://localhost:5000/tracker.js"
-></script>`}
+                  {trackingScript}
                 </p>
                 <button
-                  onClick={() =>
-                    handleCopy(
-                      `<script defer data-website-id="${website.websiteId}" src="http://localhost:5000/tracker.js"></script>`,
-                      "script",
-                    )
-                  }
+                  onClick={() => handleCopy(trackingScript, "script")}
                   className="p-1 ml-4 hover:bg-gray-200 rounded transition-colors self-start"
                 >
                   {copiedScript ? (

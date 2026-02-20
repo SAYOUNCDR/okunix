@@ -78,15 +78,29 @@ exports.getTrackedData = async (req, res) => {
 
 exports.getTrackingScript = async (req, res) => {
   const _id = req.params.websiteId;
+  const userId = req.user.id;
 
-  // Use APP_URL from env for consistent production URLs (handling Nginx proxies correctly)
-  const baseUrl = process.env.APP_URL || req.protocol + "://" + req.get("host");
-  const scriptTag = `<script src="${baseUrl}/scripts/tracker.js" data-website-id="${_id}"></script>`;
+  try {
+    const website = await Website.findOne({ _id, userId });
+    if (!website) {
+      return res.status(404).json({ message: "Website not found" });
+    }
 
-  res.status(200).json({
-    message: "Script generated successfully",
-    script: scriptTag,
-    instructions:
-      "Copy the 'script' tag and paste it into the <head> of your website.",
-  });
+    // Use APP_URL from env for consistent production URLs (handling Nginx proxies correctly)
+    const baseUrl =
+      process.env.APP_URL || req.protocol + "://" + req.get("host");
+
+    // The tracker script is served from /scripts/tracker.js as per app.js static config
+    const scriptTag = `<script defer src="${baseUrl}/scripts/tracker.js" data-website-id="${website.websiteId}"></script>`;
+
+    res.status(200).json({
+      message: "Script generated successfully",
+      script: scriptTag,
+      instructions:
+        "Copy the 'script' tag and paste it into the <head> of your website.",
+    });
+  } catch (error) {
+    console.error("Get Tracking Script Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
