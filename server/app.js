@@ -20,6 +20,22 @@ const allowedOrigins = [
   .filter(Boolean)
   .map((url) => url.toLowerCase().replace(/\/$/, "")); // Normalize: Lowercase & No Trailing Slashes
 
+
+// 2. Open CORS for Tracking (Script & Collection)
+const trackingCors = cors({
+  origin: "*",
+  optionsSuccessStatus: 200,
+});
+
+// --- 1. HIGH PRIORITY: TRACKING ROUTES (MUST BE FIRST) ---
+app.use("/scripts", trackingCors, express.static("./scripts"));
+app.use("/api/track", trackingCors, require("./routes/trackerRoute"));
+
+// --- 2. MIDDLEWARE FOR DASHBOARD ---
+app.use(express.json());
+app.use(cookieParser());
+
+// --- 3. DASHBOARD CORS ---
 const dashboardCors = cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
@@ -30,39 +46,23 @@ const dashboardCors = cors({
     if (allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
-      console.log("Blocked by CORS:", origin);
-      callback(new Error("Not allowed by CORS"));
+      console.log("Blocked by CORS (Origin not in allowed list):", origin);
+      // Passing (null, false) tells the CORS middleware to reject but not crash
+      callback(null, false);
     }
   },
   credentials: true,
-  optionsSuccessStatus: 200, // Fix for legacy browsers & some proxy issues
+  optionsSuccessStatus: 200, // Important for legacy browsers & some proxies
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 });
 
-// 2. Open CORS for Tracking (Script & Collection)
-const trackingCors = cors({ origin: "*" });
+// Apply Dashboard CORS to all remaining routes handles OPTIONS and requests
+app.use(dashboardCors);
 
-app.use(express.json());
-app.use(cookieParser());
-
-// --- 1. HANDLING PRE-FLIGHTS (Critical for Proxies) ---
-
-// Handle Tracking pre-flights first (Open)
-app.options("/api/track/*", trackingCors);
-app.options("/scripts/*", trackingCors);
-
-// Handle Dashboard pre-flights (Strict)
-app.options("/api/auth/*", dashboardCors);
-app.options("/api/website/*", dashboardCors);
-
-// --- 2. MOUNTING ROUTES ---
-
-// Open routes (Scripts & Data Collection)
-app.use("/scripts", trackingCors, express.static("./scripts"));
-app.use("/api/track", trackingCors, require("./routes/trackerRoute"));
-
-// Strict routes (Dashboard)
-app.use("/api/auth", dashboardCors, authRoute);
-app.use("/api/website", dashboardCors, verifyToken, websiteRoute);
+// --- 4. DASHBOARD ROUTES ---
+app.use("/api/auth", authRoute);
+app.use("/api/website", verifyToken, websiteRoute);
 
 app.get("/api/test", verifyToken, (req, res) => {
   const user = req.user;
