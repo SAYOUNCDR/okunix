@@ -16,28 +16,27 @@ const allowedOrigins = [
   "https://okunix.sayoun.studio",
   "https://okunix.tech",
   "http://localhost:5173",
-].filter(Boolean); // Remove undefined/null values
+]
+  .filter(Boolean)
+  .map((url) => url.toLowerCase().replace(/\/$/, "")); // Normalize: Lowercase & No Trailing Slashes
 
 const dashboardCors = cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests) - Optional: remove if strict
+    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    const normalizedOrigin = origin.toLowerCase().replace(/\/$/, "");
+
+    if (allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
-      console.log("Blocked by CORS:", origin); // Helpful for debugging on server logs
+      console.log("Blocked by CORS:", origin);
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
+  optionsSuccessStatus: 200, // Fix for legacy browsers & some proxy issues
 });
-
-// TEMPORARY DEBUG: Allow ALL origins with credentials
-// const dashboardCors = cors({
-//   origin: true, // Reflects the request origin (effectively allowing all while keeping credentials working)
-//   credentials: true, // Required for cookies
-// });
 
 // 2. Open CORS for Tracking (Script & Collection)
 const trackingCors = cors({ origin: "*" });
@@ -45,23 +44,23 @@ const trackingCors = cors({ origin: "*" });
 app.use(express.json());
 app.use(cookieParser());
 
-// Handle Tracking pre-flights first (Allow all origins)
+// --- 1. HANDLING PRE-FLIGHTS (Critical for Proxies) ---
+
+// Handle Tracking pre-flights first (Open)
 app.options("/api/track/*", trackingCors);
 app.options("/scripts/*", trackingCors);
 
-// ENABLE PRE-FLIGHT FOR DASHBOARD ROUTES (Critical for Nginx Proxy)
-app.options(/(.*)/, dashboardCors);
+// Handle Dashboard pre-flights (Strict)
+app.options("/api/auth/*", dashboardCors);
+app.options("/api/website/*", dashboardCors);
 
-app.get("/test", (req, res) => {
-  res.status(200).json({ message: "API is working!" });
-});
+// --- 2. MOUNTING ROUTES ---
 
-// Apply OPEN CORS to tracker script and collection endpoint
-// NOTE: These MUST come before any strict CORS middleware
+// Open routes (Scripts & Data Collection)
 app.use("/scripts", trackingCors, express.static("./scripts"));
 app.use("/api/track", trackingCors, require("./routes/trackerRoute"));
 
-// Apply STRICT CORS to Dashboard routes
+// Strict routes (Dashboard)
 app.use("/api/auth", dashboardCors, authRoute);
 app.use("/api/website", dashboardCors, verifyToken, websiteRoute);
 
