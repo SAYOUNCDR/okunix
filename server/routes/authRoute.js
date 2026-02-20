@@ -16,4 +16,6 @@ router.get("/verify-email", authController.verifyEmail);
 
 router.get("/me", verifyToken, authController.getMe);
 
+router.delete("/delete-account", verifyToken, authController.deleteAccount);
+
 module.exports = router;
