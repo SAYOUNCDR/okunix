@@ -104,7 +104,7 @@ const WebsiteSetting = () => {
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden overflow-y-auto">
-        <header className="px-8 py-6">
+        <header className="px-8 pt-6">
           <div className="mb-6">
             <button
               onClick={() => navigate("/dashboard")}
@@ -131,9 +131,9 @@ const WebsiteSetting = () => {
           </div>
         </header>
 
-        <div className="h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
+        {/* <div className="h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div> */}
 
-        <div className="flex-1 p-8">
+        <div className="flex-1 px-8">
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-2">
               <h3 className="text-sm font-semibold text-gray-700 mb-1">

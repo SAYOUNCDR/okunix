@@ -73,7 +73,7 @@ const WebsiteList = ({ websites = [] }) => {
                   href={`https://${site.domain}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 hover:text-gray-900 transition-colors py-1 px-2 -ml-2 rounded-lg hover:bg-gray-100"
+                  className="inline-flex items-center gap-2 hover:text-gray-900 transition-colors py-1 px-2 -ml-2 rounded-lg group-hover:bg-gray-100"
                 >
                   <Globe
                     size={14}
