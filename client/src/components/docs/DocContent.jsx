@@ -16,18 +16,17 @@ import {
   Check,
 } from "lucide-react";
 
-// Table of contents item component with smooth indicator
+// Table of contents item component
 const TOCItem = ({ item, activeId }) => {
   const isActive = activeId === item.id;
 
   return (
     <a
       href={`#${item.id}`}
-      className={`relative block text-sm py-1.5 pl-4 transition-colors duration-200 ${
-        isActive
-          ? "text-orange-600 font-medium"
-          : "text-gray-500 hover:text-gray-900"
-      }`}
+      className={`block text-sm py-1.5 ${isActive
+          ? "text-gray-900 font-semibold"
+          : "text-gray-500 hover:text-gray-800"
+        }`}
       onClick={(e) => {
         e.preventDefault();
         const element = document.getElementById(item.id);
@@ -39,21 +38,11 @@ const TOCItem = ({ item, activeId }) => {
 
           window.scrollTo({
             top: offsetPosition,
-            behavior: "smooth",
+            behavior: "auto",
           });
         }
       }}
     >
-      {isActive && (
-        <motion.span
-          layoutId="active-indicator"
-          className="absolute left-0 top-0 bottom-0 w-0.5 bg-orange-500 rounded-r-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        />
-      )}
       {item.label}
     </a>
   );
@@ -501,42 +490,6 @@ npm run start`}
   const currentDoc = contentMap[activeDoc];
   const [activeSectionId, setActiveSectionId] = useState("");
 
-  // Setup efficient scroll spy using IntersectionObserver
-  useEffect(() => {
-    if (!currentDoc || !currentDoc.toc) return;
-
-    // Create an observer callback
-    const callback = (entries) => {
-      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-      if (visibleEntries.length > 0) {
-        // Sort by intersection ratio or just pick the first one which is usually the top one
-        // Better: prefer the one closer to the top of the viewport?
-        // Actually, just picking the first intersecting one is okay enough for this use case
-        // But let's handle the case where multiple might trigger
-        const visibleEntry = visibleEntries[0];
-        setActiveSectionId(visibleEntry.target.id);
-      }
-    };
-
-    const observer = new IntersectionObserver(callback, {
-      rootMargin: "-10% 0px -80% 0px", // Adjusted to be very specific to top area
-      threshold: 0,
-    });
-
-    // Observe all TOC targets
-    currentDoc.toc.forEach((item) => {
-      const element = document.getElementById(item.id);
-      if (element) observer.observe(element);
-    });
-
-    // Also set initial active state
-    if (currentDoc.toc.length > 0) {
-      setActiveSectionId(currentDoc.toc[0].id);
-    }
-
-    return () => observer.disconnect();
-  }, [currentDoc, activeDoc]);
-
   return (
     <div className="flex xl:flex-row flex-col gap-10 max-w-7xl mx-auto px-4 sm:px-8 py-10">
       {/* Main Content */}
@@ -601,10 +554,7 @@ npm run start`}
               On this page
             </h5>
 
-            <nav className="relative flex flex-col">
-              {/* Vertical line track */}
-              <div className="absolute top-0 bottom-0 left-0 w-0.5 bg-gray-100" />
-
+            <nav className="flex flex-col">
               {currentDoc.toc.map((item) => (
                 <TOCItem key={item.id} item={item} activeId={activeSectionId} />
               ))}
@@ -618,7 +568,7 @@ npm run start`}
                 <li>
                   <a
                     href="#"
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600 transition-colors"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600"
                   >
                     <Globe size={14} /> Website
                   </a>
@@ -626,7 +576,7 @@ npm run start`}
                 <li>
                   <a
                     href="#"
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600 transition-colors"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600"
                   >
                     <BookOpen size={14} /> Blog
                   </a>
