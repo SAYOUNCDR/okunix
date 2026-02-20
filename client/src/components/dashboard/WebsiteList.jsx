@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../common/Button"; // Check Button import path
 import { Copy, Check, Cog, Globe } from "lucide-react";
 
 const WebsiteList = ({ websites = [] }) => {
   const [copiedId, setCopiedId] = useState(null);
+  const navigate = useNavigate();
 
   const handleCopy = (id) => {
     navigator.clipboard.writeText(id);
@@ -83,7 +85,11 @@ const WebsiteList = ({ websites = [] }) => {
 
               {/* Action */}
               <div className="col-span-4 sm:col-span-2 flex justify-end pr-2">
-                <Button variant="ghost" className="p-2!">
+                <Button
+                  variant="ghost"
+                  className="p-2!"
+                  onClick={() => navigate(`/dashboard/setting/${site._id}`)}
+                >
                   <Cog size={18} />
                 </Button>
               </div>

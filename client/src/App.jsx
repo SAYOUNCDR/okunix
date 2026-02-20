@@ -25,7 +25,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardOverview />} />
           <Route path="/dashboard/detail" element={<DashboardDetail />} />
-          <Route path="/dashboard/setting" element={<WebsiteSetting />} />
+          <Route path="/dashboard/setting/:websiteId" element={<WebsiteSetting />} />
           <Route path="/support" element={<Support />} />
           <Route path="/dashboard/setting/user" element={<UserSetting />} />
         </Route>
