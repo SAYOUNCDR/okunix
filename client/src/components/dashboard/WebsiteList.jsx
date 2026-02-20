@@ -1,17 +1,11 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../common/Button"; // Check Button import path
 import { Copy, Check, Cog, Globe } from "lucide-react";
+import useCopy from "../../hooks/useCopy";
 
 const WebsiteList = ({ websites = [] }) => {
-  const [copiedId, setCopiedId] = useState(null);
+  const [copiedId, handleCopy] = useCopy();
   const navigate = useNavigate();
-
-  const handleCopy = (id) => {
-    navigator.clipboard.writeText(id);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">

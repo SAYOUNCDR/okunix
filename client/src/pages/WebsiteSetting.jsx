@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import useCopy from "../hooks/useCopy";
 import DeleteWebsiteModal from "../components/dashboard/DeleteWebsiteModal";
 import ResetWebsiteModal from "../components/dashboard/ResetWebsiteModal";
 import {
@@ -20,8 +21,8 @@ const WebsiteSetting = () => {
   const [error, setError] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [copiedId, setCopiedId] = useState(false);
-  const [copiedScript, setCopiedScript] = useState(false);
+  const [copiedId, copyId] = useCopy();
+  const [copiedScript, copyScript] = useCopy();
   const [trackingScript, setTrackingScript] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -59,17 +60,6 @@ const WebsiteSetting = () => {
       fetchData();
     }
   }, [websiteId]);
-
-  const handleCopy = (text, type) => {
-    navigator.clipboard.writeText(text);
-    if (type === "id") {
-      setCopiedId(true);
-      setTimeout(() => setCopiedId(false), 2000);
-    } else {
-      setCopiedScript(true);
-      setTimeout(() => setCopiedScript(false), 2000);
-    }
-  };
 
   const handleUpdate = async () => {
     try {
@@ -201,7 +191,7 @@ const WebsiteSetting = () => {
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg flex items-center justify-between">
                 <p className="text-gray-900">{website.websiteId}</p>
                 <button
-                  onClick={() => handleCopy(website.websiteId, "id")}
+                  onClick={() => copyId(website.websiteId)}
                   className="p-1 hover:bg-gray-200 rounded transition-colors"
                 >
                   {copiedId ? (
@@ -269,7 +259,7 @@ const WebsiteSetting = () => {
                   {trackingScript}
                 </p>
                 <button
-                  onClick={() => handleCopy(trackingScript, "script")}
+                  onClick={() => copyScript(trackingScript)}
                   className="p-1 ml-4 hover:bg-gray-200 rounded transition-colors self-start"
                 >
                   {copiedScript ? (

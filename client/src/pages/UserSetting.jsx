@@ -1,9 +1,13 @@
 import Sidebar from "../components/layout/Sidebar";
-import { ArrowLeft, Copy } from "lucide-react";
+import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import useCopy from "../hooks/useCopy";
 
 const UserSetting = () => {
   const navigate = useNavigate();
+  const [copiedId, handleCopy] = useCopy();
+  const accountId = "ac6d1abf-aa4c-4c91-8b2a-d0d7b15de840";
+
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
@@ -28,11 +32,20 @@ const UserSetting = () => {
             <div className="mb-2">
               <h3>Account Id</h3>
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg flex items-center justify-between">
-                <p>ac6d1abf-aa4c-4c91-8b2a-d0d7b15de840</p>
-                <Copy
-                  size={16}
-                  className="ml-2 text-gray-500 cursor-pointer hover:text-gray-900 transition-colors"
-                />
+                <p>{accountId}</p>
+                <button
+                  onClick={() => handleCopy(accountId)}
+                  className="p-1 hover:bg-gray-200 rounded transition-colors"
+                >
+                  {copiedId ? (
+                    <Check size={16} className="text-green-600" />
+                  ) : (
+                    <Copy
+                      size={16}
+                      className="text-gray-500 cursor-pointer hover:text-gray-900 transition-colors"
+                    />
+                  )}
+                </button>
               </div>
             </div>
             <div className="mb-2">
