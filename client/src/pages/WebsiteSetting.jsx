@@ -13,12 +13,18 @@ const WebsiteSetting = () => {
   const [copiedId, setCopiedId] = useState(false);
   const [copiedScript, setCopiedScript] = useState(false);
 
+  // Edit states
+  const [editName, setEditName] = useState("");
+  const [editDomain, setEditDomain] = useState("");
+
   useEffect(() => {
     const fetchWebsite = async () => {
       try {
         setLoading(true);
         const data = await getWebsite(websiteId);
         setWebsite(data.website);
+        setEditName(data.website.websiteName);
+        setEditDomain(data.website.domain);
         setError(null);
       } catch (err) {
         console.error("Failed to fetch website:", err);
@@ -110,9 +116,11 @@ const WebsiteSetting = () => {
         <div className="flex-1 p-8">
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-2">
-              <h3>Website Id</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Website Id
+              </h3>
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg flex items-center justify-between">
-                <p>{website.websiteId}</p>
+                <p className="text-gray-900">{website.websiteId}</p>
                 <button
                   onClick={() => handleCopy(website.websiteId, "id")}
                   className="p-1 hover:bg-gray-200 rounded transition-colors"
@@ -129,16 +137,28 @@ const WebsiteSetting = () => {
               </div>
             </div>
             <div className="mb-2">
-              <h3>Name</h3>
-              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
-                <p>{website.websiteName}</p>
-              </div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">Name</h3>
+              <input
+                type="text"
+                name="websiteName"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full bg-gray-100 p-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-300 transition-all text-gray-900"
+                placeholder="Enter website name"
+              />
             </div>
             <div className="mb-2">
-              <h3>Domain</h3>
-              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
-                <p>{website.domain}</p>
-              </div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Domain
+              </h3>
+              <input
+                type="text"
+                name="domain"
+                value={editDomain}
+                onChange={(e) => setEditDomain(e.target.value)}
+                className="w-full bg-gray-100 p-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-300 transition-all text-gray-900"
+                placeholder="domain.com"
+              />
             </div>
             <div>
               <button className="mt-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
@@ -149,7 +169,9 @@ const WebsiteSetting = () => {
 
           <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-2">
-              <h3>Tracking Code</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Tracking Code
+              </h3>
               <p className="py-4 px-2 text-sm text-gray-600">
                 To track stats for this website, place the following code in the
                 "head" section of your website's HTML.
@@ -166,7 +188,7 @@ const WebsiteSetting = () => {
                   onClick={() =>
                     handleCopy(
                       `<script defer data-website-id="${website.websiteId}" src="http://localhost:5000/tracker.js"></script>`,
-                      "script"
+                      "script",
                     )
                   }
                   className="p-1 ml-4 hover:bg-gray-200 rounded transition-colors self-start"
