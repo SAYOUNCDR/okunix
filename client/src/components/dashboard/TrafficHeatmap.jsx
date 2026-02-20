@@ -1,5 +1,3 @@
-import React from "react";
-
 const TrafficHeatmap = () => {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const hours = Array.from({ length: 24 }, (_, i) => {
@@ -31,63 +29,69 @@ const TrafficHeatmap = () => {
   };
 
   return (
-    <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm w-full overflow-hidden">
+    <div className="mt-8 bg-white p-4 sm:p-6 rounded-xl border border-gray-200 shadow-sm w-full">
       <h3 className="text-lg font-semibold text-gray-900 mb-6 text-start">
         Traffic
       </h3>
 
-      <div className="flex flex-col">
-        <div className="flex mb-2 ml-12">
-          {hours.map((hour, i) => (
-            <div key={hour} className="flex-1 text-center min-w-5">
-              <span className="text-[10px] text-gray-400 font-medium block">
-                {i % 2 === 0 ? hour : ""}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          {days.map((day, dayIndex) => (
-            <div key={day} className="flex items-center gap-1.5">
-              <div className="w-12 text-xs font-semibold text-gray-500 shrink-0">
-                {day}
+      <div className="overflow-x-auto pb-4">
+        <div className="min-w-200">
+          <div className="flex mb-2 ml-12">
+            {hours.map((hour, i) => (
+              <div key={hour} className="flex-1 text-center">
+                <span className="text-[10px] text-gray-400 font-medium block">
+                  {i % 2 === 0 ? hour : ""}
+                </span>
               </div>
+            ))}
+          </div>
 
-              <div className="flex flex-1 gap-1.5">
-                {data[dayIndex].map((value, hourIndex) => (
-                  <div
-                    key={`${day}-${hourIndex}`}
-                    className="flex-1 aspect-square min-w-5 max-w-7.5 group relative cursor-default"
-                  >
+          <div className="flex flex-col gap-1">
+            {days.map((day, dayIndex) => (
+              <div key={day} className="flex items-center gap-2">
+                <div className="w-10 text-[11px] font-semibold text-gray-500 shrink-0">
+                  {day}
+                </div>
+
+                <div className="flex flex-1 gap-1">
+                  {data[dayIndex].map((value, hourIndex) => (
                     <div
-                      className={`w-full h-full rounded-sm transition-colors duration-200 ${getColorClass(value)}`}
-                    ></div>
+                      key={`${day}-${hourIndex}`}
+                      className="flex-1 aspect-square group relative cursor-default"
+                    >
+                      <div
+                        className={`w-full h-full rounded-xstransition-colors duration-200 ${getColorClass(value)}`}
+                      ></div>
 
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block z-20 pointer-events-none">
-                      <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-lg">
-                        {value} visitors • {day} {hours[hourIndex]}
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 pointer-events-none">
+                        <div className="bg-gray-900 text-white text-[10px] sm:text-xs rounded-md py-1.5 px-3 whitespace-nowrap shadow-xl border border-white/10">
+                          <span className="font-bold">{value}</span> visitors •{" "}
+                          {day} {hours[hourIndex]}
+                        </div>
+                        <div className="w-2 h-2 bg-gray-900 rotate-45 absolute -bottom-1 left-1/2 -translate-x-1/2"></div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-end items-center mt-4 gap-2 text-xs text-gray-500 font-medium">
-        <span>Less</span>
-        <div className="flex gap-1">
-          <div className="w-3 h-3 rounded-sm bg-gray-100"></div>
-          <div className="w-3 h-3 rounded-sm bg-orange-100"></div>
-          <div className="w-3 h-3 rounded-sm bg-orange-200"></div>
-          <div className="w-3 h-3 rounded-sm bg-orange-300"></div>
-          <div className="w-3 h-3 rounded-sm bg-orange-400"></div>
-          <div className="w-3 h-3 rounded-sm bg-orange-500"></div>
+      <div className="flex flex-col sm:flex-row justify-end items-center mt-6 gap-3 sm:gap-4 text-[10px] sm:text-xs text-gray-500 font-medium">
+        <div className="flex items-center gap-2">
+          <span>Less</span>
+          <div className="flex gap-1 sm:gap-1.5">
+            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-xs bg-gray-100"></div>
+            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-xs bg-orange-100"></div>
+            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-xs bg-orange-200"></div>
+            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-xs bg-orange-300"></div>
+            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-xs bg-orange-400"></div>
+            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-xs bg-orange-500"></div>
+          </div>
+          <span>More</span>
         </div>
-        <span>More</span>
       </div>
     </div>
   );
