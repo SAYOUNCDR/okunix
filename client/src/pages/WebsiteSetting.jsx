@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import DeleteWebsiteModal from "../components/dashboard/DeleteWebsiteModal";
+import ResetWebsiteModal from "../components/dashboard/ResetWebsiteModal";
 import {
   getWebsite,
   deleteWebsite,
   getTrackingScript,
   updateWebsite,
+  resetWebsite,
 } from "../services/websiteApi";
 
 const WebsiteSetting = () => {
@@ -20,6 +23,10 @@ const WebsiteSetting = () => {
   const [copiedId, setCopiedId] = useState(false);
   const [copiedScript, setCopiedScript] = useState(false);
   const [trackingScript, setTrackingScript] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   // Edit states
   const [editName, setEditName] = useState("");
@@ -86,23 +93,39 @@ const WebsiteSetting = () => {
     }
   };
 
-  const handleDelete = async () => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this website? This action cannot be undone.",
-      )
-    ) {
-      return;
-    }
+  const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
 
+  const confirmDelete = async () => {
     try {
-      setLoading(true);
+      setIsDeleting(true);
       await deleteWebsite(websiteId);
+      setIsDeleteModalOpen(false);
       navigate("/dashboard");
     } catch (err) {
       console.error("Failed to delete website:", err);
       setError(typeof err === "string" ? err : "Failed to delete website");
-      setLoading(false);
+      setIsDeleting(false);
+    }
+  };
+
+  const handleReset = () => {
+    setIsResetModalOpen(true);
+  };
+
+  const confirmReset = async () => {
+    try {
+      setIsResetting(true);
+      await resetWebsite(websiteId);
+      setIsResetModalOpen(false);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      console.error("Failed to reset website:", err);
+      setError(typeof err === "string" ? err : "Failed to reset website");
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -275,7 +298,10 @@ const WebsiteSetting = () => {
                 </p>
               </div>
               <div>
-                <button className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm">
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm"
+                >
                   Reset Website
                 </button>
               </div>
@@ -297,6 +323,22 @@ const WebsiteSetting = () => {
           </div>
         </div>
       </main>
+
+      <DeleteWebsiteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        websiteName={website?.websiteName}
+        onConfirm={confirmDelete}
+        isLoading={isDeleting}
+      />
+
+      <ResetWebsiteModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        websiteName={website?.websiteName}
+        onConfirm={confirmReset}
+        isLoading={isResetting}
+      />
     </div>
   );
 };

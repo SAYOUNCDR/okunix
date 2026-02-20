@@ -9,6 +9,7 @@ const {
   getTrackingScript,
   deleteWebsite,
   updateWebsite,
+  resetWebsite,
 } = require("../controllers/websiteController");
 
 router.post("/createWebsite", verifyToken, createWebsite);
@@ -24,5 +25,7 @@ router.get("/getTrackingScript/:websiteId", verifyToken, getTrackingScript);
 router.delete("/deleteWebsite/:websiteId", verifyToken, deleteWebsite);
 
 router.put("/updateWebsite/:websiteId", verifyToken, updateWebsite);
+
+router.delete("/resetWebsite/:websiteId", verifyToken, resetWebsite);
 
 module.exports = router;

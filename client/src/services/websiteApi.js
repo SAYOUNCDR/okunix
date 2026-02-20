@@ -60,6 +60,15 @@ export const deleteWebsite = async (websiteId) => {
   }
 };
 
+export const resetWebsite = async (websiteId) => {
+  try {
+    const response = await api.delete(`/website/resetWebsite/${websiteId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to reset website website";
+  }
+};
+
 export const updateWebsite = async (websiteId, websiteData) => {
   try {
     const response = await api.put(

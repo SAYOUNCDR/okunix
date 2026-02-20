@@ -101,10 +101,29 @@ exports.deleteWebsite = async (req, res) => {
     if (!website) {
       return res.status(404).json({ message: "Website not found" });
     }
+    // Delete all tracked data associated with this website
+    await TrackedData.deleteMany({ websiteId: website._id });
     await website.deleteOne();
     res.status(200).json({ message: "Website deleted successfully" });
   } catch (error) {
     console.error("Delete Website Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.resetWebsite = async (req, res) => {
+  try {
+    const _id = req.params.websiteId;
+    const userId = req.user.id;
+    const website = await Website.findOne({ _id, userId });
+    if (!website) {
+      return res.status(404).json({ message: "Website not found" });
+    }
+    // Delete all tracked data associated with this website
+    await TrackedData.deleteMany({ websiteId: website._id });
+    res.status(200).json({ message: "Website data reset successfully" });
+  } catch (error) {
+    console.error("Reset Website Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
