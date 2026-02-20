@@ -3,8 +3,7 @@ import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import useCopy from "../hooks/useCopy";
-import DeleteWebsiteModal from "../components/dashboard/DeleteWebsiteModal";
-import ResetWebsiteModal from "../components/dashboard/ResetWebsiteModal";
+import DangerModal from "../components/common/DangerModal";
 import {
   getWebsite,
   deleteWebsite,
@@ -314,20 +313,28 @@ const WebsiteSetting = () => {
         </div>
       </main>
 
-      <DeleteWebsiteModal
+      <DangerModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        websiteName={website?.websiteName}
+        title="Delete Website"
+        description="This will permanently delete all records and settings for this website. This cannot be undone."
+        confirmText="Confirm Delete"
+        message={`Are you sure you want to delete ${website?.websiteName}?`}
         onConfirm={confirmDelete}
         isLoading={isDeleting}
+        color="red"
       />
 
-      <ResetWebsiteModal
+      <DangerModal
         isOpen={isResetModalOpen}
         onClose={() => setIsResetModalOpen(false)}
-        websiteName={website?.websiteName}
+        title="Reset Statistics"
+        description="This will wipe all historical visitor data. Your website settings and tracking code will remain intact."
+        confirmText="Reset Data"
+        message={`Are you sure you want to reset ${website?.websiteName}'s stats?`}
         onConfirm={confirmReset}
         isLoading={isResetting}
+        color="orange"
       />
     </div>
   );

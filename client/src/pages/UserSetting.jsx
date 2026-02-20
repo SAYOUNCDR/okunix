@@ -1,14 +1,35 @@
 import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import useCopy from "../hooks/useCopy";
 import { useAuth } from "../context/AuthContext";
+import DangerModal from "../components/common/DangerModal";
+import api from "../services/api";
 
 const UserSetting = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [copiedId, handleCopy] = useCopy();
   const accountId = user?._id || "N/A";
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const confirmDeleteAccount = async () => {
+    try {
+      setIsDeleting(true);
+      await api.delete("/auth/delete-account");
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to delete account:", error);
+      alert("Failed to delete account. Please try again.");
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
@@ -103,7 +124,10 @@ const UserSetting = () => {
                 </p>
               </div>
               <div>
-                <button className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm">
+                <button
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="flex items-center gap-2 text-red-500 hover:text-red-900 transition-colors text-sm font-medium border border-red-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-red-50 shadow-sm"
+                >
                   Delete
                 </button>
               </div>
@@ -111,6 +135,18 @@ const UserSetting = () => {
           </div>
         </div>
       </main>
+
+      <DangerModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Delete Account"
+        description="This will permanently delete your account and all associated data, including websites and tracking stats. This action is irreversible."
+        confirmText="Confirm Delete"
+        message={`Are you sure you want to delete your account, ${user?.username}?`}
+        onConfirm={confirmDeleteAccount}
+        isLoading={isDeleting}
+        color="red"
+      />
     </div>
   );
 };
