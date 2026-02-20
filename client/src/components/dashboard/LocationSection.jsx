@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Maximize2 } from "lucide-react";
 
 const LocationSection = () => {
   const [activeTab, setActiveTab] = useState("Countries");
@@ -95,6 +96,14 @@ const LocationSection = () => {
           ))}
         </div>
       </div>
+
+      <button className="w-full mt-4 flex items-center justify-center gap-2 py-2 text-sm text-gray-500 hover:text-gray-900 transition-colors border-t border-gray-50 pt-4 group">
+        <Maximize2
+          size={14}
+          className="text-gray-400 group-hover:text-gray-900"
+        />
+        More
+      </button>
     </div>
   );
 };

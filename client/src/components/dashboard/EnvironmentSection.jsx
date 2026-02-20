@@ -17,7 +17,6 @@ const EnvironmentSection = () => {
   const data = {
     Browsers: [
       { name: "Chrome", count: 21, percent: "91%", icon: Chrome },
-      { name: "Edge (Chromium)", count: 2, percent: "9%", icon: GlobeIcon }, // Using generic globe since Edge icon isn't in standard lucide
     ],
     OS: [
       { name: "Windows", count: 18, percent: "78%", icon: Monitor },
@@ -80,7 +79,7 @@ const EnvironmentSection = () => {
       <div className="flex flex-col">
         <div className="flex justify-between items-center mb-4 px-2">
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            {activeTab.slice(0, -1)} {/* Singular version of tab name */}
+            {activeTab === "OS" ? activeTab : activeTab.slice(0, -1)}
           </span>
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             Visitors
