@@ -6,6 +6,7 @@ import {
   getWebsite,
   deleteWebsite,
   getTrackingScript,
+  updateWebsite,
 } from "../services/websiteApi";
 
 const WebsiteSetting = () => {
@@ -14,6 +15,8 @@ const WebsiteSetting = () => {
   const [website, setWebsite] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
   const [copiedScript, setCopiedScript] = useState(false);
   const [trackingScript, setTrackingScript] = useState("");
@@ -58,6 +61,28 @@ const WebsiteSetting = () => {
     } else {
       setCopiedScript(true);
       setTimeout(() => setCopiedScript(false), 2000);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      setUpdateLoading(true);
+      setSuccess(false);
+      setError(null);
+
+      const response = await updateWebsite(websiteId, {
+        websiteName: editName,
+        domain: editDomain,
+      });
+
+      setWebsite(response.updatedWebsite);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      console.error("Failed to update website:", err);
+      setError(typeof err === "string" ? err : "Failed to update website");
+    } finally {
+      setUpdateLoading(false);
     }
   };
 
@@ -191,10 +216,19 @@ const WebsiteSetting = () => {
                 placeholder="domain.com"
               />
             </div>
-            <div>
-              <button className="mt-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
-                Save changes
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleUpdate}
+                disabled={updateLoading}
+                className="mt-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm disabled:opacity-50"
+              >
+                {updateLoading ? "Saving..." : "Save changes"}
               </button>
+              {success && (
+                <p className="mt-4 text-sm text-green-600 font-medium">
+                  Website updated successfully!
+                </p>
+              )}
             </div>
           </div>
 
