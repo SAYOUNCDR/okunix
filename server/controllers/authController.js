@@ -1,4 +1,6 @@
 const User = require("../models/userModal");
+const Website = require("../models/websiteModal");
+const TrackedData = require("../models/trackedDataModal");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
@@ -258,7 +260,6 @@ exports.getMe = async (req, res) => {
   }
 };
 
-
 exports.deleteAccount = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -267,7 +268,21 @@ exports.deleteAccount = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Cascading delete: find all user websites
+    const websites = await Website.find({ userId });
+    const websiteIds = websites.map((w) => w._id);
+
+    // Delete all tracked data associated with those websites
+    if (websiteIds.length > 0) {
+      await TrackedData.deleteMany({ websiteId: { $in: websiteIds } });
+    }
+
+    // Delete all website records
+    await Website.deleteMany({ userId });
+
+    // Finally delete the user record itself
     await User.findByIdAndDelete(userId);
+
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
     console.log(error);
