@@ -55,30 +55,50 @@ exports.collectData = async (req, res) => {
     if (cityReader && clientIp) {
       try {
         // Handle localhost / private IPs gracefully
-        if (clientIp === "::1" || clientIp === "127.0.0.1") {
+        if (
+          clientIp === "::1" ||
+          clientIp === "127.0.0.1" ||
+          clientIp.includes("192.168.") ||
+          clientIp.startsWith("10.")
+        ) {
           country = "Local";
           region = "Local";
           city = "Local";
         } else {
           const response = cityReader.city(clientIp);
-          country = response.country.names.en || "Unknown";
-          region =
-            response.subdivisions && response.subdivisions.length > 0
-              ? response.subdivisions[0].names.en
-              : "Unknown";
-          city = response.city.names.en || "Unknown";
+
+          if (response) {
+            country =
+              (response.country &&
+                response.country.names &&
+                response.country.names.en) ||
+              "Unknown";
+
+            if (response.subdivisions && response.subdivisions.length > 0) {
+              region =
+                (response.subdivisions[0].names &&
+                  response.subdivisions[0].names.en) ||
+                "Unknown";
+            }
+
+            city =
+              (response.city &&
+                response.city.names &&
+                response.city.names.en) ||
+              "Unknown";
+          }
         }
       } catch (geoErr) {
         // IP not found in DB or invalid
-        console.warn(`Geo lookup failed for IP ${clientIp}:`, geoErr.message);
+        console.warn(`Geo lookup notice for IP ${clientIp}:`, geoErr.message);
       }
     }
 
     // 4. Save to DB
-    await TrackedData.create({
+    const newData = {
       websiteId: website._id,
       url,
-      referrer,
+      referrer: referrer || "Direct",
       country,
       region,
       city,
@@ -86,13 +106,20 @@ exports.collectData = async (req, res) => {
       browser,
       os,
       device: device,
-      // You might want to store screen resolution too if you add it to the schema
-    });
+    };
+
+    await TrackedData.create(newData);
 
     // Respond with a simple 200 OK (or even 204 No Content for speed)
     return res.status(200).json({ message: "Data tracked successfully" });
   } catch (error) {
-    console.error("Tracking Error:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error("--- TRACKING ERROR DETAIL ---");
+    console.error("Message:", error.message);
+    console.error("Stack:", error.stack);
+    console.error("Body:", req.body);
+    console.error("-----------------------------");
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };

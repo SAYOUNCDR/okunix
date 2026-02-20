@@ -20,20 +20,19 @@ const allowedOrigins = [
   .filter(Boolean)
   .map((url) => url.toLowerCase().replace(/\/$/, "")); // Normalize: Lowercase & No Trailing Slashes
 
-
 // 2. Open CORS for Tracking (Script & Collection)
 const trackingCors = cors({
   origin: "*",
   optionsSuccessStatus: 200,
 });
 
-// --- 1. HIGH PRIORITY: TRACKING ROUTES (MUST BE FIRST) ---
-app.use("/scripts", trackingCors, express.static("./scripts"));
-app.use("/api/track", trackingCors, require("./routes/trackerRoute"));
-
-// --- 2. MIDDLEWARE FOR DASHBOARD ---
+// --- 1. GLOBAL MIDDLEWARE ---
 app.use(express.json());
 app.use(cookieParser());
+
+// --- 2. HIGH PRIORITY: TRACKING ROUTES (MUST BE FIRST) ---
+app.use("/scripts", trackingCors, express.static("./scripts"));
+app.use("/api/track", trackingCors, require("./routes/trackerRoute"));
 
 // --- 3. DASHBOARD CORS ---
 const dashboardCors = cors({
