@@ -45,7 +45,11 @@ const trackingCors = cors({ origin: "*" });
 app.use(express.json());
 app.use(cookieParser());
 
-// ENABLE PRE-FLIGHT FOR ALL ROUTES (Critical for Nginx Proxy)
+// Handle Tracking pre-flights first (Allow all origins)
+app.options("/api/track/*", trackingCors);
+app.options("/scripts/*", trackingCors);
+
+// ENABLE PRE-FLIGHT FOR DASHBOARD ROUTES (Critical for Nginx Proxy)
 app.options(/(.*)/, dashboardCors);
 
 app.get("/test", (req, res) => {
