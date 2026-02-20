@@ -51,15 +51,62 @@ exports.getWebsite = async (req, res) => {
   res.status(200).json({ message: "Website fetched successfully", website });
 };
 
-exports.deleteWebsite = async (req, res) => {
+exports.updateWebsite = async (req, res) => {
   const _id = req.params.websiteId;
   const userId = req.user.id;
-  const website = await Website.findOne({ _id, userId });
-  if (!website) {
-    return res.status(404).json({ message: "Website not found" });
+  try {
+    const { websiteName, domain } = req.body;
+    const website = await Website.findOne({ _id, userId });
+    if (!website) {
+      return res.status(404).json({ message: "Website not found" });
+    }
+    if (websiteName) {
+      const existingName = await Website.findOne({
+        websiteName,
+        _id: { $ne: _id },
+      });
+      if (existingName) {
+        return res.status(400).json({ message: "Website name already exists" });
+      }
+    }
+    if (domain) {
+      const existingDomain = await Website.findOne({
+        domain,
+        _id: { $ne: _id },
+      });
+      if (existingDomain) {
+        return res.status(400).json({ message: "Domain already registered" });
+      }
+    }
+
+    const updatedWebsite = await Website.findByIdAndUpdate(
+      _id,
+      { websiteName, domain },
+      { new: true },
+    );
+    res
+      .status(200)
+      .json({ message: "Website updated successfully", updatedWebsite });
+  } catch (error) {
+    console.error("Update Website Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
-  await website.deleteOne();
-  res.status(200).json({ message: "Website deleted successfully" });
+};
+
+exports.deleteWebsite = async (req, res) => {
+  try {
+    const _id = req.params.websiteId;
+    const userId = req.user.id;
+    const website = await Website.findOne({ _id, userId });
+    if (!website) {
+      return res.status(404).json({ message: "Website not found" });
+    }
+    await website.deleteOne();
+    res.status(200).json({ message: "Website deleted successfully" });
+  } catch (error) {
+    console.error("Delete Website Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 exports.getTrackedData = async (req, res) => {
