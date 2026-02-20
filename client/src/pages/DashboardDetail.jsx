@@ -6,6 +6,7 @@ import TimeFilter from "../components/dashboard/TimeFilter";
 import ChartFilter from "../components/dashboard/ChartFilter";
 import LocationSection from "../components/dashboard/LocationSection";
 import SourcesSection from "../components/dashboard/SourcesSection";
+import EnvironmentSection from "../components/dashboard/EnvironmentSection";
 import TrafficHeatmap from "../components/dashboard/TrafficHeatmap";
 import EntryExitPages from "../components/dashboard/EntryExitpages";
 import { Cog, ArrowLeft, ArrowRight } from "lucide-react";
@@ -128,6 +129,7 @@ const DashboardDetail = () => {
             <TrafficHeatmap />
             <SourcesSection />
             <LocationSection />
+            <EnvironmentSection />
             <EntryExitPages />
           </div>
         </div>

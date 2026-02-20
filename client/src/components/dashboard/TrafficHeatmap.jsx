@@ -34,33 +34,35 @@ const TrafficHeatmap = () => {
         Traffic
       </h3>
 
-      <div className="overflow-x-auto pb-4">
-        <div className="min-w-200">
-          <div className="flex mb-2 ml-12">
+      <div className="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+        <div className="min-w-200 sm:min-w-0">
+          <div className="flex mb-3 ml-12">
             {hours.map((hour, i) => (
               <div key={hour} className="flex-1 text-center">
-                <span className="text-[10px] text-gray-400 font-medium block">
+                <span className="text-[10px] text-gray-400 font-semibold block uppercase tracking-tighter">
                   {i % 2 === 0 ? hour : ""}
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5">
             {days.map((day, dayIndex) => (
               <div key={day} className="flex items-center gap-2">
-                <div className="w-10 text-[11px] font-semibold text-gray-500 shrink-0">
+                <div className="w-10 text-[11px] font-bold text-gray-400 shrink-0 uppercase tracking-wider">
                   {day}
                 </div>
 
-                <div className="flex flex-1 gap-1">
+                <div className="flex flex-1 gap-1 sm:gap-1.5">
                   {data[dayIndex].map((value, hourIndex) => (
                     <div
                       key={`${day}-${hourIndex}`}
-                      className="flex-1 aspect-square group relative cursor-default"
+                      className="flex-1 aspect-square group relative cursor-pointer"
                     >
                       <div
-                        className={`w-full h-full rounded-xstransition-colors duration-200 ${getColorClass(value)}`}
+                        className={`w-full h-full rounded-sm transition-all duration-300 hover:scale-110 hover:z-10 ${getColorClass(
+                          value,
+                        )}`}
                       ></div>
 
                       <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 pointer-events-none">
