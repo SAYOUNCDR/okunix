@@ -66,14 +66,6 @@ const UserSetting = () => {
                 <p className="text-gray-600">{user?.email || "N/A"}</p>
               </div>
             </div>
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-1">
-                Data Region
-              </h3>
-              <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
-                <p className="text-gray-600">US</p>
-              </div>
-            </div>
           </div>
 
           <div className="mt-8 mb-4 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
