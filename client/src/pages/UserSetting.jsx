@@ -2,11 +2,13 @@ import Sidebar from "../components/layout/Sidebar";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useCopy from "../hooks/useCopy";
+import { useAuth } from "../context/AuthContext";
 
 const UserSetting = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [copiedId, handleCopy] = useCopy();
-  const accountId = "ac6d1abf-aa4c-4c91-8b2a-d0d7b15de840";
+  const accountId = user?._id || "N/A";
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
@@ -29,10 +31,12 @@ const UserSetting = () => {
 
         <div className="flex-1 px-8">
           <div className="mt-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-            <div className="mb-2">
-              <h3>Account Id</h3>
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Account Id
+              </h3>
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg flex items-center justify-between">
-                <p>{accountId}</p>
+                <p className="text-gray-600 font-mono text-sm">{accountId}</p>
                 <button
                   onClick={() => handleCopy(accountId)}
                   className="p-1 hover:bg-gray-200 rounded transition-colors"
@@ -48,29 +52,27 @@ const UserSetting = () => {
                 </button>
               </div>
             </div>
-            <div className="mb-2">
-              <h3>Name</h3>
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">Name</h3>
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
-                <p>Sayoun</p>
+                <p className="text-gray-600">{user?.username || "N/A"}</p>
               </div>
             </div>
-            <div className="mb-2">
-              <h3>Email</h3>
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Email
+              </h3>
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
-                <p>sayoun@example.com</p>
+                <p className="text-gray-600">{user?.email || "N/A"}</p>
               </div>
             </div>
-            <div className="mb-2">
-              <h3>Data Region</h3>
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Data Region
+              </h3>
               <div className="bg-gray-100 p-2 border border-slate-200 rounded-lg">
-                <p>US</p>
+                <p className="text-gray-600">US</p>
               </div>
-            </div>
-
-            <div>
-              <button className="mt-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
-                Save changes
-              </button>
             </div>
           </div>
 
