@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const sendEmail = require("../lib/email");
-const { getVerificationEmailTemplate } = require("../lib/emailTemplates");
+const { getVerificationEmailTemplate, getResetPasswordEmailTemplate } = require("../lib/emailTemplates");
 const { getEmailVerifiedPage, getErrorPage } = require("../lib/htmlPages");
 const { generateAccessToken, generateRefreshToken, generateEmailVerificationToken } = require("../lib/token");
 
