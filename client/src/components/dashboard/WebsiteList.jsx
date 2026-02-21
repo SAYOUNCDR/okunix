@@ -36,13 +36,20 @@ const WebsiteList = ({ websites = [] }) => {
                     {site.name || site.websiteName}
                   </span>
                   <div className="flex items-center gap-2 text-xs text-gray-400 font-mono group/id h-5">
-                    <span className="truncate max-w-20 sm:max-w-30">
+                    <span
+                      className="truncate max-w-20 sm:max-w-30 cursor-pointer hover:text-gray-600 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopy(site.websiteId, site.websiteId);
+                      }}
+                      title="Copy Website ID"
+                    >
                       {site.websiteId}
                     </span>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleCopy(site.websiteId);
+                        handleCopy(site.websiteId, site.websiteId);
                       }}
                       className="flex items-center justify-center w-5 h-5 -ml-1 hover:bg-gray-100 rounded-md text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                       title="Copy Website ID"
