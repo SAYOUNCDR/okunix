@@ -289,3 +289,36 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const normalizedEmail = email.toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
+    if (!user) {
+      return res.status(404).json({
+        message: "If an account with this email exists, we'll send you a link to reset your password."
+      });
+    }
+
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    const token = crypto.createHash("sha256").update(rawToken).digest("hex");
+
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
+    await user.save();
+
+    const resetUrl = `${getAppUrl()}/api/auth/reset-password?token=${rawToken}`;
+
+    const emailTemplate = getResetPasswordEmailTemplate(resetUrl);
+
+    await sendEmail(email, "Reset your password - Okunix", emailTemplate);
+
+    res.status(200).json({ message: "Password reset link sent successfully" });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
