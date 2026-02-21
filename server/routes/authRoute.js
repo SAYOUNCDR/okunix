@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const verifyToken = require("../middleware/authMiddleware")
-
+const verifyToken = require("../middleware/authMiddleware");
 const authController = require("../controllers/authController");
 
 router.post("/register", authController.register);
@@ -17,5 +16,9 @@ router.get("/verify-email", authController.verifyEmail);
 router.get("/me", verifyToken, authController.getMe);
 
 router.delete("/delete-account", verifyToken, authController.deleteAccount);
+
+router.post("/forgot-password", authController.forgotPassword);
+
+router.post("/reset-password", authController.resetPassword);
 
 module.exports = router;
