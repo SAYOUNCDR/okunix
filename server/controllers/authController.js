@@ -9,13 +9,26 @@ const { userSchema, loginSchema } = require("../config/zod");
 const sendEmail = require("../lib/email");
 const { getVerificationEmailTemplate } = require("../lib/emailTemplates");
 const { getEmailVerifiedPage, getErrorPage } = require("../lib/htmlPages");
-const { generateAccessToken, generateRefreshToken } = require("../lib/token");
+const { generateAccessToken, generateRefreshToken, generateEmailVerificationToken } = require("../lib/token");
 
 function getAppUrl() {
   if (process.env.NODE_ENV === "development") {
     return `http://localhost:${process.env.PORT}`;
   }
   return process.env.APP_URL || `http://localhost:${process.env.PORT}`;
+}
+
+function getFrontendUrl(req) {
+  const origin = req.headers.origin || req.headers.referer;
+  let frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+
+  // Allowed dynamic domains
+  const allowedDomains = ["https://okunix.tech", "https://okunix.sayoun.studio", "http://localhost:5173"];
+
+  if (origin && allowedDomains.some(domain => origin.startsWith(domain))) {
+    frontendUrl = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+  }
+  return frontendUrl;
 }
 
 exports.register = async (req, res) => {
@@ -51,11 +64,7 @@ exports.register = async (req, res) => {
     });
 
     // Email verification token (will be used for email verification process)
-    const verificationToken = jwt.sign(
-      { userId: newUser._id },
-      process.env.EMAIL_VERIFICATION_SECRET,
-      { expiresIn: "1d" },
-    );
+    const verificationToken = generateEmailVerificationToken(newUser._id);
 
     const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
 
@@ -310,7 +319,7 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
     await user.save();
 
-    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const frontendUrl = getFrontendUrl(req);
     const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
 
     const emailTemplate = getResetPasswordEmailTemplate(resetUrl);
@@ -392,11 +401,7 @@ exports.changeEmail = async (req, res) => {
     await user.save();
 
     // Send verification email for the new email address
-    const verificationToken = jwt.sign(
-      { userId: user._id },
-      process.env.EMAIL_VERIFICATION_SECRET,
-      { expiresIn: "1d" },
-    );
+    const verificationToken = generateEmailVerificationToken(user._id);
 
     const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
     const emailTemplate = getVerificationEmailTemplate(verifyUrl);

@@ -38,9 +38,18 @@ const verifyRefreshToken = (token) => {
   }
 };
 
+const generateEmailVerificationToken = (userId) => {
+  return jwt.sign(
+    { userId },
+    process.env.EMAIL_VERIFICATION_SECRET,
+    { expiresIn: "1d" },
+  );
+};
+
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,
+  generateEmailVerificationToken,
 };
