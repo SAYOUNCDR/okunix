@@ -3,6 +3,7 @@ const Website = require("../models/websiteModal");
 const TrackedData = require("../models/trackedDataModal");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const sendEmail = require("../lib/email");
@@ -309,7 +310,8 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
     await user.save();
 
-    const resetUrl = `${getAppUrl()}/api/auth/reset-password?token=${rawToken}`;
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
 
     const emailTemplate = getResetPasswordEmailTemplate(resetUrl);
 
@@ -345,6 +347,74 @@ exports.resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: "Password reset successfully" });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+exports.changeEmail = async (req, res) => {
+  try {
+    const { newEmail, password } = req.body;
+    const userId = req.user.id;
+
+    if (!newEmail || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+
+    const normalizedEmail = newEmail.toLowerCase();
+
+    if (normalizedEmail === user.email) {
+      return res.status(400).json({ message: "New email must be different from current email" });
+    }
+
+    const emailExists = await User.findOne({ email: normalizedEmail });
+    if (emailExists) {
+      return res.status(400).json({ message: "Email is already in use by another account" });
+    }
+
+    user.email = normalizedEmail;
+    user.isEmailVerified = false; // Require them to verify the new email
+
+    // Revoke all existing sessions by incrementing token version
+    user.tokenVersion = user.tokenVersion + 1;
+    await user.save();
+
+    // Send verification email for the new email address
+    const verificationToken = jwt.sign(
+      { userId: user._id },
+      process.env.EMAIL_VERIFICATION_SECRET,
+      { expiresIn: "1d" },
+    );
+
+    const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
+    const emailTemplate = getVerificationEmailTemplate(verifyUrl);
+
+    await sendEmail(normalizedEmail, "Verify your new email - Okunix", emailTemplate);
+
+    // Clear the current session cookies since the token version changed
+    const isProduction = process.env.NODE_ENV === "production";
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
+    });
+
+    res.status(200).json({
+      message: "Email changed successfully. Please verify your new email and log in again.",
+      requireLogout: true
+    });
 
   } catch (error) {
     console.log(error);

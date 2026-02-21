@@ -64,12 +64,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const changeEmail = async (newEmail, password) => {
+    const response = await api.post("/auth/change-email", {
+      newEmail,
+      password,
+    });
+    return response.data;
+  };
+
+  const forgotPassword = async (email) => {
+    const response = await api.post("/auth/forgot-password", { email });
+    return response.data;
+  };
+
+  const resetPassword = async (token, password) => {
+    const response = await api.post("/auth/reset-password", {
+      token,
+      password,
+    });
+    return response.data;
+  };
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
+    changeEmail,
+    forgotPassword,
+    resetPassword,
   };
 
   return (

@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { useAuth } from "../../context/AuthContext";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -31,8 +33,23 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     }
   };
 
+  const handleClose = () => {
+    setShowForgotPassword(false);
+    onClose();
+  };
+
+  if (showForgotPassword) {
+    return (
+      <ForgotPasswordModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        onBackToLogin={() => setShowForgotPassword(false)}
+      />
+    );
+  }
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Welcome back">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Welcome back">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
           <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md">
@@ -77,14 +94,20 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
           </label>
           <button
             type="button"
+            onClick={() => setShowForgotPassword(true)}
             className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"
           >
             Forgot password?
           </button>
         </div>
 
-        <Button type="submit" variant="primary" className="w-full mt-2">
-          Sign In
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full mt-2"
+          disabled={loading}
+        >
+          {loading ? "Signing In..." : "Sign In"}
         </Button>
 
         <p className="text-center text-sm text-gray-600 mt-4">
@@ -92,7 +115,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
           <button
             type="button"
             onClick={() => {
-              onClose();
+              handleClose();
               onSwitchToRegister?.();
             }}
             className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"

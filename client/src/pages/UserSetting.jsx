@@ -6,6 +6,7 @@ import useCopy from "../hooks/useCopy";
 import { useAuth } from "../context/AuthContext";
 import DangerModal from "../components/common/DangerModal";
 import api from "../services/api";
+import ChangeEmailModal from "../components/auth/ChangeEmailModal";
 
 const UserSetting = () => {
   const navigate = useNavigate();
@@ -15,6 +16,12 @@ const UserSetting = () => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const [isChangeEmailModalOpen, setIsChangeEmailModalOpen] = useState(false);
+  const [isSendingReset, setIsSendingReset] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+
+  const { forgotPassword } = useAuth();
 
   const confirmDeleteAccount = async () => {
     try {
@@ -28,6 +35,21 @@ const UserSetting = () => {
     } finally {
       setIsDeleting(false);
       setIsDeleteModalOpen(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!user?.email) return;
+    setIsSendingReset(true);
+    try {
+      await forgotPassword(user.email);
+      setResetSent(true);
+      setTimeout(() => setResetSent(false), 5000); // Hide success message after 5 seconds
+    } catch (error) {
+      console.error("Failed to send reset email:", error);
+      alert("Failed to send password reset email. Please try again.");
+    } finally {
+      setIsSendingReset(false);
     }
   };
 
@@ -98,9 +120,18 @@ const UserSetting = () => {
                 <p className="text-xs">Change your account password.</p>
               </div>
               <div>
-                <button className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
-                  Change password
+                <button
+                  onClick={handleForgotPassword}
+                  disabled={isSendingReset}
+                  className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm"
+                >
+                  {isSendingReset ? "Sending..." : "Change password"}
                 </button>
+                {resetSent && (
+                  <p className="text-xs text-green-600 mt-2">
+                    Reset link sent to your email!
+                  </p>
+                )}
               </div>
             </div>
 
@@ -110,7 +141,10 @@ const UserSetting = () => {
                 <p className="text-xs">Change your account email.</p>
               </div>
               <div>
-                <button className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm">
+                <button
+                  onClick={() => setIsChangeEmailModalOpen(true)}
+                  className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm"
+                >
                   Change email
                 </button>
               </div>
@@ -146,6 +180,11 @@ const UserSetting = () => {
         onConfirm={confirmDeleteAccount}
         isLoading={isDeleting}
         color="red"
+      />
+
+      <ChangeEmailModal
+        isOpen={isChangeEmailModalOpen}
+        onClose={() => setIsChangeEmailModalOpen(false)}
       />
     </div>
   );
