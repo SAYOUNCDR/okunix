@@ -161,7 +161,10 @@ const DashboardDetail = () => {
               </a>
             </div>
 
-            <Button className="flex items-center gap-2 w-full sm:w-auto justify-center">
+            <Button
+              onClick={() => navigate(`/dashboard/setting/${websiteId}`)}
+              className="flex items-center gap-2 w-full sm:w-auto justify-center"
+            >
               <Cog size={16} />
               Edit
             </Button>
