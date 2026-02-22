@@ -17,6 +17,7 @@ import {
   getActivityChart,
   getLocationMetrics,
   getEnvironmentMetrics,
+  getHeatmapData,
 } from "../services/analyticsApi";
 
 const DashboardDetail = () => {
@@ -43,8 +44,10 @@ const DashboardDetail = () => {
   const [environmentData, setEnvironmentData] = useState({
     Browsers: [],
     OS: [],
-    Devices: [],
   });
+  const [heatmapData, setHeatmapData] = useState(
+    Array.from({ length: 7 }, () => Array(24).fill(0)),
+  );
   const [loadingExtras, setLoadingExtras] = useState(true);
 
   useEffect(() => {
@@ -78,12 +81,16 @@ const DashboardDetail = () => {
       if (!websiteId) return;
       try {
         setLoadingExtras(true);
-        const [locData, envData] = await Promise.all([
+        const [locData, envData, heatData] = await Promise.all([
           getLocationMetrics(websiteId),
           getEnvironmentMetrics(websiteId),
+          getHeatmapData(websiteId),
         ]);
         setLocationData(locData);
         setEnvironmentData(envData);
+        if (heatData && heatData.length > 0) {
+          setHeatmapData(heatData);
+        }
       } catch (error) {
         // Error handled in service layer
       } finally {
@@ -215,7 +222,7 @@ const DashboardDetail = () => {
           </div>
 
           <div className="space-y-6 sm:space-y-8">
-            <TrafficHeatmap />
+            <TrafficHeatmap data={heatmapData} loading={loadingExtras} />
             <SourcesSection />
             <LocationSection data={locationData} loading={loadingExtras} />
             <EnvironmentSection

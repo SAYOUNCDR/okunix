@@ -51,3 +51,16 @@ export const getEnvironmentMetrics = async (websiteId) => {
         throw error;
     }
 };
+
+/**
+ * Fetch traffic heatmap logic (returning default 7x24 arrays natively)
+ */
+export const getHeatmapData = async (websiteId) => {
+    try {
+        const response = await api.get(`/analytics/heatmap/${websiteId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch heatmap data:", error);
+        throw error;
+    }
+};

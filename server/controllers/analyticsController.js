@@ -313,3 +313,66 @@ exports.getEnvironmentMetrics = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch environment metrics" });
     }
 };
+
+exports.getHeatmapData = async (req, res) => {
+    try {
+        const { websiteId } = req.params;
+        const userId = req.user.id;
+
+        const website = await Website.findOne({ _id: websiteId, userId });
+        if (!website) return res.status(404).json({ message: "Website not found or unauthorized" });
+
+        const objectId = new mongoose.Types.ObjectId(websiteId);
+
+        // Limit to past 7 days to keep heatmap relevant to recent traffic
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const heatmapStats = await TrackedData.aggregate([
+            {
+                $match: {
+                    websiteId: objectId,
+                    createdAt: { $gte: sevenDaysAgo }
+                }
+            },
+            {
+                $group: {
+                    // $dayOfWeek returns 1 (Sunday) to 7 (Saturday)
+                    // $hour returns 0-23
+                    _id: {
+                        day: { $dayOfWeek: "$createdAt" },
+                        hour: { $hour: "$createdAt" }
+                    },
+                    uniqueVisitors: { $addToSet: "$visitorId" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    day: "$_id.day",
+                    hour: "$_id.hour",
+                    visitors: { $size: "$uniqueVisitors" }
+                }
+            }
+        ]);
+
+        // Initialize a 7x24 matrix with 0s
+        // indices 0-6 (Sun-Sat), 0-23 (hours)
+        const formatData = Array.from({ length: 7 }, () => Array(24).fill(0));
+
+        // Map the results into the matrix
+        heatmapStats.forEach(stat => {
+            // $dayOfWeek is 1-indexed (1=Sunday), subtract 1 for 0-indexed JS array
+            const dayIndex = stat.day - 1;
+            const hourIndex = stat.hour;
+
+            formatData[dayIndex][hourIndex] = stat.visitors;
+        });
+
+        res.status(200).json(formatData);
+
+    } catch (error) {
+        console.error("Heatmap Data Error:", error);
+        res.status(500).json({ message: "Failed to fetch heatmap data" });
+    }
+};
