@@ -1,6 +1,6 @@
 const express = require("express");
-const { getStats, getActivityChart } = require("../controllers/analyticsController");
-const  verifyToken  = require("../middleware/authMiddleware")
+const { getStats, getActivityChart, getLocationMetrics, getEnvironmentMetrics } = require("../controllers/analyticsController");
+const verifyToken = require("../middleware/authMiddleware")
 
 const router = express.Router();
 
@@ -9,5 +9,7 @@ router.use(verifyToken);
 
 router.get("/stats/:websiteId", getStats);
 router.get("/chart/:websiteId", getActivityChart);
+router.get("/location/:websiteId", getLocationMetrics);
+router.get("/environment/:websiteId", getEnvironmentMetrics);
 
 module.exports = router;

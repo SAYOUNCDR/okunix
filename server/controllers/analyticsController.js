@@ -174,3 +174,142 @@ exports.getActivityChart = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch chart data" });
     }
 };
+
+exports.getLocationMetrics = async (req, res) => {
+    try {
+        const { websiteId } = req.params;
+        const userId = req.user.id;
+
+        const website = await Website.findOne({ _id: websiteId, userId });
+        if (!website) return res.status(404).json({ message: "Website not found or unauthorized" });
+
+        const objectId = new mongoose.Types.ObjectId(websiteId);
+
+        // Group by visitorId first so we count Unique Visitors, using their last known location
+        const visitorLocations = await TrackedData.aggregate([
+            { $match: { websiteId: objectId } },
+            { $sort: { createdAt: 1 } },
+            {
+                $group: {
+                    _id: "$visitorId",
+                    country: { $last: "$country" },
+                    region: { $last: "$region" },
+                    city: { $last: "$city" }
+                }
+            },
+            {
+                $facet: {
+                    Countries: [
+                        { $group: { _id: "$country", count: { $sum: 1 } } },
+                        { $sort: { count: -1 } },
+                        { $limit: 10 },
+                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                    ],
+                    Regions: [
+                        { $group: { _id: "$region", count: { $sum: 1 } } },
+                        { $sort: { count: -1 } },
+                        { $limit: 10 },
+                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                    ],
+                    Cities: [
+                        { $group: { _id: "$city", count: { $sum: 1 } } },
+                        { $sort: { count: -1 } },
+                        { $limit: 10 },
+                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                    ]
+                }
+            }
+        ]);
+
+        const result = visitorLocations[0];
+
+        // Calculate percentages
+        const totalVisitors = result.Countries.reduce((acc, curr) => acc + curr.count, 0) || 1;
+        const formatPercent = (count) => `${Math.round((count / totalVisitors) * 100)}%`;
+
+        const formatData = (arr) => arr.map(item => ({
+            name: item.name || "Unknown",
+            count: item.count,
+            percent: formatPercent(item.count),
+            flag: "📍" // Fallback icon
+        }));
+
+        res.status(200).json({
+            Countries: formatData(result.Countries),
+            Regions: formatData(result.Regions),
+            Cities: formatData(result.Cities),
+        });
+
+    } catch (error) {
+        console.error("Location Metrics Error:", error);
+        res.status(500).json({ message: "Failed to fetch location metrics" });
+    }
+};
+
+exports.getEnvironmentMetrics = async (req, res) => {
+    try {
+        const { websiteId } = req.params;
+        const userId = req.user.id;
+
+        const website = await Website.findOne({ _id: websiteId, userId });
+        if (!website) return res.status(404).json({ message: "Website not found or unauthorized" });
+
+        const objectId = new mongoose.Types.ObjectId(websiteId);
+
+        const visitorEnvironments = await TrackedData.aggregate([
+            { $match: { websiteId: objectId } },
+            { $sort: { createdAt: 1 } },
+            {
+                $group: {
+                    _id: "$visitorId",
+                    browser: { $last: "$browser" },
+                    os: { $last: "$os" },
+                    device: { $last: "$device" }
+                }
+            },
+            {
+                $facet: {
+                    Browsers: [
+                        { $group: { _id: "$browser", count: { $sum: 1 } } },
+                        { $sort: { count: -1 } },
+                        { $limit: 10 },
+                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                    ],
+                    OS: [
+                        { $group: { _id: "$os", count: { $sum: 1 } } },
+                        { $sort: { count: -1 } },
+                        { $limit: 10 },
+                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                    ],
+                    Devices: [
+                        { $group: { _id: "$device", count: { $sum: 1 } } },
+                        { $sort: { count: -1 } },
+                        { $limit: 10 },
+                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                    ]
+                }
+            }
+        ]);
+
+        const result = visitorEnvironments[0];
+
+        const totalVisitors = result.Browsers.reduce((acc, curr) => acc + curr.count, 0) || 1;
+        const formatPercent = (count) => `${Math.round((count / totalVisitors) * 100)}%`;
+
+        const formatData = (arr) => arr.map(item => ({
+            name: item.name || "Unknown",
+            count: item.count,
+            percent: formatPercent(item.count)
+        }));
+
+        res.status(200).json({
+            Browsers: formatData(result.Browsers),
+            OS: formatData(result.OS),
+            Devices: formatData(result.Devices),
+        });
+
+    } catch (error) {
+        console.error("Environment Metrics Error:", error);
+        res.status(500).json({ message: "Failed to fetch environment metrics" });
+    }
+};

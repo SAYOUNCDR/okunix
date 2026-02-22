@@ -12,7 +12,12 @@ import EntryExitPages from "../components/dashboard/EntryExitpages";
 import { Cog, ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../services/api";
+import {
+  getDashboardStats,
+  getActivityChart,
+  getLocationMetrics,
+  getEnvironmentMetrics,
+} from "../services/analyticsApi";
 
 const DashboardDetail = () => {
   const navigate = useNavigate();
@@ -29,15 +34,28 @@ const DashboardDetail = () => {
   const [chartData, setChartData] = useState([]);
   const [loadingChart, setLoadingChart] = useState(true);
 
+  // New states for location and environment
+  const [locationData, setLocationData] = useState({
+    Countries: [],
+    Regions: [],
+    Cities: [],
+  });
+  const [environmentData, setEnvironmentData] = useState({
+    Browsers: [],
+    OS: [],
+    Devices: [],
+  });
+  const [loadingExtras, setLoadingExtras] = useState(true);
+
   useEffect(() => {
     const fetchStats = async () => {
       if (!websiteId) return;
       try {
         setLoadingStats(true);
-        const response = await api.get(`/analytics/stats/${websiteId}`);
-        setStats(response.data);
+        const data = await getDashboardStats(websiteId);
+        setStats(data);
       } catch (error) {
-        console.error("Failed to fetch analytics stats:", error);
+        // Error handled in service layer
       } finally {
         setLoadingStats(false);
       }
@@ -47,17 +65,35 @@ const DashboardDetail = () => {
       if (!websiteId) return;
       try {
         setLoadingChart(true);
-        const response = await api.get(`/analytics/chart/${websiteId}`);
-        setChartData(response.data);
+        const data = await getActivityChart(websiteId);
+        setChartData(data);
       } catch (error) {
-        console.error("Failed to fetch analytics chart:", error);
+        // Error handled in service layer
       } finally {
         setLoadingChart(false);
       }
     };
 
+    const fetchExtras = async () => {
+      if (!websiteId) return;
+      try {
+        setLoadingExtras(true);
+        const [locData, envData] = await Promise.all([
+          getLocationMetrics(websiteId),
+          getEnvironmentMetrics(websiteId),
+        ]);
+        setLocationData(locData);
+        setEnvironmentData(envData);
+      } catch (error) {
+        // Error handled in service layer
+      } finally {
+        setLoadingExtras(false);
+      }
+    };
+
     fetchStats();
     fetchChartData();
+    fetchExtras();
   }, [websiteId]);
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
@@ -181,8 +217,11 @@ const DashboardDetail = () => {
           <div className="space-y-6 sm:space-y-8">
             <TrafficHeatmap />
             <SourcesSection />
-            <LocationSection />
-            <EnvironmentSection />
+            <LocationSection data={locationData} loading={loadingExtras} />
+            <EnvironmentSection
+              data={environmentData}
+              loading={loadingExtras}
+            />
             <EntryExitPages />
           </div>
         </div>

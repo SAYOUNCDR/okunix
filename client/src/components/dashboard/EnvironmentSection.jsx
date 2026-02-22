@@ -9,25 +9,13 @@ import {
   Maximize2,
 } from "lucide-react";
 
-const EnvironmentSection = () => {
+const EnvironmentSection = ({
+  data = { Browsers: [], OS: [], Devices: [] },
+  loading = true,
+}) => {
   const [activeTab, setActiveTab] = useState("Browsers");
 
   const tabs = ["Browsers", "OS", "Devices"];
-
-  const data = {
-    Browsers: [
-      { name: "Chrome", count: 21, percent: "91%", icon: Chrome },
-    ],
-    OS: [
-      { name: "Windows", count: 18, percent: "78%", icon: Monitor },
-      { name: "macOS", count: 4, percent: "17%", icon: Command },
-      { name: "Linux", count: 1, percent: "5%", icon: HardDrive },
-    ],
-    Devices: [
-      { name: "Desktop", count: 20, percent: "87%", icon: Monitor },
-      { name: "Mobile", count: 3, percent: "13%", icon: Smartphone },
-    ],
-  };
 
   function GlobeIcon(props) {
     return (
@@ -49,6 +37,34 @@ const EnvironmentSection = () => {
       </svg>
     );
   }
+
+  const resolveIcon = (name) => {
+    const n = (name || "").toLowerCase();
+
+    // Browsers
+    if (n.includes("chrome")) return Chrome;
+    if (
+      n.includes("safari") ||
+      n.includes("firefox") ||
+      n.includes("edge") ||
+      n.includes("opera") ||
+      n.includes("browser")
+    )
+      return GlobeIcon;
+
+    // OS
+    if (n.includes("mac") || n.includes("ios")) return Command;
+    if (n.includes("windows")) return Monitor;
+    if (n.includes("linux") || n.includes("ubuntu")) return HardDrive;
+    if (n.includes("android")) return Smartphone;
+
+    // Devices
+    if (n.includes("mobile")) return Smartphone;
+    if (n.includes("tablet")) return Tablet;
+    if (n.includes("desktop")) return Monitor;
+
+    return GlobeIcon;
+  };
 
   return (
     <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm transition-all duration-300">
@@ -87,31 +103,44 @@ const EnvironmentSection = () => {
         </div>
 
         <div className="space-y-1">
-          {data[activeTab].map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-gray-50 text-gray-600 rounded-lg group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-gray-200">
-                  <item.icon size={16} />
-                </div>
-                <span className="text-sm font-medium text-gray-900">
-                  {item.name}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-gray-900">
-                  {item.count}
-                </span>
-                <span className="text-gray-300 text-sm">|</span>
-                <span className="text-sm text-gray-500 min-w-[3ch] text-right">
-                  {item.percent}
-                </span>
-              </div>
+          {loading ? (
+            <div className="py-4 text-center text-sm text-gray-500 animate-pulse">
+              Loading environment data...
             </div>
-          ))}
+          ) : data[activeTab] && data[activeTab].length > 0 ? (
+            data[activeTab].map((item, index) => {
+              const Icon = resolveIcon(item.name);
+              return (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gray-50 text-gray-600 rounded-lg group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-gray-200">
+                      <Icon size={16} />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">
+                      {item.name}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-bold text-gray-900">
+                      {item.count}
+                    </span>
+                    <span className="text-gray-300 text-sm">|</span>
+                    <span className="text-sm text-gray-500 min-w-[3ch] text-right">
+                      {item.percent}
+                    </span>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="py-4 text-center text-sm text-gray-500">
+              No data available yet
+            </div>
+          )}
         </div>
       </div>
 

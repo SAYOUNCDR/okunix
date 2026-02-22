@@ -1,35 +1,13 @@
 import { useState } from "react";
 import { Maximize2 } from "lucide-react";
 
-const LocationSection = () => {
+const LocationSection = ({
+  data = { Countries: [], Regions: [], Cities: [] },
+  loading = true,
+}) => {
   const [activeTab, setActiveTab] = useState("Countries");
 
   const tabs = ["Countries", "Regions", "Cities"];
-
-  const data = {
-    Countries: [
-      { name: "India", flag: "🇮🇳", count: 25, percent: "83%" },
-      { name: "Pakistan", flag: "🇵🇰", count: 1, percent: "3%" },
-      { name: "Bangladesh", flag: "🇧🇩", count: 1, percent: "3%" },
-      { name: "Philippines", flag: "🇵🇭", count: 1, percent: "3%" },
-      { name: "United States", flag: "🇺🇸", count: 1, percent: "3%" },
-      { name: "France", flag: "🇫🇷", count: 1, percent: "3%" },
-    ],
-    Regions: [
-      { name: "Tamil Nadu", flag: "🇮🇳", count: 12, percent: "40%" },
-      { name: "Maharashtra", flag: "🇮🇳", count: 8, percent: "27%" },
-      { name: "Karnataka", flag: "🇮🇳", count: 5, percent: "16%" },
-      { name: "Sindh", flag: "🇵🇰", count: 1, percent: "3%" },
-      { name: "Dhaka", flag: "🇧🇩", count: 1, percent: "3%" },
-    ],
-    Cities: [
-      { name: "Chennai", flag: "🇮🇳", count: 10, percent: "33%" },
-      { name: "Mumbai", flag: "🇮🇳", count: 8, percent: "27%" },
-      { name: "Bangalore", flag: "🇮🇳", count: 5, percent: "16%" },
-      { name: "Karachi", flag: "🇵🇰", count: 1, percent: "3%" },
-      { name: "Dhaka", flag: "🇧🇩", count: 1, percent: "3%" },
-    ],
-  };
 
   return (
     <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -71,29 +49,39 @@ const LocationSection = () => {
         </div>
 
         <div className="space-y-1">
-          {data[activeTab].map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-xl">{item.flag}</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {item.name}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-gray-900">
-                  {item.count}
-                </span>
-                <span className="text-gray-300 text-sm">|</span>
-                <span className="text-sm text-gray-500 min-w-[3ch] text-right">
-                  {item.percent}
-                </span>
-              </div>
+          {loading ? (
+            <div className="py-4 text-center text-sm text-gray-500 animate-pulse">
+              Loading location data...
             </div>
-          ))}
+          ) : data[activeTab] && data[activeTab].length > 0 ? (
+            data[activeTab].map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">{item.flag || "📍"}</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {item.name}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-gray-900">
+                    {item.count}
+                  </span>
+                  <span className="text-gray-300 text-sm">|</span>
+                  <span className="text-sm text-gray-500 min-w-[3ch] text-right">
+                    {item.percent}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-4 text-center text-sm text-gray-500">
+              No data available yet
+            </div>
+          )}
         </div>
       </div>
 
