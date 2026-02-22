@@ -9,7 +9,20 @@ import SourcesSection from "../components/dashboard/SourcesSection";
 import EnvironmentSection from "../components/dashboard/EnvironmentSection";
 import TrafficHeatmap from "../components/dashboard/TrafficHeatmap";
 import EntryExitPages from "../components/dashboard/EntryExitpages";
-import { Cog, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  ChevronDown,
+  Cog,
+  Users,
+  MousePointerClick,
+  Eye,
+  Activity,
+  Clock,
+  ArrowUpRight,
+  ArrowDownRight,
+} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -27,11 +40,11 @@ const DashboardDetail = () => {
   const { websiteId } = useParams(); // URL should be something like /dashboard/:websiteId
 
   const [stats, setStats] = useState({
-    visitors: 0,
-    visits: 0,
-    views: 0,
-    bounceRate: "0%",
-    visitDuration: "0m 0s",
+    visitors: { value: 0, change: 0 },
+    visits: { value: 0, change: 0 },
+    views: { value: 0, change: 0 },
+    bounceRate: { value: "0%", change: 0 },
+    visitDuration: { value: "0m 0s", change: 0 },
   });
   const [loadingStats, setLoadingStats] = useState(true);
   const [chartData, setChartData] = useState([]);
@@ -173,46 +186,86 @@ const DashboardDetail = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-              <StatCard
-                title="Visitors"
-                value={loadingStats ? "..." : stats.visitors.toString()}
-                change="--"
-                trend="up"
-                trendColor="green"
-              />
-
-              <StatCard
-                title="Visits"
-                value={loadingStats ? "..." : stats.visits.toString()}
-                change="--"
-                trend="up"
-                trendColor="green"
-              />
-
-              <StatCard
-                title="Views"
-                value={loadingStats ? "..." : stats.views.toString()}
-                change="--"
-                trend="up"
-                trendColor="green"
-              />
-
-              <StatCard
-                title="Bounce rate"
-                value={loadingStats ? "..." : stats.bounceRate}
-                change="--"
-                trend="down"
-                trendColor="green"
-              />
-
-              <StatCard
-                title="Visit duration"
-                value={loadingStats ? "..." : stats.visitDuration}
-                change="--"
-                trend="up"
-                trendColor="green"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {[
+                {
+                  label: "Visitors",
+                  value: stats.visitors.value,
+                  icon: Users,
+                  change: stats.visitors.change,
+                },
+                {
+                  label: "Visits",
+                  value: stats.visits.value,
+                  icon: MousePointerClick,
+                  change: stats.visits.change,
+                },
+                {
+                  label: "Views",
+                  value: stats.views.value,
+                  icon: Eye,
+                  change: stats.views.change,
+                },
+                {
+                  label: "Bounce rate",
+                  value: stats.bounceRate.value,
+                  icon: Activity,
+                  change: stats.bounceRate.change,
+                },
+                {
+                  label: "Visit duration",
+                  value: stats.visitDuration.value,
+                  icon: Clock,
+                  change: stats.visitDuration.change,
+                },
+              ].map((stat, i) => (
+                <div
+                  key={i}
+                  className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm transition-all hover:shadow-md hover:border-gray-300 group"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-gray-50 text-gray-600 rounded-lg group-hover:bg-gray-100 transition-colors">
+                      <stat.icon size={18} />
+                    </div>
+                    <span className="text-sm font-medium text-gray-500">
+                      {stat.label}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    {loadingStats ? (
+                      <div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
+                    ) : (
+                      <span className="text-2xl font-bold text-gray-900 group-hover:text-black transition-colors">
+                        {stat.value}
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-3 flex items-center gap-1.5 min-h-[24px]">
+                    {loadingStats ? (
+                      <div className="h-5 w-16 bg-gray-200 animate-pulse rounded-full"></div>
+                    ) : (
+                      <span
+                        className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md ${
+                          stat.change === 0
+                            ? "bg-gray-100 text-gray-600"
+                            : stat.change > 0
+                              ? "bg-green-50 text-emerald-600 border border-green-100/50"
+                              : "bg-red-50 text-rose-600 border border-red-100/50"
+                        }`}
+                      >
+                        {stat.change === 0 ? (
+                          <span className="text-gray-400">~</span>
+                        ) : stat.change > 0 ? (
+                          <ArrowUpRight size={14} className="stroke-[2.5]" />
+                        ) : (
+                          <ArrowDownRight size={14} className="stroke-[2.5]" />
+                        )}
+                        {Math.abs(stat.change)}%
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 

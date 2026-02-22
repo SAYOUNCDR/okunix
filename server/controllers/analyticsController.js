@@ -5,6 +5,7 @@ const Website = require("../models/websiteModal");
 exports.getStats = async (req, res) => {
     try {
         const { websiteId } = req.params;
+        const { range = "7d" } = req.query; // Default to 7 days
         const userId = req.user.id; // From verifyToken middleware
 
         // 1. Verify ownership of the website
@@ -13,96 +14,153 @@ exports.getStats = async (req, res) => {
             return res.status(404).json({ message: "Website not found or unauthorized" });
         }
 
-        // 2. Aggregate Stats
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
-        // Get basic counts
-        const counts = await TrackedData.aggregate([
-            { $match: { websiteId: objectId } },
-            {
-                $group: {
-                    _id: null,
-                    totalViews: {
-                        // Count every row that is a pageview
-                        $sum: { $cond: [{ $eq: ["$event", "pageview"] }, 1, 0] }
-                    },
-                    uniqueVisits: { $addToSet: "$sessionId" },
-                    uniqueVisitors: { $addToSet: "$visitorId" }
-                }
-            },
-            {
-                $project: {
-                    views: "$totalViews",
-                    visits: { $size: "$uniqueVisits" },
-                    visitors: { $size: "$uniqueVisitors" }
-                }
-            }
-        ]);
+        // 2. Determine Date Ranges
+        const now = new Date();
+        let currentStartDate = new Date();
+        let previousStartDate = new Date();
+        let previousEndDate = new Date();
 
-        const baseStats = counts[0] || { views: 0, visits: 0, visitors: 0 };
+        const match = range.match(/^(\d+)([hd])$/);
+        let durationMs = 0;
 
-        // 3. Calculate Bounce Rate & Visit Duration
-        // This groups events by sessionId to see how many pages were viewed per session
-        // and calculates the time difference between the first and last event
-        const sessionStats = await TrackedData.aggregate([
-            { $match: { websiteId: objectId } },
-            { $sort: { createdAt: 1 } }, // Sort chronologically to get first/last event times
-            {
-                $group: {
-                    _id: "$sessionId",
-                    pageviewCount: {
-                        $sum: { $cond: [{ $eq: ["$event", "pageview"] }, 1, 0] }
-                    },
-                    startTime: { $first: "$createdAt" },
-                    endTime: { $last: "$createdAt" }
-                }
-            },
-            {
-                $project: {
-                    isBounce: { $cond: [{ $eq: ["$pageviewCount", 1] }, 1, 0] },
-                    // Duration in seconds (MongoDB timestamps subtract to milliseconds)
-                    durationSecs: {
-                        $divide: [
-                            { $subtract: ["$endTime", "$startTime"] },
-                            1000
-                        ]
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalSessions: { $sum: 1 },
-                    bounces: { $sum: "$isBounce" },
-                    totalDurationSecs: { $sum: "$durationSecs" }
-                }
-            }
-        ]);
-
-        let bounceRate = "0%";
-        let avgDurationFormatted = "0m 0s";
-
-        if (sessionStats.length > 0) {
-            const s = sessionStats[0];
-            if (s.totalSessions > 0) {
-                // Calculate Bounce Rate Percentage
-                const br = (s.bounces / s.totalSessions) * 100;
-                bounceRate = `${br.toFixed(1)}%`;
-
-                // Calculate Average Duration
-                const avgSecs = s.totalDurationSecs / s.totalSessions;
-                const mins = Math.floor(avgSecs / 60);
-                const secs = Math.floor(avgSecs % 60);
-                avgDurationFormatted = `${mins}m ${secs}s`;
-            }
+        if (match) {
+            const value = parseInt(match[1]);
+            const unit = match[2];
+            durationMs = unit === "h" ? value * 60 * 60 * 1000 : value * 24 * 60 * 60 * 1000;
+        } else {
+            // Default 7 days fallback
+            durationMs = 7 * 24 * 60 * 60 * 1000;
         }
 
+        currentStartDate = new Date(now.getTime() - durationMs);
+        previousEndDate = currentStartDate;
+        previousStartDate = new Date(currentStartDate.getTime() - durationMs);
+
+
+        // 3. Helper to Aggregate Stats for Date Range
+        const generateStatsForRange = async (start, end) => {
+            const matchQuery = {
+                websiteId: objectId,
+                createdAt: { $gte: start, $lte: end }
+            };
+
+            const counts = await TrackedData.aggregate([
+                { $match: matchQuery },
+                {
+                    $group: {
+                        _id: null,
+                        totalViews: {
+                            $sum: { $cond: [{ $eq: ["$event", "pageview"] }, 1, 0] }
+                        },
+                        uniqueVisits: { $addToSet: "$sessionId" },
+                        uniqueVisitors: { $addToSet: "$visitorId" }
+                    }
+                },
+                {
+                    $project: {
+                        views: "$totalViews",
+                        visits: { $size: "$uniqueVisits" },
+                        visitors: { $size: "$uniqueVisitors" }
+                    }
+                }
+            ]);
+
+            const sessionStats = await TrackedData.aggregate([
+                { $match: matchQuery },
+                { $sort: { createdAt: 1 } },
+                {
+                    $group: {
+                        _id: "$sessionId",
+                        pageviewCount: {
+                            $sum: { $cond: [{ $eq: ["$event", "pageview"] }, 1, 0] }
+                        },
+                        startTime: { $first: "$createdAt" },
+                        endTime: { $last: "$createdAt" }
+                    }
+                },
+                {
+                    $project: {
+                        isBounce: { $cond: [{ $eq: ["$pageviewCount", 1] }, 1, 0] },
+                        durationSecs: {
+                            $divide: [
+                                { $subtract: ["$endTime", "$startTime"] },
+                                1000
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalSessions: { $sum: 1 },
+                        bounces: { $sum: "$isBounce" },
+                        totalDurationSecs: { $sum: "$durationSecs" }
+                    }
+                }
+            ]);
+
+            const baseStats = counts[0] || { views: 0, visits: 0, visitors: 0 };
+            let rawBounceRate = 0;
+            let rawDurationSecs = 0;
+
+            if (sessionStats.length > 0) {
+                const s = sessionStats[0];
+                if (s.totalSessions > 0) {
+                    rawBounceRate = (s.bounces / s.totalSessions) * 100;
+                    rawDurationSecs = s.totalDurationSecs / s.totalSessions;
+                }
+            }
+
+            return {
+                visitors: baseStats.visitors,
+                visits: baseStats.visits,
+                views: baseStats.views,
+                bounceRate: rawBounceRate,
+                visitDuration: rawDurationSecs
+            };
+        };
+
+        // 4. Run Concurrent Aggregations
+        const [currentStats, previousStats] = await Promise.all([
+            generateStatsForRange(currentStartDate, now),
+            generateStatsForRange(previousStartDate, previousEndDate)
+        ]);
+
+        // 5. Delta Format Helper
+        const formatObject = (currVal, prevVal, isPercentage = false, isTime = false) => {
+            let change = 0;
+            if (prevVal === 0) {
+                // Handle Infinity bounds gracefully
+                if (currVal > 0) change = 100;
+                else change = 0;
+            } else {
+                change = ((currVal - prevVal) / prevVal) * 100;
+            }
+
+            let formattedValue = currVal;
+            if (isPercentage) {
+                formattedValue = `${currVal.toFixed(1)}%`;
+            } else if (isTime) {
+                const mins = Math.floor(currVal / 60);
+                const secs = Math.floor(currVal % 60);
+                formattedValue = `${mins}m ${secs}s`;
+            }
+
+            return {
+                value: formattedValue,
+                change: parseFloat(change.toFixed(1))
+            };
+        };
+
+        // 6. Output Generation
         res.status(200).json({
-            visitors: baseStats.visitors,
-            visits: baseStats.visits,
-            views: baseStats.views,
-            bounceRate,
-            visitDuration: avgDurationFormatted,
+            visitors: formatObject(currentStats.visitors, previousStats.visitors),
+            visits: formatObject(currentStats.visits, previousStats.visits),
+            views: formatObject(currentStats.views, previousStats.views),
+            bounceRate: formatObject(currentStats.bounceRate, previousStats.bounceRate, true, false),
+            visitDuration: formatObject(currentStats.visitDuration, previousStats.visitDuration, false, true),
         });
 
     } catch (error) {
