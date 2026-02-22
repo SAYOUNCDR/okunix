@@ -10,6 +10,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const { login } = useAuth();
@@ -21,7 +22,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     setLoading(true);
 
     try {
-      await login(email, password);
+      await login(email, password, rememberMe);
       onClose();
       navigate("/dashboard");
     } catch (err) {
@@ -88,6 +89,8 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
               className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
             />
             <span className="text-gray-600">Remember me</span>

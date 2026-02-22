@@ -138,7 +138,7 @@ exports.login = async (req, res) => {
         .status(400)
         .json({ message: "Invalid Data", error: result.error.flatten() });
     }
-    const { email, password } = sanitize(result.data);
+    const { email, password, rememberMe } = sanitize(result.data);
 
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -169,12 +169,19 @@ exports.login = async (req, res) => {
 
     const isProduction = process.env.NODE_ENV === "production";
 
-    res.cookie("refreshToken", refreshToken, {
+    const cookieOptions = {
       httpOnly: true,
       secure: isProduction, // True in production
       sameSite: isProduction ? "None" : "Lax", // "None" allows cross-site cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    };
+
+    if (rememberMe) {
+      cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+    } else {
+      cookieOptions.maxAge = 24 * 60 * 60 * 1000; // 1 day
+    }
+
+    res.cookie("refreshToken", refreshToken, cookieOptions);
 
     const userResponse = {
       _id: user._id,

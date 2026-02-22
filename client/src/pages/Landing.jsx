@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import SimpleSetup from "../components/sections/SimpleSetup";
@@ -7,6 +9,17 @@ import Hero from "../components/sections/Hero";
 import Getstarted from "../components/layout/Getstarted";
 
 const Landing = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/dashboard");
+    }
+  }, [user, loading, navigate]);
+
+  if (loading) return null; // Or a subtle loading spinner
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />

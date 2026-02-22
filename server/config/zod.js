@@ -25,6 +25,7 @@ const userSchema = z.object({
 const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email("Invalid email address"),
   password: z.string(),
+  rememberMe: z.boolean().optional(),
 });
 
 module.exports = { userSchema, loginSchema };

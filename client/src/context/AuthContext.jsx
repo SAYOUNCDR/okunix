@@ -34,8 +34,12 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
-    const response = await api.post("/auth/login", { email, password });
+  const login = async (email, password, rememberMe) => {
+    const response = await api.post("/auth/login", {
+      email,
+      password,
+      rememberMe,
+    });
     const { user, accessToken } = response.data;
 
     // Store access token in memory
