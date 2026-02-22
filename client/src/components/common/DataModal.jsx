@@ -49,7 +49,7 @@ const DataModal = ({ isOpen, onClose, title, data = [], renderItem }) => {
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-5xl max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200"
       >
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100">
           <h2 className="text-lg font-bold text-gray-900">{title}</h2>
