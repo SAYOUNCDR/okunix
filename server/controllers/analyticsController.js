@@ -206,16 +206,16 @@ exports.getLocationMetrics = async (req, res) => {
                         { $project: { _id: 0, name: "$_id", count: 1 } }
                     ],
                     Regions: [
-                        { $group: { _id: "$region", count: { $sum: 1 } } },
+                        { $group: { _id: "$region", country: { $first: "$country" }, count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
                         { $limit: 10 },
-                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                        { $project: { _id: 0, name: "$_id", country: 1, count: 1 } }
                     ],
                     Cities: [
-                        { $group: { _id: "$city", count: { $sum: 1 } } },
+                        { $group: { _id: "$city", country: { $first: "$country" }, count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
                         { $limit: 10 },
-                        { $project: { _id: 0, name: "$_id", count: 1 } }
+                        { $project: { _id: 0, name: "$_id", country: 1, count: 1 } }
                     ]
                 }
             }
@@ -227,15 +227,15 @@ exports.getLocationMetrics = async (req, res) => {
         const totalVisitors = result.Countries.reduce((acc, curr) => acc + curr.count, 0) || 1;
         const formatPercent = (count) => `${Math.round((count / totalVisitors) * 100)}%`;
 
-        const formatData = (arr) => arr.map(item => ({
+        const formatData = (arr, isCountry = false) => arr.map(item => ({
             name: item.name || "Unknown",
+            country: isCountry ? item.name : item.country || "Unknown",
             count: item.count,
             percent: formatPercent(item.count),
-            flag: "📍" // Fallback icon
         }));
 
         res.status(200).json({
-            Countries: formatData(result.Countries),
+            Countries: formatData(result.Countries, true),
             Regions: formatData(result.Regions),
             Cities: formatData(result.Cities),
         });

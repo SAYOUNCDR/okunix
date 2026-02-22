@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Maximize2 } from "lucide-react";
+import { Maximize2, MapPin } from "lucide-react";
+import FlagIcon from "../svg/FlagIcon";
 
 const LocationSection = ({
   data = { Countries: [], Regions: [], Cities: [] },
@@ -60,10 +61,21 @@ const LocationSection = ({
                 className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-xl">{item.flag || "📍"}</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {item.name}
-                  </span>
+                  {/* Dynamic Flag Icon mapping component */}
+                  <FlagIcon
+                    countryName={item.country}
+                    className="w-5 h-5 text-gray-400 shrink-0"
+                  />
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-medium text-gray-900 truncate pr-2">
+                      {item.name}
+                    </span>
+                    {activeTab !== "Countries" && (
+                      <span className="text-xs text-gray-400 truncate pr-2">
+                        {item.country}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
