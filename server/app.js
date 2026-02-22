@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const authRoute = require("./routes/authRoute");
 const verifyToken = require("./middleware/authMiddleware");
+const authRoute = require("./routes/authRoute");
 const websiteRoute = require("./routes/websiteRoute");
+const analyticsRoute = require("./routes/analyticsRoute");
 const app = express();
 
 // Trust proxy is required when behind Nginx/Load Balancers so req.ip and request-ip work correctly
@@ -59,7 +60,6 @@ const dashboardCors = cors({
 // Apply Dashboard CORS to all remaining routes handles OPTIONS and requests
 app.use(dashboardCors);
 
-const analyticsRoute = require("./routes/analyticsRoute");
 
 // --- 4. DASHBOARD ROUTES ---
 app.use("/api/auth", authRoute);
