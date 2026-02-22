@@ -18,6 +18,8 @@ import {
   getLocationMetrics,
   getEnvironmentMetrics,
   getHeatmapData,
+  getSourcesMetrics,
+  getPagesMetrics,
 } from "../services/analyticsApi";
 
 const DashboardDetail = () => {
@@ -44,6 +46,13 @@ const DashboardDetail = () => {
   const [environmentData, setEnvironmentData] = useState({
     Browsers: [],
     OS: [],
+    Devices: [],
+  });
+  const [sourcesData, setSourcesData] = useState([]);
+  const [pagesData, setPagesData] = useState({
+    Path: [],
+    Entry: [],
+    Exit: [],
   });
   const [heatmapData, setHeatmapData] = useState(
     Array.from({ length: 7 }, () => Array(24).fill(0)),
@@ -81,16 +90,22 @@ const DashboardDetail = () => {
       if (!websiteId) return;
       try {
         setLoadingExtras(true);
-        const [locData, envData, heatData] = await Promise.all([
-          getLocationMetrics(websiteId),
-          getEnvironmentMetrics(websiteId),
-          getHeatmapData(websiteId),
-        ]);
+        const [locData, envData, heatData, srcData, pgData] = await Promise.all(
+          [
+            getLocationMetrics(websiteId),
+            getEnvironmentMetrics(websiteId),
+            getHeatmapData(websiteId),
+            getSourcesMetrics(websiteId),
+            getPagesMetrics(websiteId),
+          ],
+        );
         setLocationData(locData);
         setEnvironmentData(envData);
         if (heatData && heatData.length > 0) {
           setHeatmapData(heatData);
         }
+        setSourcesData(srcData);
+        setPagesData(pgData);
       } catch (error) {
         // Error handled in service layer
       } finally {
@@ -223,13 +238,13 @@ const DashboardDetail = () => {
 
           <div className="space-y-6 sm:space-y-8">
             <TrafficHeatmap data={heatmapData} loading={loadingExtras} />
-            <SourcesSection />
+            <SourcesSection data={sourcesData} loading={loadingExtras} />
             <LocationSection data={locationData} loading={loadingExtras} />
             <EnvironmentSection
               data={environmentData}
               loading={loadingExtras}
             />
-            <EntryExitPages />
+            <EntryExitPages data={pagesData} loading={loadingExtras} />
           </div>
         </div>
       </main>

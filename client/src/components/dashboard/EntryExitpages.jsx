@@ -1,45 +1,13 @@
 import { useState } from "react";
 import { Maximize2 } from "lucide-react";
 
-const EntryExitPages = () => {
+const EntryExitPages = ({
+  data = { Path: [], Entry: [], Exit: [] },
+  loading = true,
+}) => {
   const [activeTab, setActiveTab] = useState("Path");
 
   const tabs = ["Path", "Entry", "Exit"];
-
-  const data = {
-    Path: [
-      { path: "/", count: 30, percent: "77%" },
-      {
-        path: "/blogs/dockerizing-nodejs-mongodb-persistent-storage",
-        count: 3,
-        percent: "8%",
-      },
-      { path: "/blogs", count: 2, percent: "5%" },
-      { path: "/projects", count: 2, percent: "5%" },
-      { path: "/contributions", count: 1, percent: "3%" },
-      {
-        path: "/blogs/jwt-auth-flow-access-refresh-expressjs",
-        count: 1,
-        percent: "3%",
-      },
-    ],
-    Entry: [
-      { path: "/", count: 25, percent: "83%" },
-      {
-        path: "/blogs/dockerizing-nodejs-mongodb-persistent-storage",
-        count: 2,
-        percent: "7%",
-      },
-      { path: "/projects", count: 2, percent: "7%" },
-      { path: "/blogs", count: 1, percent: "3%" },
-    ],
-    Exit: [
-      { path: "/", count: 20, percent: "66%" },
-      { path: "/projects", count: 5, percent: "16%" },
-      { path: "/blogs", count: 3, percent: "10%" },
-      { path: "/contributions", count: 2, percent: "6%" },
-    ],
-  };
 
   return (
     <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -76,32 +44,42 @@ const EntryExitPages = () => {
           </span>
         </div>
 
-        <div className="space-y-1">
-          {data[activeTab].map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
-            >
-              <div className="flex items-center gap-3 overflow-hidden">
-                <span
-                  className="text-sm font-medium text-gray-900 truncate"
-                  title={item.path}
-                >
-                  {item.path}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3 shrink-0">
-                <span className="text-sm font-bold text-gray-900">
-                  {item.count}
-                </span>
-                <span className="text-gray-300 text-sm">|</span>
-                <span className="text-sm text-gray-500 min-w-[3ch] text-right">
-                  {item.percent}
-                </span>
-              </div>
+        <div className="space-y-1 min-h-[160px]">
+          {loading ? (
+            <div className="py-12 text-center text-sm text-gray-500 animate-pulse">
+              Loading pages data...
             </div>
-          ))}
+          ) : data[activeTab] && data[activeTab].length > 0 ? (
+            data[activeTab].map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
+              >
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <span
+                    className="text-sm font-medium text-gray-900 truncate"
+                    title={item.path}
+                  >
+                    {item.path}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="text-sm font-bold text-gray-900">
+                    {item.count}
+                  </span>
+                  <span className="text-gray-300 text-sm">|</span>
+                  <span className="text-sm text-gray-500 min-w-[3ch] text-right">
+                    {item.percent}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-12 text-center text-sm text-gray-500">
+              No data available.
+            </div>
+          )}
         </div>
 
         <button className="flex items-center justify-center gap-2 mt-6 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors cursor-pointer w-full py-2 hover:bg-gray-50 rounded-lg">

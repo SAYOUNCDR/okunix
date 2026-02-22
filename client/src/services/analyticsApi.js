@@ -64,3 +64,29 @@ export const getHeatmapData = async (websiteId) => {
         throw error;
     }
 };
+
+/**
+ * Fetch sources (referrers) metrics
+ */
+export const getSourcesMetrics = async (websiteId) => {
+    try {
+        const response = await api.get(`/analytics/sources/${websiteId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch sources metrics:", error);
+        throw error;
+    }
+};
+
+/**
+ * Fetch top paths, entry pages, and exit pages
+ */
+export const getPagesMetrics = async (websiteId) => {
+    try {
+        const response = await api.get(`/analytics/pages/${websiteId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch pages metrics:", error);
+        throw error;
+    }
+};

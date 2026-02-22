@@ -376,3 +376,157 @@ exports.getHeatmapData = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch heatmap data" });
     }
 };
+
+exports.getSourcesMetrics = async (req, res) => {
+    try {
+        const { websiteId } = req.params;
+        const userId = req.user.id;
+
+        const website = await Website.findOne({ _id: websiteId, userId });
+        if (!website) return res.status(404).json({ message: "Website not found or unauthorized" });
+
+        const objectId = new mongoose.Types.ObjectId(websiteId);
+
+        // Group by sessionId to get the first referrer of each session
+        const sessionSources = await TrackedData.aggregate([
+            { $match: { websiteId: objectId } },
+            { $sort: { createdAt: 1 } },
+            {
+                $group: {
+                    _id: "$sessionId",
+                    referrer: { $first: "$referrer" }
+                }
+            }
+        ]);
+
+        // Process in JS to handle domains and "Direct"
+        const sourceCounts = {};
+        let totalSessions = 0;
+
+        sessionSources.forEach(session => {
+            totalSessions++;
+            let source = "Direct";
+            if (session.referrer && session.referrer !== "Direct") {
+                try {
+                    const url = new URL(session.referrer);
+                    if (url.hostname !== website.domain && url.hostname !== "localhost") {
+                        source = url.hostname.replace(/^www\./, "");
+                    }
+                } catch (e) {
+                    // Invalid URL, keep as Direct or original
+                    source = session.referrer;
+                }
+            }
+            sourceCounts[source] = (sourceCounts[source] || 0) + 1;
+        });
+
+        // Convert to array and sort
+        const sourcesArray = Object.keys(sourceCounts).map(name => ({
+            name,
+            count: sourceCounts[name]
+        })).sort((a, b) => b.count - a.count).slice(0, 10);
+
+        // Calculate percentages
+        const formatPercent = (count) => totalSessions > 0 ? `${Math.round((count / totalSessions) * 100)}%` : "0%";
+
+        const formattedData = sourcesArray.map(item => ({
+            ...item,
+            percent: formatPercent(item.count)
+        }));
+
+        res.status(200).json(formattedData);
+    } catch (error) {
+        console.error("Sources Metrics Error:", error);
+        res.status(500).json({ message: "Failed to fetch sources metrics" });
+    }
+};
+
+exports.getPagesMetrics = async (req, res) => {
+    try {
+        const { websiteId } = req.params;
+        const userId = req.user.id;
+
+        const website = await Website.findOne({ _id: websiteId, userId });
+        if (!website) return res.status(404).json({ message: "Website not found or unauthorized" });
+
+        const objectId = new mongoose.Types.ObjectId(websiteId);
+
+        // Helper to extract path
+        const getPath = (fullUrl) => {
+            try {
+                const url = new URL(fullUrl);
+                return url.pathname;
+            } catch (e) {
+                return fullUrl;
+            }
+        };
+
+        // 1. Top Paths (most pageviews)
+        const pathStats = await TrackedData.aggregate([
+            { $match: { websiteId: objectId, event: "pageview" } },
+            { $group: { _id: "$url", count: { $sum: 1 } } }
+        ]);
+
+        let totalViews = 0;
+        const pathCounts = {};
+        pathStats.forEach(stat => {
+            totalViews += stat.count;
+            const p = getPath(stat._id);
+            pathCounts[p] = (pathCounts[p] || 0) + stat.count;
+        });
+
+        const topPaths = Object.keys(pathCounts).map(path => ({
+            path,
+            count: pathCounts[path]
+        })).sort((a, b) => b.count - a.count).slice(0, 10);
+
+        const formatPathPercent = (count) => totalViews > 0 ? `${Math.round((count / totalViews) * 100)}%` : "0%";
+        const formattedPaths = topPaths.map(item => ({ ...item, percent: formatPathPercent(item.count) }));
+
+        // 2. Entry and Exit Pages
+        const sessionPages = await TrackedData.aggregate([
+            { $match: { websiteId: objectId, event: "pageview" } },
+            { $sort: { createdAt: 1 } },
+            {
+                $group: {
+                    _id: "$sessionId",
+                    entryUrl: { $first: "$url" },
+                    exitUrl: { $last: "$url" }
+                }
+            }
+        ]);
+
+        let totalSessions = 0;
+        const entryCounts = {};
+        const exitCounts = {};
+
+        sessionPages.forEach(session => {
+            totalSessions++;
+            const entryPath = getPath(session.entryUrl);
+            const exitPath = getPath(session.exitUrl);
+            entryCounts[entryPath] = (entryCounts[entryPath] || 0) + 1;
+            exitCounts[exitPath] = (exitCounts[exitPath] || 0) + 1;
+        });
+
+        const topEntries = Object.keys(entryCounts).map(path => ({ path, count: entryCounts[path] }))
+            .sort((a, b) => b.count - a.count).slice(0, 10);
+
+        const topExits = Object.keys(exitCounts).map(path => ({ path, count: exitCounts[path] }))
+            .sort((a, b) => b.count - a.count).slice(0, 10);
+
+        const formatSessionPercent = (count) => totalSessions > 0 ? `${Math.round((count / totalSessions) * 100)}%` : "0%";
+
+        const formattedEntries = topEntries.map(item => ({ ...item, percent: formatSessionPercent(item.count) }));
+        const formattedExits = topExits.map(item => ({ ...item, percent: formatSessionPercent(item.count) }));
+
+        res.status(200).json({
+            Path: formattedPaths,
+            Entry: formattedEntries,
+            Exit: formattedExits
+        });
+
+    } catch (error) {
+        console.error("Pages Metrics Error:", error);
+        res.status(500).json({ message: "Failed to fetch pages metrics" });
+    }
+};
