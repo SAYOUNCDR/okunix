@@ -59,9 +59,12 @@ const dashboardCors = cors({
 // Apply Dashboard CORS to all remaining routes handles OPTIONS and requests
 app.use(dashboardCors);
 
+const analyticsRoute = require("./routes/analyticsRoute");
+
 // --- 4. DASHBOARD ROUTES ---
 app.use("/api/auth", authRoute);
 app.use("/api/website", verifyToken, websiteRoute);
+app.use("/api/analytics", analyticsRoute);
 
 app.get("/api/test", verifyToken, (req, res) => {
   const user = req.user;

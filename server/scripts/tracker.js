@@ -12,15 +12,24 @@
     }
 
     function getSessionId() {
-        let sessionId = localStorage.getItem("openpulse_session");
+        let sessionId = sessionStorage.getItem("openpulse_session");
         if (!sessionId) {
             sessionId = crypto.randomUUID();
-            localStorage.setItem("openpulse_session", sessionId);
+            sessionStorage.setItem("openpulse_session", sessionId);
         }
         return sessionId;
     }
 
-    function sendData() {
+    function getVisitorId() {
+        let visitorId = localStorage.getItem("openpulse_visitor");
+        if (!visitorId) {
+            visitorId = crypto.randomUUID();
+            localStorage.setItem("openpulse_visitor", visitorId);
+        }
+        return visitorId;
+    }
+
+    function sendData(event = "pageview") {
         const payload = {
             websiteId: websiteId,
             url: window.location.href,
@@ -28,6 +37,8 @@
             width: window.innerWidth,
             height: window.innerHeight,
             sessionId: getSessionId(),
+            visitorId: getVisitorId(),
+            event: event,
         };
 
         // Determine if we need to send to a different origin
@@ -47,18 +58,25 @@
 
     // Track on load
     if (document.readyState === "complete") {
-        sendData();
+        sendData("pageview");
     } else {
-        window.addEventListener("load", sendData);
+        window.addEventListener("load", () => sendData("pageview"));
     }
 
     // Optional: Track History API changes (SPA support - basic)
     const originalPushState = history.pushState;
     history.pushState = function () {
         originalPushState.apply(this, arguments);
-        sendData();
+        sendData("pageview");
     };
 
-    window.addEventListener("popstate", sendData);
+    window.addEventListener("popstate", () => sendData("pageview"));
+
+    // Track when user leaves/closes the tab (for Visit Duration)
+    window.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "hidden") {
+            sendData("leave");
+        }
+    });
 
 })();

@@ -10,10 +10,55 @@ import EnvironmentSection from "../components/dashboard/EnvironmentSection";
 import TrafficHeatmap from "../components/dashboard/TrafficHeatmap";
 import EntryExitPages from "../components/dashboard/EntryExitpages";
 import { Cog, ArrowLeft, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import api from "../services/api";
 
 const DashboardDetail = () => {
   const navigate = useNavigate();
+  const { websiteId } = useParams(); // URL should be something like /dashboard/:websiteId
+
+  const [stats, setStats] = useState({
+    visitors: 0,
+    visits: 0,
+    views: 0,
+    bounceRate: "0%",
+    visitDuration: "0m 0s",
+  });
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [chartData, setChartData] = useState([]);
+  const [loadingChart, setLoadingChart] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!websiteId) return;
+      try {
+        setLoadingStats(true);
+        const response = await api.get(`/analytics/stats/${websiteId}`);
+        setStats(response.data);
+      } catch (error) {
+        console.error("Failed to fetch analytics stats:", error);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
+    const fetchChartData = async () => {
+      if (!websiteId) return;
+      try {
+        setLoadingChart(true);
+        const response = await api.get(`/analytics/chart/${websiteId}`);
+        setChartData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch analytics chart:", error);
+      } finally {
+        setLoadingChart(false);
+      }
+    };
+
+    fetchStats();
+    fetchChartData();
+  }, [websiteId]);
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
@@ -73,42 +118,42 @@ const DashboardDetail = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
               <StatCard
                 title="Visitors"
-                value="15"
-                change="15%"
+                value={loadingStats ? "..." : stats.visitors.toString()}
+                change="--"
                 trend="up"
                 trendColor="green"
               />
 
               <StatCard
                 title="Visits"
-                value="18"
-                change="21%"
-                trend="down"
-                trendColor="red"
+                value={loadingStats ? "..." : stats.visits.toString()}
+                change="--"
+                trend="up"
+                trendColor="green"
               />
 
               <StatCard
                 title="Views"
-                value="22"
-                change="63%"
-                trend="down"
-                trendColor="red"
+                value={loadingStats ? "..." : stats.views.toString()}
+                change="--"
+                trend="up"
+                trendColor="green"
               />
 
               <StatCard
                 title="Bounce rate"
-                value="78%"
-                change="37%"
-                trend="up"
-                trendColor="red"
+                value={loadingStats ? "..." : stats.bounceRate}
+                change="--"
+                trend="down"
+                trendColor="green"
               />
 
               <StatCard
                 title="Visit duration"
-                value="2m 48s"
-                change="40%"
-                trend="down"
-                trendColor="red"
+                value={loadingStats ? "..." : stats.visitDuration}
+                change="--"
+                trend="up"
+                trendColor="green"
               />
             </div>
           </div>
@@ -120,8 +165,16 @@ const DashboardDetail = () => {
                 <ChartFilter />
               </div>
             </div>
-            <div className="h-64 sm:h-80 w-full">
-              <BarChart />
+            <div className="h-64 sm:h-80 w-full flex items-center justify-center">
+              {loadingChart ? (
+                <p className="text-gray-500">Loading chart...</p>
+              ) : chartData.length > 0 ? (
+                <BarChart data={chartData} />
+              ) : (
+                <p className="text-gray-500">
+                  No activity data for the last 7 days.
+                </p>
+              )}
             </div>
           </div>
 

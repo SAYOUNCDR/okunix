@@ -20,7 +20,7 @@ Reader.open(dbPath)
 
 exports.collectData = async (req, res) => {
   try {
-    const { websiteId, url, referrer, width, height, sessionId } = req.body;
+    const { websiteId, url, referrer, width, height, sessionId, visitorId, event } = req.body;
 
     if (!websiteId) {
       return res.status(400).json({ message: "Website ID is required" });
@@ -103,6 +103,8 @@ exports.collectData = async (req, res) => {
       region,
       city,
       sessionId,
+      visitorId,
+      event: event || "pageview",
       browser,
       os,
       device: device,

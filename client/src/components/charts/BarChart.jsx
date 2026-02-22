@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-const BarChart = () => {
+const BarChart = ({ data = [] }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
@@ -12,22 +12,18 @@ const BarChart = () => {
 
     const ctx = chartRef.current.getContext("2d");
 
+    const labels = data.map((d) => d.date);
+    const visitorsData = data.map((d) => d.Visitors);
+    const viewsData = data.map((d) => d.Views);
+
     chartInstance.current = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: [
-          "Feb 8",
-          "Feb 9",
-          "Feb 10",
-          "Feb 11",
-          "Feb 12",
-          "Feb 13",
-          "Feb 14",
-        ],
+        labels: labels,
         datasets: [
           {
             label: "Visitors",
-            data: [16, 9, 8, 4, 1, 0, 0],
+            data: visitorsData,
             backgroundColor: "#fb923cff",
             borderRadius: 4,
             barPercentage: 0.8,
@@ -35,7 +31,7 @@ const BarChart = () => {
           },
           {
             label: "Views",
-            data: [27, 28, 1, 6, 2, 0, 0],
+            data: viewsData,
             backgroundColor: "#ea580cff",
             borderRadius: 4,
             barPercentage: 0.8,
@@ -100,7 +96,6 @@ const BarChart = () => {
               stepSize: 5,
             },
             beginAtZero: true,
-            max: 45,
           },
         },
         interaction: {
@@ -115,7 +110,7 @@ const BarChart = () => {
         chartInstance.current.destroy();
       }
     };
-  }, []);
+  }, [data]);
 
   return <canvas ref={chartRef} />;
 };

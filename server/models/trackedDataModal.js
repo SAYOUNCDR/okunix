@@ -13,6 +13,13 @@ const trackedDataSchema = new mongoose.Schema(
         region: { type: String, default: "Unknown" },
         city: { type: String, default: "Unknown" },
         sessionId: { type: String, required: true },
+        visitorId: { type: String, required: true }, // The 10-year persistent token
+        event: {
+            type: String,
+            enum: ["pageview", "leave", "custom"],
+            default: "pageview",
+            required: true
+        },
         browser: String,
         os: String,
         device: String,
