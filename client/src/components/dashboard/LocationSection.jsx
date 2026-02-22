@@ -1,14 +1,49 @@
 import { useState } from "react";
 import { Maximize2, MapPin } from "lucide-react";
 import FlagIcon from "../svg/FlagIcon";
+import DataModal from "../common/DataModal";
 
 const LocationSection = ({
   data = { Countries: [], Regions: [], Cities: [] },
   loading = true,
 }) => {
   const [activeTab, setActiveTab] = useState("Countries");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const tabs = ["Countries", "Regions", "Cities"];
+
+  const renderItem = (item, index) => (
+    <div
+      key={index}
+      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
+    >
+      <div className="flex items-center gap-3">
+        {/* Dynamic Flag Icon mapping component */}
+        <FlagIcon
+          countryName={item.country}
+          className="w-5 h-5 text-gray-400 shrink-0"
+        />
+        <div className="flex flex-col min-w-0">
+          <span className="text-sm font-medium text-gray-900 truncate pr-2">
+            {item.name}
+          </span>
+          {activeTab !== "Countries" && (
+            <span className="text-xs text-gray-400 truncate pr-2">
+              {item.country}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-bold text-gray-900">{item.count}</span>
+        <span className="text-gray-300 text-sm">|</span>
+        <span className="text-sm text-gray-500 min-w-[3ch] text-right">
+          {item.percent}
+        </span>
+      </div>
+    </div>
+  );
 
   return (
     <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -55,40 +90,7 @@ const LocationSection = ({
               Loading location data...
             </div>
           ) : data[activeTab] && data[activeTab].length > 0 ? (
-            data[activeTab].map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
-              >
-                <div className="flex items-center gap-3">
-                  {/* Dynamic Flag Icon mapping component */}
-                  <FlagIcon
-                    countryName={item.country}
-                    className="w-5 h-5 text-gray-400 shrink-0"
-                  />
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-medium text-gray-900 truncate pr-2">
-                      {item.name}
-                    </span>
-                    {activeTab !== "Countries" && (
-                      <span className="text-xs text-gray-400 truncate pr-2">
-                        {item.country}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-bold text-gray-900">
-                    {item.count}
-                  </span>
-                  <span className="text-gray-300 text-sm">|</span>
-                  <span className="text-sm text-gray-500 min-w-[3ch] text-right">
-                    {item.percent}
-                  </span>
-                </div>
-              </div>
-            ))
+            data[activeTab].slice(0, 5).map(renderItem)
           ) : (
             <div className="py-4 text-center text-sm text-gray-500">
               No data available yet
@@ -97,13 +99,24 @@ const LocationSection = ({
         </div>
       </div>
 
-      <button className="w-full mt-4 flex items-center justify-center gap-2 py-2 text-sm text-gray-500 hover:text-gray-900 transition-colors border-t border-gray-50 pt-4 group">
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="w-full mt-4 flex items-center justify-center gap-2 py-2 text-sm text-gray-500 hover:text-gray-900 transition-colors border-t border-gray-50 pt-4 group cursor-pointer"
+      >
         <Maximize2
           size={14}
           className="text-gray-400 group-hover:text-gray-900"
         />
         More
       </button>
+
+      <DataModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={`All ${activeTab}`}
+        data={data[activeTab] || []}
+        renderItem={renderItem}
+      />
     </div>
   );
 };

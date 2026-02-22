@@ -202,19 +202,16 @@ exports.getLocationMetrics = async (req, res) => {
                     Countries: [
                         { $group: { _id: "$country", count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
-                        { $limit: 10 },
                         { $project: { _id: 0, name: "$_id", count: 1 } }
                     ],
                     Regions: [
                         { $group: { _id: "$region", country: { $first: "$country" }, count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
-                        { $limit: 10 },
                         { $project: { _id: 0, name: "$_id", country: 1, count: 1 } }
                     ],
                     Cities: [
                         { $group: { _id: "$city", country: { $first: "$country" }, count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
-                        { $limit: 10 },
                         { $project: { _id: 0, name: "$_id", country: 1, count: 1 } }
                     ]
                 }
@@ -272,19 +269,16 @@ exports.getEnvironmentMetrics = async (req, res) => {
                     Browsers: [
                         { $group: { _id: "$browser", count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
-                        { $limit: 10 },
                         { $project: { _id: 0, name: "$_id", count: 1 } }
                     ],
                     OS: [
                         { $group: { _id: "$os", count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
-                        { $limit: 10 },
                         { $project: { _id: 0, name: "$_id", count: 1 } }
                     ],
                     Devices: [
                         { $group: { _id: "$device", count: { $sum: 1 } } },
                         { $sort: { count: -1 } },
-                        { $limit: 10 },
                         { $project: { _id: 0, name: "$_id", count: 1 } }
                     ]
                 }
@@ -424,7 +418,7 @@ exports.getSourcesMetrics = async (req, res) => {
         const sourcesArray = Object.keys(sourceCounts).map(name => ({
             name,
             count: sourceCounts[name]
-        })).sort((a, b) => b.count - a.count).slice(0, 10);
+        })).sort((a, b) => b.count - a.count);
 
         // Calculate percentages
         const formatPercent = (count) => totalSessions > 0 ? `${Math.round((count / totalSessions) * 100)}%` : "0%";
@@ -478,7 +472,7 @@ exports.getPagesMetrics = async (req, res) => {
         const topPaths = Object.keys(pathCounts).map(path => ({
             path,
             count: pathCounts[path]
-        })).sort((a, b) => b.count - a.count).slice(0, 10);
+        })).sort((a, b) => b.count - a.count);
 
         const formatPathPercent = (count) => totalViews > 0 ? `${Math.round((count / totalViews) * 100)}%` : "0%";
         const formattedPaths = topPaths.map(item => ({ ...item, percent: formatPathPercent(item.count) }));
@@ -509,10 +503,10 @@ exports.getPagesMetrics = async (req, res) => {
         });
 
         const topEntries = Object.keys(entryCounts).map(path => ({ path, count: entryCounts[path] }))
-            .sort((a, b) => b.count - a.count).slice(0, 10);
+            .sort((a, b) => b.count - a.count);
 
         const topExits = Object.keys(exitCounts).map(path => ({ path, count: exitCounts[path] }))
-            .sort((a, b) => b.count - a.count).slice(0, 10);
+            .sort((a, b) => b.count - a.count);
 
         const formatSessionPercent = (count) => totalSessions > 0 ? `${Math.round((count / totalSessions) * 100)}%` : "0%";
 

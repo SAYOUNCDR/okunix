@@ -1,13 +1,39 @@
 import { useState } from "react";
 import { Maximize2 } from "lucide-react";
+import DataModal from "../common/DataModal";
 
 const EntryExitPages = ({
   data = { Path: [], Entry: [], Exit: [] },
   loading = true,
 }) => {
   const [activeTab, setActiveTab] = useState("Path");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const tabs = ["Path", "Entry", "Exit"];
+
+  const renderItem = (item, index) => (
+    <div
+      key={index}
+      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
+    >
+      <div className="flex items-center gap-3 overflow-hidden">
+        <span
+          className="text-sm font-medium text-gray-900 truncate"
+          title={item.path}
+        >
+          {item.path}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-3 shrink-0">
+        <span className="text-sm font-bold text-gray-900">{item.count}</span>
+        <span className="text-gray-300 text-sm">|</span>
+        <span className="text-sm text-gray-500 min-w-[3ch] text-right">
+          {item.percent}
+        </span>
+      </div>
+    </div>
+  );
 
   return (
     <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -50,31 +76,7 @@ const EntryExitPages = ({
               Loading pages data...
             </div>
           ) : data[activeTab] && data[activeTab].length > 0 ? (
-            data[activeTab].map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-default"
-              >
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <span
-                    className="text-sm font-medium text-gray-900 truncate"
-                    title={item.path}
-                  >
-                    {item.path}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm font-bold text-gray-900">
-                    {item.count}
-                  </span>
-                  <span className="text-gray-300 text-sm">|</span>
-                  <span className="text-sm text-gray-500 min-w-[3ch] text-right">
-                    {item.percent}
-                  </span>
-                </div>
-              </div>
-            ))
+            data[activeTab].slice(0, 5).map(renderItem)
           ) : (
             <div className="py-12 text-center text-sm text-gray-500">
               No data available.
@@ -82,11 +84,22 @@ const EntryExitPages = ({
           )}
         </div>
 
-        <button className="flex items-center justify-center gap-2 mt-6 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors cursor-pointer w-full py-2 hover:bg-gray-50 rounded-lg">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center justify-center gap-2 mt-6 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors cursor-pointer w-full py-2 hover:bg-gray-50 rounded-lg"
+        >
           <Maximize2 size={16} />
           <span>More</span>
         </button>
       </div>
+
+      <DataModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={`All ${activeTab} Pages`}
+        data={data[activeTab] || []}
+        renderItem={renderItem}
+      />
     </div>
   );
 };
