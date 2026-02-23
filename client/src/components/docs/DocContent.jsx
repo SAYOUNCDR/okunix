@@ -100,122 +100,229 @@ const DocContent = ({ activeDoc, onNavigate }) => {
     introduction: {
       toc: [
         { id: "introduction", label: "Introduction", level: 2 },
-        { id: "why-okunix", label: "Why Okunix?", level: 3 },
-        { id: "get-started", label: "Get started", level: 3 },
-        { id: "features", label: "Features", level: 3 },
+        { id: "what-is-okunix", label: "What is Okunix?", level: 3 },
+        { id: "core-values", label: "Core Values", level: 3 },
+        { id: "how-it-works", label: "How it works", level: 3 },
+        { id: "features", label: "Core Features", level: 3 },
         { id: "explore", label: "Explore the docs", level: 3 },
       ],
       component: (
         <Section title="Introduction" icon={BookOpen}>
           <p className="text-lg leading-relaxed mb-6">
-            Okunix is an open-source web analytics platform that respects user
-            privacy. No cookies, no tracking across sites, no personal data
-            collection. GDPR compliant out of the box.
+            Welcome to the official Okunix documentation. This guide will help
+            you understand the platform, learn how to deploy it, and explore the
+            internal architecture.
           </p>
 
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 flex gap-3">
-            <div className="shrink-0 mt-0.5">
-              <AlertCircle className="text-blue-600" size={20} />
-            </div>
-            <div>
-              <h4 className="font-semibold text-blue-900 text-sm mb-1">Note</h4>
-              <p className="text-sm text-blue-800">
-                These docs track the latest version of Okunix. For previous
-                versions or migration guides, check our legacy documentation.
-              </p>
-            </div>
-          </div>
-
           <h3
-            id="why-okunix"
+            id="what-is-okunix"
             className="text-xl font-semibold text-gray-900 mt-8 mb-4 scroll-mt-24"
           >
-            Why Okunix?
+            What is Okunix?
+          </h3>
+          <p className="mb-4">
+            Okunix is a powerful, open-source web analytics platform designed
+            specifically for teams that care about privacy. It serves as a
+            drop-in, self-hostable alternative to Google Analytics, stripping
+            away invasive tracking mechanisms while still providing you with
+            comprehensive and beautiful traffic insights.
+          </p>
+
+          <h3
+            id="core-values"
+            className="text-xl font-semibold text-gray-900 mt-8 mb-4 scroll-mt-24"
+          >
+            Core Values
           </h3>
           <ul className="grid sm:grid-cols-2 gap-4 mb-8">
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <strong>Privacy-first</strong> — No cookies, no fingerprinting, no
-              personal data. Your visitors stay anonymous.
+              <strong>Privacy-first :</strong> No cookies, no fingerprinting, no
+              personal data. Your visitors stay 100% anonymous.
             </li>
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <strong>Own your data</strong> — Self-host on your infrastructure.
-              Your analytics data never leaves your servers.
+              <strong>Data Ownership :</strong> Self-host on your infrastructure.
+              Your analytics data never leaves your servers, putting you in full
+              control.
             </li>
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <strong>Lightweight</strong> — The tracking script is under 2KB.
-              It won't slow down your site.
+              <strong>Lightweight :</strong> The tracking script is under 2KB. It
+              won't slow down your website's performance or impact SEO scores.
             </li>
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <strong>Simple</strong> — Deploy with Docker or Node.js in
-              minutes. No complex configuration required.
+              <strong>Open Source :</strong> Fully transparent telemetry systems
+              and aggregation pipelines that you can audit and modify.
             </li>
           </ul>
 
           <h3
-            id="get-started"
+            id="how-it-works"
             className="text-xl font-semibold text-gray-900 mt-8 mb-4 scroll-mt-24"
           >
-            Get started
+            How it works
           </h3>
           <p className="mb-4">
-            You can get started immediately by cloning the repo and running the
-            stack:
+            The architecture is designed to be as non-invasive as possible:
           </p>
-          <CodeBlock>
-            {`git clone https://github.com/okunix/okunix.git
-cd okunix
-npm install
-npm run start`}
-          </CodeBlock>
-          <p className="mb-6">
-            That's it. Open{" "}
-            <a
-              href="http://localhost:3000"
-              className="text-orange-600 hover:underline"
-            >
-              http://localhost:3000
-            </a>{" "}
-            and log in with your admin credentials.
-          </p>
+          <ol className="list-decimal pl-5 space-y-2 mb-8 text-gray-600">
+            <li>
+              <strong>The Tracker:</strong> A tiny JavaScript snippet is
+              injected into your website's <code>&lt;head&gt;</code>.
+            </li>
+            <li>
+              <strong>Data Collection:</strong> When a user visits your site,
+              the script extracts environmental data (browser, OS, screen size,
+              page path) without storing any locally identifiable cookies.
+            </li>
+            <li>
+              <strong>Processing:</strong> The data is sent securely to your
+              Okunix backend node, which hashes IP addresses into ephemeral
+              session tokens for strict anonymization.
+            </li>
+            <li>
+              <strong>Visualization:</strong> Your React-powered dashboard
+              aggregates these millions of tiny hits into beautiful, readable
+              metrics instantly.
+            </li>
+          </ol>
 
           <h3
             id="features"
             className="text-xl font-semibold text-gray-900 mt-8 mb-4 scroll-mt-24"
           >
-            Features
+            Core Features
           </h3>
-          <ul className="space-y-4 mb-8">
-            <li className="flex gap-3">
-              <Check className="text-green-500 shrink-0 mt-1" size={18} />
-              <div>
-                <strong>Core analytics</strong> — Pageviews, visitors, bounce
-                rate, session duration, referrers, browsers, operating systems,
-                devices, and countries.
-              </div>
-            </li>
-            <li className="flex gap-3">
-              <Check className="text-green-500 shrink-0 mt-1" size={18} />
-              <div>
-                <strong>Custom events</strong> — Track button clicks, form
-                submissions, or any user interaction with a simple data
-                attribute or JavaScript call.
-              </div>
-            </li>
-            <li className="flex gap-3">
-              <Check className="text-green-500 shrink-0 mt-1" size={18} />
-              <div>
-                <strong>Advanced insights</strong> — Funnels, user journeys,
-                retention analysis, goals, UTM campaign tracking, and cohort
-                breakdowns.
-              </div>
-            </li>
-            <li className="flex gap-3">
-              <Check className="text-green-500 shrink-0 mt-1" size={18} />
-              <div>
-                <strong>Sessions</strong> — View individual visitor activity and
-                session properties without identifying personal information.
-              </div>
-            </li>
+
+          <p className="mb-4 text-gray-700 font-medium">
+            Analytics & Data Collection
+          </p>
+          <ul className="grid xl:grid-cols-2 gap-4 mb-8">
+            {[
+              {
+                title: "Page views",
+                desc: "Knowing which of your pages gets the most traffic is essential to improving your website content.",
+              },
+              {
+                title: "Visitors",
+                desc: "Get detailed information about your visitors like their device, browser, OS and location.",
+              },
+              {
+                title: "Bounce rate",
+                desc: "See which pages keep your visitors engaged versus those they are abandoning.",
+              },
+              {
+                title: "Traffic sources",
+                desc: "See where your traffic is coming from to better understand where you should be spending your effort.",
+              },
+              {
+                title: "Location & Devices",
+                desc: "Find out where your visitors are coming from, and the most popular devices used by visitors.",
+              },
+              {
+                title: "Realtime data",
+                desc: "Data available in seconds, not days. The data that OkUnix collects is immediately available on your dashboard.",
+              },
+              {
+                title: "Custom events",
+                desc: "Track everything that happens on your website like signups and checkouts using custom events.",
+              },
+              {
+                title: "UTM tracking",
+                desc: "Measure the effectiveness of your campaign by analyzing UTM query parameters that are automatically collected.",
+              },
+            ].map((f, i) => (
+              <li
+                key={`analytics-${i}`}
+                className="flex gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100"
+              >
+                <Check className="text-green-500 shrink-0 mt-0.5" size={18} />
+                <div>
+                  <strong className="text-gray-900 block mb-1 text-sm">
+                    {f.title}
+                  </strong>
+                  <span className="text-sm text-gray-600 leading-relaxed block">
+                    {f.desc}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mb-4 text-gray-700 font-medium">
+            Deep Insights & Comparisons
+          </p>
+          <ul className="grid xl:grid-cols-2 gap-4 mb-8">
+            {[
+              {
+                title: "Compare & Breakdown",
+                desc: "See your metric performance compared against previous date ranges, and dive deeper using segments and filters.",
+              },
+              {
+                title: "Funnels & Retention",
+                desc: "Understand the conversion and drop-off rate of users, and measure your website stickiness by tracking how often users return.",
+              },
+              {
+                title: "Goals",
+                desc: "Track your goals for pageviews and events directly within the dashboard.",
+              },
+              {
+                title: "Journey & Routing",
+                desc: "Look into your user pathways, how they navigate, what drives conversions, and their entry/exit pages.",
+              },
+            ].map((f, i) => (
+              <li
+                key={`insights-${i}`}
+                className="flex gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100"
+              >
+                <Check className="text-orange-500 shrink-0 mt-0.5" size={18} />
+                <div>
+                  <strong className="text-gray-900 block mb-1 text-sm">
+                    {f.title}
+                  </strong>
+                  <span className="text-sm text-gray-600 leading-relaxed block">
+                    {f.desc}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mb-4 text-gray-700 font-medium">
+            Privacy & Data Ownership
+          </p>
+          <ul className="grid xl:grid-cols-2 gap-4 mb-8">
+            {[
+              {
+                title: "GDPR & CCPA Compliant",
+                desc: "OkUnix never collects any personal information from your visitors so it is fully compliant.",
+              },
+              {
+                title: "Data Anonymization",
+                desc: "All visitor data is anonymized. We apply strict cryptographic hashing to ensure privacy is always protected.",
+              },
+              {
+                title: "No Cookies",
+                desc: "OkUnix does not use any tracking cookies, so no annoying cookie banner is required on your website.",
+              },
+              {
+                title: "Full Data Ownership",
+                desc: "Data is always in your control. You can self-host on your own infrastructure or export your data at any time.",
+              },
+            ].map((f, i) => (
+              <li
+                key={`privacy-${i}`}
+                className="flex gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100"
+              >
+                <Check className="text-blue-500 shrink-0 mt-0.5" size={18} />
+                <div>
+                  <strong className="text-gray-900 block mb-1 text-sm">
+                    {f.title}
+                  </strong>
+                  <span className="text-sm text-gray-600 leading-relaxed block">
+                    {f.desc}
+                  </span>
+                </div>
+              </li>
+            ))}
           </ul>
 
           <h3
