@@ -11,6 +11,8 @@ import ProtectedRoute from "./components/layout/ProtectedRoute";
 import Support from "./pages/Support";
 import Docs from "./pages/Docs";
 import ResetPassword from "./pages/ResetPassword";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/features" element={<Features />} />
         <Route path="/docs" element={<Docs />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
 
         {/* Protected Dashboard Routes */}
         <Route element={<ProtectedRoute />}>

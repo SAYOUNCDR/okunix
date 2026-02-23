@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { useAuth } from "../../context/AuthContext";
@@ -155,13 +155,21 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
         <div className="text-sm text-gray-500 leading-relaxed">
           By creating an account, you agree to our{" "}
-          <a href="/terms" className="text-orange-600 hover:text-orange-700">
+          <Link
+            to="/terms"
+            onClick={onClose}
+            className="text-orange-600 hover:text-orange-700"
+          >
             Terms of Service
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a href="/privacy" className="text-orange-600 hover:text-orange-700">
+          <Link
+            to="/privacy"
+            onClick={onClose}
+            className="text-orange-600 hover:text-orange-700"
+          >
             Privacy Policy
-          </a>
+          </Link>
           .
         </div>
 
