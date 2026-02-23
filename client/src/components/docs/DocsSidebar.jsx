@@ -24,7 +24,7 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Core Concepts",
+    title: "Usage Guides",
     items: [
       { id: "dashboard", label: "Dashboard Overview", icon: FileText },
       { id: "websites", label: "Managing Websites", icon: Globe },
@@ -32,11 +32,19 @@ const SECTIONS = [
     ],
   },
   {
-    title: "API Reference",
+    title: "Architecture & Data",
     items: [
-      { id: "authentication", label: "Authentication", icon: Lock },
-      { id: "endpoints", label: "API Endpoints", icon: Server },
-      { id: "errors", label: "Error Handling", icon: HelpCircle },
+      { id: "tracker", label: "Tracking Engine", icon: Code },
+      { id: "models", label: "Database Models", icon: Database },
+      { id: "middleware", label: "Security & Middleware", icon: Lock },
+    ],
+  },
+  {
+    title: "REST API Reference",
+    items: [
+      { id: "authApi", label: "Authentication API", icon: Lock },
+      { id: "analyticsApi", label: "Analytics Pipeline API", icon: Server },
+      { id: "websiteApi", label: "Website Control API", icon: Globe },
     ],
   },
 ];

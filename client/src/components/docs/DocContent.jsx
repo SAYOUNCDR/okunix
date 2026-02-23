@@ -23,10 +23,11 @@ const TOCItem = ({ item, activeId }) => {
   return (
     <a
       href={`#${item.id}`}
-      className={`block text-sm py-1.5 ${isActive
+      className={`block text-sm py-1.5 ${
+        isActive
           ? "text-gray-900 font-semibold"
           : "text-gray-500 hover:text-gray-800"
-        }`}
+      }`}
       onClick={(e) => {
         e.preventDefault();
         const element = document.getElementById(item.id);
@@ -466,6 +467,391 @@ npm run start`}
         </Section>
       ),
     },
+    analytics: {
+      toc: [
+        { id: "analytics-metrics", label: "Analytics & Metrics", level: 2 },
+        { id: "time-filtering", label: "Time Range Filtering", level: 3 },
+        { id: "kpi-definitions", label: "KPI Definitions", level: 3 },
+      ],
+      component: (
+        <Section title="Analytics & Metrics" icon={Database}>
+          <p>
+            The Okunix engine calculates comparative insights on the fly,
+            evaluating millions of node interactions to generate percentage
+            deltas across flexible time ranges.
+          </p>
+          <h3
+            id="time-filtering"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            Time Range Filtering
+          </h3>
+          <p>
+            The dashboard dynamically accepts `?range=24h`, `?range=7d`, or
+            `?range=30d` queries, instantly isolating traffic segments and
+            computing prior-period vectors to measure true growth vs stagnation.
+          </p>
+          <h3
+            id="kpi-definitions"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            KPI Definitions
+          </h3>
+          <ul className="list-disc pl-5 mt-4 space-y-2">
+            <li>
+              <strong>Visitors:</strong> The volume of totally unique
+              cryptographic Session IDs hitting your domain.
+            </li>
+            <li>
+              <strong>Visits:</strong> Total successful page resolutions,
+              regardless of user uniqueness.
+            </li>
+            <li>
+              <strong>Bounce Rate:</strong> The ratio of single-hit sessions vs
+              multi-hit sessions. Lower is better.
+            </li>
+          </ul>
+        </Section>
+      ),
+    },
+    tracker: {
+      toc: [
+        { id: "tracking-engine", label: "Tracking Engine", level: 2 },
+        { id: "script-injection", label: "Script Injection", level: 3 },
+        { id: "payload-extraction", label: "Payload Extraction", level: 3 },
+      ],
+      component: (
+        <Section title="Tracking Engine" icon={Code}>
+          <p>
+            Okunix operates via an asynchronous, non-blocking telemetry{" "}
+            <code>&lt;script&gt;</code> that fires instantly upon page
+            resolution, extracting environmental data natively from the browser
+            context before dispatching to the{" "}
+            <code>POST /api/track/collect</code> ingress gateway.
+          </p>
+
+          <h3
+            id="script-injection"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            Script Injection
+          </h3>
+          <p>
+            The tracker uses modern Single Page Application (SPA) listeners
+            hooked into the `history.pushState` and `window.popstate` bindings
+            to track seamless client-side routing natively without requiring
+            hard refreshes.
+          </p>
+          <CodeBlock>
+            {`// SPA Hook Example
+const originalPushState = history.pushState;
+history.pushState = function () {
+    originalPushState.apply(this, arguments);
+    sendData("pageview");
+};`}
+          </CodeBlock>
+
+          <h3
+            id="payload-extraction"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            Payload Extraction
+          </h3>
+          <p>
+            The core script assigns both an ephemeral `sessionStorage` token and
+            a persistent `localStorage` 10-year generic GUID to maintain user
+            anonymity while tracking return-visitor retention loops.
+          </p>
+        </Section>
+      ),
+    },
+    models: {
+      toc: [
+        { id: "database-models", label: "Database Models", level: 2 },
+        { id: "trackeddata-schema", label: "TrackedData Schema", level: 3 },
+        { id: "user-schema", label: "Identity & Roles", level: 3 },
+      ],
+      component: (
+        <Section title="Database Models" icon={Database}>
+          <p>
+            The backend engine is powered by a high-availability MongoDB cluster
+            managed via Mongoose Object Relational Mappers (ORMs) spanning 3
+            core tables: `Users`, `Websites`, and `TrackedData`.
+          </p>
+
+          <h3
+            id="trackeddata-schema"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            TrackedData Schema
+          </h3>
+          <p>
+            The hyper-dense transactional scale of the entire application.
+            Designed without nested sub-documents to prioritize massive,
+            parallel, un-indexed write speeds.
+          </p>
+          <CodeBlock>
+            {`const trackedDataSchema = new mongoose.Schema({
+  websiteId: { type: ObjectId, ref: "Website", required: true },
+  url: { type: String, required: true },
+  referrer: { type: String, default: "" },
+  country: { type: String, default: "Unknown" },
+  sessionId: { type: String, required: true },
+  visitorId: { type: String }, // 10-Year Token
+  event: { type: String, enum: ["pageview", "leave", "custom"] },
+  browser: String,
+  os: String,
+  device: String,
+}, { timestamps: true });`}
+          </CodeBlock>
+
+          <h3
+            id="user-schema"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            Identity & Roles
+          </h3>
+          <p>
+            The `User` model manages cryptographic password hashes via `bcrypt`,
+            alongside active token-rotation versioning integers (`tokenVersion`)
+            ensuring compromised sessions can be permanently terminated
+            server-side.
+          </p>
+        </Section>
+      ),
+    },
+    middleware: {
+      toc: [
+        { id: "security-middleware", label: "Security & Middleware", level: 2 },
+        { id: "rate-limiting", label: "Rate Limiting", level: 3 },
+        { id: "jwt-verification", label: "JWT Verification", level: 3 },
+      ],
+      component: (
+        <Section title="Security & Middleware" icon={Lock}>
+          <p>
+            Complex Express middleware pipes intercept rogue network traffic
+            before resolving downstream logic.
+          </p>
+
+          <h3
+            id="rate-limiting"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            Rate Limiting (`express-rate-limit`)
+          </h3>
+          <p>
+            All authentication vectors (<code>/login</code>,{" "}
+            <code>/register</code>, <code>/forgot-password</code>) are strictly
+            regulated by a centralized IP firewall dropping connections globally
+            if 10 or more requests occur inside a rolling 15 minute window.
+          </p>
+          <CodeBlock>
+            {`// middleware/rateLimiter.js
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  message: "Too many requests from this IP"
+});`}
+          </CodeBlock>
+
+          <h3
+            id="jwt-verification"
+            className="text-lg font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24"
+          >
+            JWT Verification (`verifyToken`)
+          </h3>
+          <p>
+            The engine enforces asymmetric JSON Web Tokens via HTTP-Only active
+            cookie storage and explicit Bearer headers. Protected resources will
+            hard-reject any `401 Unauthorized` access attempt lacking proper
+            signature validation.
+          </p>
+        </Section>
+      ),
+    },
+    authApi: {
+      toc: [
+        { id: "authentication-api", label: "Authentication API", level: 2 },
+        { id: "auth-endpoints", label: "Core Endpoints", level: 3 },
+      ],
+      component: (
+        <Section title="Authentication API Reference" icon={Lock}>
+          <p className="mb-6">
+            The `/api/auth` namespace orchestrates all credential initialization
+            and destruction pipelines.
+          </p>
+
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Method
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Endpoint
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Description
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td className="px-4 py-3 font-mono text-orange-600">POST</td>
+                  <td className="px-4 py-3 font-mono">/register</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Securely generates identity & issues token
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono text-orange-600">POST</td>
+                  <td className="px-4 py-3 font-mono">/login</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Authenticates standard HTTP requests
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono text-green-600">GET</td>
+                  <td className="px-4 py-3 font-mono">/me</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Retrieves protected object model instance
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono text-red-600">DELETE</td>
+                  <td className="px-4 py-3 font-mono">/delete-account</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Permanently truncates the associated identity
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Section>
+      ),
+    },
+    analyticsApi: {
+      toc: [
+        { id: "analytics-pipeline", label: "Analytics Pipeline API", level: 2 },
+        { id: "analytics-endpoints", label: "Core Endpoints", level: 3 },
+      ],
+      component: (
+        <Section title="Analytics Pipeline Reference" icon={Server}>
+          <p className="mb-6">
+            The `/api/analytics` namespace connects the Dashboard visualization
+            modules to massive read-replica operations. These paths accept
+            `?range=24h/7d/30d` variables.
+          </p>
+
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Endpoint
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Description
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td className="px-4 py-3 font-mono">/stats/:websiteId</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Evaluates concurrent comparative deltas (Visitors/Views)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono">/heatmap/:websiteId</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Projects a 7-day 24-hour activity density matrix
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono">/location/:websiteId</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Aggregates origin traces via GeoIP into Country/Region
+                    mappings
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono">/pages/:websiteId</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Tracks explicitly isolated client Entry and Exit paths
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Section>
+      ),
+    },
+    websiteApi: {
+      toc: [
+        { id: "website-control", label: "Website Control API", level: 2 },
+        { id: "website-endpoints", label: "Core Endpoints", level: 3 },
+      ],
+      component: (
+        <Section title="Website Control API" icon={Globe}>
+          <p className="mb-6">
+            The `/api/website` paths execute standard RESTful logic regarding
+            domain association and structural resets.
+          </p>
+
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Method
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Endpoint
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-900">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td className="px-4 py-3 font-mono text-orange-600">POST</td>
+                  <td className="px-4 py-3 font-mono">/createWebsite</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Wires a brand new `domain` array strictly to the `userId`
+                    bounds
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono text-green-600">GET</td>
+                  <td className="px-4 py-3 font-mono">/getUserWebsites</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Builds the dashboard routing library array
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono text-blue-600">PUT</td>
+                  <td className="px-4 py-3 font-mono">/updateWebsite/:id</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Reconfigures strings explicitly updating the DB Record
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-mono text-red-600">DELETE</td>
+                  <td className="px-4 py-3 font-mono">/resetWebsite/:id</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    Triggers a soft-delete destroying telemetry records while
+                    preserving the domain definition structure
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Section>
+      ),
+    },
   };
 
   const DOC_ORDER = [
@@ -475,9 +861,12 @@ npm run start`}
     { id: "dashboard", label: "Dashboard Overview" },
     { id: "websites", label: "Managing Websites" },
     { id: "analytics", label: "Analytics & Metrics" },
-    { id: "authentication", label: "Authentication" },
-    { id: "endpoints", label: "API Endpoints" },
-    { id: "errors", label: "Error Handling" },
+    { id: "tracker", label: "Tracking Engine" },
+    { id: "models", label: "Database Models" },
+    { id: "middleware", label: "Security & Middleware" },
+    { id: "authApi", label: "Authentication API" },
+    { id: "analyticsApi", label: "Analytics Pipeline API" },
+    { id: "websiteApi", label: "Website Control API" },
   ];
 
   const currentDocIndex = DOC_ORDER.findIndex((doc) => doc.id === activeDoc);
