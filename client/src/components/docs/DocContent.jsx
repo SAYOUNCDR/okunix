@@ -956,7 +956,7 @@ const authLimiter = rateLimit({
               <ul className="space-y-3">
                 <li>
                   <a
-                    href="#"
+                    href="https://okunix.tech"
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600"
                   >
                     <Globe size={14} /> Website
@@ -964,10 +964,18 @@ const authLimiter = rateLimit({
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="https://okunix.tech/blog"
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600"
                   >
                     <BookOpen size={14} /> Blog
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/SAYOUNCDR/okunix"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600"
+                  >
+                    <Code size={14} /> GitHub
                   </a>
                 </li>
               </ul>
