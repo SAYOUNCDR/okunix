@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Github, Menu, X } from "lucide-react";
 import Button from "../common/Button";
@@ -6,27 +6,9 @@ import LoginModal from "../auth/LoginModal";
 import RegisterModal from "../auth/RegisterModal";
 
 const Navbar = () => {
-  const [stars, setStars] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchStars = async () => {
-      try {
-        const res = await fetch("https://api.github.com/repos/#/okunix");
-        if (res.ok) {
-          const data = await res.json();
-          setStars(data.stargazers_count ?? 0);
-        }
-      } catch (error) {
-        console.error("Failed to fetch stars:", error);
-        setStars(0);
-      }
-    };
-
-    fetchStars();
-  }, []);
 
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl shadow-sm transition-all duration-300">
@@ -81,7 +63,7 @@ const Navbar = () => {
             className="hidden lg:flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-2"
           >
             <Github size={20} />
-            <span className="font-medium">{stars}</span>
+            <span className="font-medium">4</span>
           </a>
 
           <Button
