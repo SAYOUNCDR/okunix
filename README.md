@@ -2,8 +2,8 @@
   <h1>Okunix Analytics</h1>
   <p>A lightweight, privacy-focused analytics engine built for modern web applications.</p>
   
-  <a href="https://okunix.tech">Production Environment</a> •
-  <a href="https://okunix.sayoun.studio">Staging Environment</a> •
+  <a href="https://okunix.tech">Website Link 1</a> •
+  <a href="https://okunix.sayoun.studio">Website Link 2</a> •
   <a href="https://github.com/SAYOUNCDR/okunix">GitHub Repository</a>
 </div>
 
@@ -73,13 +73,23 @@ Ensure the following runtimes and services are available on your host machine:
    ```
 
 4. **Environment Configuration**
-   Create a `.env` file in the `/server` directory and provide the necessary connection strings:
 
-   ```env
-   # server/.env
-   PORT=5000
-   MONGO_URI=mongodb://localhost:27017/okunix
-   JWT_SECRET=your_secure_jwt_secret_key
+   #### Server Environment Variables
+
+   Create a .env file in the server directory by copying the .env.example file.
+
+   ```bash
+   cd server
+   cp .env.example .env
+   ```
+
+   #### Client Environment Variables - Must Read the .env.example in client directory for /api setup
+
+   Create a .env file in the client directory by copying the .env.example file.
+
+   ```bash
+   cd client
+   cp .env.example .env
    ```
 
 5. **Initialize the Application**
