@@ -1,81 +1,115 @@
-# OkUnix
+<div align="center">
+  <h1>Okunix Analytics</h1>
+  <p>A lightweight, privacy-focused analytics engine built for modern web applications.</p>
+  
+  <a href="https://okunix.tech">Production Environment</a> •
+  <a href="https://okunix.sayoun.studio">Staging Environment</a> •
+  <a href="https://github.com/SAYOUNCDR/okunix">GitHub Repository</a>
+</div>
 
-OkUnix is a simple yet powerful web-analytics platform designed to track and visualize key metrics such as visits, visitors, bounce rate, and more. It provides real-time insights into your website's performance.
+<br />
 
-## 🚀 Features
+Okunix is a powerful, self-hostable web analytics platform designed to track, aggregate, and visualize key telemetry metrics in real-time. Built with a focus on simplicity and performance, Okunix provides developers with immediate insights into their application traffic without compromising end-user privacy.
 
-### Core Metrics
-- **Live Viewers**: See how many users are on your site right now.
-- **Traffic Overview**: Track Unique Visitors and Total Visits.
-- **Engagement**: Monitor Bounce Rate and Visit Duration.
+## Core Features
 
-### Visualizations
-- **Traffic Graphs**: Visual representation of Visitors and Views over time.
-- **Geographic Data**:
-    - **World Map**: Highlighting visitor locations.
-    - **Location Breakdown**: Detailed stats by Countries, Regions, and Cities.
-- **Heat Maps**:
-    - **Daily**: Activity intensity by day.
-    - **Hourly**: Operational hours tracking (12am - 11pm).
+### Telemetry & Metrics
 
-### Detailed Analytics
-- **Page Tracking**: Analyze performance of specific paths (e.g., `/`, `/payment`, `/about`).
-    - Entry Paths
-    - Exit Paths
-- **Sources & Channels**: Identify traffic origins (LinkedIn, X/Twitter, YouTube, etc.).
-- **Environment Stats**: Breakdown by Browsers, Operating Systems, and Devices.
+- **Live Viewers**: Real-time websocket tracking of concurrent active sessions.
+- **Traffic Analytics**: Accurate aggregation of Unique Visitors and Total Visits.
+- **Engagement Tracking**: Automated Bounce Rate calculation and Session Duration tracking.
 
-## 🛠️ Tech Stack
+### Data Visualization
 
-- **Frontend**: React, Chart.js
+- **Geographic Distribution**: Interactive world mapping and detailed tabular breakdown by Country, Region, and City.
+- **Traffic Heatmaps**: visual matrix representations of activity intensity sorted by day and operational hours (24h).
+- **Environment Profiling**: Device, Operating System, and Browser telemetry extraction.
+
+### Deep Routing Analytics
+
+- **Referrer Attribution**: Track incoming traffic channels (Social Media, Direct, Organic Search).
+- **Path Analysis**: Monitor specific route performance, visualizing standard pageviews alongside Entry and Exit nodes.
+
+## Architecture & Technology Stack
+
+Okunix is built on the MERN stack, delivering high-performance telemetry processing via Node.js streams and efficient aggregation pipelines via MongoDB.
+
+- **Frontend**: React.js, TailwindCSS, Chart.js, Lucide Icons
 - **Backend**: Node.js, Express.js
-- **Database**: PostgreSQL
+- **Database**: MongoDB & Mongoose ORM
+- **Authentication**: JWT-based stateless authentication
 
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- PostgreSQL
-- npm or yarn
+Ensure the following runtimes and services are available on your host machine:
 
-### Installation
+- Node.js (v18.0.0 or higher)
+- MongoDB (v6.0 or higher)
+- npm or yarn package manager
 
-1. Clone the repository:
+### Local Installation
+
+1. **Clone the repository**
+
    ```bash
-   git clone https://github.com/yourusername/okunix.git
+   git clone https://github.com/SAYOUNCDR/okunix.git
+   cd okunix
    ```
 
-2. Install dependencies for server and client:
+2. **Install Backend Dependencies**
+
    ```bash
-   cd okunix
-   # Setup Server
    cd server
    npm install
-   
-   # Setup Client
+   ```
+
+3. **Install Frontend Dependencies**
+
+   ```bash
    cd ../client
    npm install
    ```
 
-3. Configure Environment Variables:
-   - Create a `.env` file in the `server` directory and add your database credentials.
+4. **Environment Configuration**
+   Create a `.env` file in the `/server` directory and provide the necessary connection strings:
 
-4. Run the application:
-   ```bash
-   # Run Server
-   cd server
-   npm start
-
-   # Run Client
-   cd client
-   npm start
+   ```env
+   # server/.env
+   PORT=5000
+   MONGO_URI=mongodb://localhost:27017/okunix
+   JWT_SECRET=your_secure_jwt_secret_key
    ```
 
-## 🤝 Contributing
+5. **Initialize the Application**
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+   ```bash
+   # Terminal 1: Start the Backend API
+   cd server
+   npm run dev
 
-## 📝 License
+   # Terminal 2: Start the React Client
+   cd client
+   npm run dev
+   ```
 
-This project is open source and available under the [MIT License](LICENSE).
+## Integration Guide
+
+To begin tracking analytics on a target website, embed the Okunix tracking script into the `<head>` of your application. The script acts as an asynchronous unblocking beacon.
+
+```html
+<script
+  defer
+  src="https://okunix.tech/api/tracker/script.js"
+  data-website-id="YOUR_WEBSITE_ID"
+></script>
+```
+
+## Contributing
+
+We welcome contributions to the Okunix engine. Please read through our open issues or submit a detailed Pull Request outlining your proposed architectural changes.
+
+## License
+
+This project is generously open-sourced and available under the [MIT License](LICENSE).
