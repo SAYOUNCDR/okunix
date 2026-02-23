@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   UserPlus,
@@ -8,6 +8,8 @@ import {
   BarChart3,
 } from "lucide-react";
 import Sectionheader from "./Sectionheader";
+import LoginModal from "../auth/LoginModal";
+import RegisterModal from "../auth/RegisterModal";
 
 const FeatureCard = ({
   title,
@@ -15,6 +17,7 @@ const FeatureCard = ({
   icon: Icon,
   image,
   linkText = "Learn More",
+  onClick,
 }) => (
   <div className="p-4 flex flex-col h-full text-left">
     <div className="rounded-xl h-68 mb-6 flex items-center justify-center overflow-hidden relative bg-white shadow-sm border border-gray-200">
@@ -33,49 +36,78 @@ const FeatureCard = ({
     </p>
 
     <div className="mt-auto">
-      <span className="inline-flex items-center text-orange-600 font-semibold text-sm hover:translate-x-1 transition-transform cursor-pointer">
+      <button
+        onClick={onClick}
+        className="inline-flex items-center text-orange-600 font-semibold text-sm hover:translate-x-1 transition-transform cursor-pointer"
+      >
         {linkText} <ArrowRight className="w-4 h-4 ml-1" />
-      </span>
+      </button>
     </div>
   </div>
 );
 
 const SimpleSetup = () => {
+  const navigate = useNavigate();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
   return (
     <section className="relative overflow-hidden">
       <Sectionheader />
       <div className="max-w-6xl mx-auto px-6 relative z-10 ">
         <div className="max-w-5xl mx-auto  grid grid-cols-1 md:grid-cols-2  relative z-20">
-            <FeatureCard
-              title="Register & Login"
-              description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
-              icon={UserPlus}
-              image="/onboading.png"
-              linkText="Get Started"
-            />
-            <FeatureCard
-              title="Generate Script"
-              description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
-              icon={Code2}
-              image="/GenerateScript.png"
-              linkText="View Documentation"
-            />
-            <FeatureCard
-              title="Embed Tracking Code"
-              description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
-              icon={ClipboardCopy}
-              image="/deploy.png"
-              linkText="Installation Guide"
-            />
-            <FeatureCard
-              title="View Real-time Analytics"
-              description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
-              icon={BarChart3}
-              image="/Analytics.png"
-              linkText="Explore Demo"
-            />
+          <FeatureCard
+            title="Register & Login"
+            description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
+            icon={UserPlus}
+            image="/onboading.png"
+            linkText="Get Started"
+            onClick={() => setIsRegisterOpen(true)}
+          />
+          <FeatureCard
+            title="Generate Script"
+            description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
+            icon={Code2}
+            image="/GenerateScript.png"
+            linkText="View Documentation"
+            onClick={() => navigate("/docs")}
+          />
+          <FeatureCard
+            title="Embed Tracking Code"
+            description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
+            icon={ClipboardCopy}
+            image="/deploy.png"
+            linkText="Installation Guide"
+            onClick={() => navigate("/docs")}
+          />
+          <FeatureCard
+            title="View Real-time Analytics"
+            description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
+            icon={BarChart3}
+            image="/Analytics.png"
+            linkText="Explore Demo"
+            onClick={() => navigate("/docs")}
+          />
         </div>
       </div>
+
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSwitchToRegister={() => {
+          setIsLoginOpen(false);
+          setIsRegisterOpen(true);
+        }}
+      />
+
+      <RegisterModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+        onSwitchToLogin={() => {
+          setIsRegisterOpen(false);
+          setIsLoginOpen(true);
+        }}
+      />
     </section>
   );
 };
