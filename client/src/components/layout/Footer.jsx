@@ -8,8 +8,8 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-4">
             <div className="flex items-center gap-1 mb-6">
               <img
-                src="/h.png"
-                alt="OkUnix Logo"
+                src="/h.webp"
+                alt="Okunix Logo"
                 className="h-8 w-auto object-contain"
               />
               <span className="font-bold text-xl tracking-tight text-gray-900">

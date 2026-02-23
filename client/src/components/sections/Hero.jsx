@@ -43,7 +43,7 @@ const Hero = () => {
       <div className="w-full lg:w-[70%] lg:-ml-[15%] mt-12 lg:mt-0 relative z-10">
         <div className="relative">
           <img
-            src="/Analytics-Photoroom.png"
+            src="/Analytics-Photoroom.webp"
             alt="OkUnix Analytics Dashboard"
             className="w-full h-auto"
           />

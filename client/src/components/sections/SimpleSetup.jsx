@@ -60,7 +60,7 @@ const SimpleSetup = () => {
             title="Register & Login"
             description="Create your account to get started. Secure authentication ensures your data remains private and accessible only to you."
             icon={UserPlus}
-            image="/onboading.png"
+            image="/onboading.webp"
             linkText="Get Started"
             onClick={() => setIsRegisterOpen(true)}
           />
@@ -68,7 +68,7 @@ const SimpleSetup = () => {
             title="Generate Script"
             description="Our system automatically generates a unique, lightweight tracking script tailored for your specific website configuration."
             icon={Code2}
-            image="/GenerateScript.png"
+            image="/GenerateScript.webp"
             linkText="View Documentation"
             onClick={() => navigate("/docs")}
           />
@@ -76,7 +76,7 @@ const SimpleSetup = () => {
             title="Embed Tracking Code"
             description="Simply copy and paste the generated script into the <head> tag of your website. No complex coding knowledge required."
             icon={ClipboardCopy}
-            image="/deploy.png"
+            image="/deploy.webp"
             linkText="Installation Guide"
             onClick={() => navigate("/docs")}
           />
@@ -84,7 +84,7 @@ const SimpleSetup = () => {
             title="View Real-time Analytics"
             description="Access your dashboard instantly to see live traffic, user behavior, and insightful metrics unfold in real-time."
             icon={BarChart3}
-            image="/Analytics.png"
+            image="/Analytics.webp"
             linkText="Explore Demo"
             onClick={() => navigate("/docs")}
           />

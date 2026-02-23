@@ -117,7 +117,7 @@ const Sidebar = ({ className }) => {
             <div className="flex items-center gap-0.5 overflow-hidden w-full lg:w-auto pl-12 lg:pl-0">
               <div className="h-8 w-8 shrink-0">
                 <img
-                  src="/header.png"
+                  src="/header.webp"
                   alt=""
                   className="w-full h-full object-contain"
                 />
@@ -129,7 +129,7 @@ const Sidebar = ({ className }) => {
           ) : (
             <div className="w-8 h-8 flex items-center justify-center mx-auto shrink-0">
               <img
-                src="/header.png"
+                src="/header.webp"
                 alt=""
                 className="w-8 h-8 object-contain"
               />

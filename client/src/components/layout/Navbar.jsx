@@ -19,7 +19,7 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen(false)}
         >
           <img
-            src="/h.png"
+            src="/h.webp"
             alt="OkUnix Logo"
             className="h-8 w-auto object-contain"
           />
