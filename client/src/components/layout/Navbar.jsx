@@ -60,6 +60,7 @@ const Navbar = () => {
             href="https://github.com/SAYOUNCDR/okunix"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Okunix GitHub Repository"
             className="hidden lg:flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-2"
           >
             <Github size={20} />
@@ -85,6 +86,7 @@ const Navbar = () => {
           <button
             className="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none p-1"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle mobile menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

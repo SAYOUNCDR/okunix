@@ -4,7 +4,8 @@
   
   <a href="https://okunix.tech">Website Link 1</a> •
   <a href="https://okunix.sayoun.studio">Website Link 2</a> •
-  <a href="https://github.com/SAYOUNCDR/okunix">GitHub Repository</a>
+  <a href="https://github.com/SAYOUNCDR/okunix">GitHub Repository</a> •
+  <a href="./API.md">API Reference</a>
 </div>
 
 <br />
@@ -35,7 +36,7 @@ Okunix is a powerful, self-hostable web analytics platform designed to track, ag
 Okunix is built on the MERN stack, delivering high-performance telemetry processing via Node.js streams and efficient aggregation pipelines via MongoDB.
 
 - **Frontend**: React.js, TailwindCSS, Chart.js, Lucide Icons
-- **Backend**: Node.js, Express.js
+- **Backend**: Node.js, Express.js (See [API Reference](API.md))
 - **Database**: MongoDB & Mongoose ORM
 - **Authentication**: JWT-based stateless authentication
 
