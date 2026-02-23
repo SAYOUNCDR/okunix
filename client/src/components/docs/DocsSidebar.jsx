@@ -81,7 +81,7 @@ const DocsSidebar = ({ activeDoc, onSelect, className, backLink }) => {
                     <li key={item.id}>
                       <button
                         onClick={() => onSelect(item.id)}
-                        className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-all duration-200 group text-left ${
+                        className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-all duration-200 group cursor-pointer text-left ${
                           isActive
                             ? "bg-white text-orange-600 shadow-sm ring-1 ring-gray-900/5"
                             : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"

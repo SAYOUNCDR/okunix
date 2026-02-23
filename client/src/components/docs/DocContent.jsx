@@ -14,6 +14,21 @@ import {
   AlertCircle,
   Copy,
   Check,
+  Eye,
+  Users,
+  Activity,
+  Router,
+  MapPin,
+  Clock,
+  Tag,
+  GitCompare,
+  ListFilter,
+  Target,
+  Map,
+  ShieldCheck,
+  UserX,
+  Cookie,
+  DatabaseZap,
 } from "lucide-react";
 
 // Table of contents item component
@@ -140,13 +155,14 @@ const DocContent = ({ activeDoc, onNavigate }) => {
               personal data. Your visitors stay 100% anonymous.
             </li>
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <strong>Data Ownership :</strong> Self-host on your infrastructure.
-              Your analytics data never leaves your servers, putting you in full
-              control.
+              <strong>Data Ownership :</strong> Self-host on your
+              infrastructure. Your analytics data never leaves your servers,
+              putting you in full control.
             </li>
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <strong>Lightweight :</strong> The tracking script is under 2KB. It
-              won't slow down your website's performance or impact SEO scores.
+              <strong>Lightweight :</strong> The tracking script is under 2KB.
+              It won't slow down your website's performance or impact SEO
+              scores.
             </li>
             <li className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <strong>Open Source :</strong> Fully transparent telemetry systems
@@ -200,41 +216,49 @@ const DocContent = ({ activeDoc, onNavigate }) => {
               {
                 title: "Page views",
                 desc: "Knowing which of your pages gets the most traffic is essential to improving your website content.",
+                icon: Eye,
               },
               {
                 title: "Visitors",
                 desc: "Get detailed information about your visitors like their device, browser, OS and location.",
+                icon: Users,
               },
               {
                 title: "Bounce rate",
                 desc: "See which pages keep your visitors engaged versus those they are abandoning.",
+                icon: Activity,
               },
               {
                 title: "Traffic sources",
                 desc: "See where your traffic is coming from to better understand where you should be spending your effort.",
+                icon: Router,
               },
               {
                 title: "Location & Devices",
                 desc: "Find out where your visitors are coming from, and the most popular devices used by visitors.",
+                icon: MapPin,
               },
               {
                 title: "Realtime data",
                 desc: "Data available in seconds, not days. The data that OkUnix collects is immediately available on your dashboard.",
+                icon: Clock,
               },
               {
                 title: "Custom events",
                 desc: "Track everything that happens on your website like signups and checkouts using custom events.",
+                icon: Zap,
               },
               {
                 title: "UTM tracking",
                 desc: "Measure the effectiveness of your campaign by analyzing UTM query parameters that are automatically collected.",
+                icon: Tag,
               },
             ].map((f, i) => (
               <li
                 key={`analytics-${i}`}
                 className="flex gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100"
               >
-                <Check className="text-green-500 shrink-0 mt-0.5" size={18} />
+                <f.icon className="text-green-500 shrink-0 mt-0.5" size={18} />
                 <div>
                   <strong className="text-gray-900 block mb-1 text-sm">
                     {f.title}
@@ -255,25 +279,29 @@ const DocContent = ({ activeDoc, onNavigate }) => {
               {
                 title: "Compare & Breakdown",
                 desc: "See your metric performance compared against previous date ranges, and dive deeper using segments and filters.",
+                icon: GitCompare,
               },
               {
                 title: "Funnels & Retention",
                 desc: "Understand the conversion and drop-off rate of users, and measure your website stickiness by tracking how often users return.",
+                icon: ListFilter,
               },
               {
                 title: "Goals",
                 desc: "Track your goals for pageviews and events directly within the dashboard.",
+                icon: Target,
               },
               {
                 title: "Journey & Routing",
                 desc: "Look into your user pathways, how they navigate, what drives conversions, and their entry/exit pages.",
+                icon: Map,
               },
             ].map((f, i) => (
               <li
                 key={`insights-${i}`}
                 className="flex gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100"
               >
-                <Check className="text-orange-500 shrink-0 mt-0.5" size={18} />
+                <f.icon className="text-orange-500 shrink-0 mt-0.5" size={18} />
                 <div>
                   <strong className="text-gray-900 block mb-1 text-sm">
                     {f.title}
@@ -294,25 +322,29 @@ const DocContent = ({ activeDoc, onNavigate }) => {
               {
                 title: "GDPR & CCPA Compliant",
                 desc: "OkUnix never collects any personal information from your visitors so it is fully compliant.",
+                icon: ShieldCheck,
               },
               {
                 title: "Data Anonymization",
                 desc: "All visitor data is anonymized. We apply strict cryptographic hashing to ensure privacy is always protected.",
+                icon: UserX,
               },
               {
                 title: "No Cookies",
                 desc: "OkUnix does not use any tracking cookies, so no annoying cookie banner is required on your website.",
+                icon: Cookie,
               },
               {
                 title: "Full Data Ownership",
                 desc: "Data is always in your control. You can self-host on your own infrastructure or export your data at any time.",
+                icon: DatabaseZap,
               },
             ].map((f, i) => (
               <li
                 key={`privacy-${i}`}
                 className="flex gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100"
               >
-                <Check className="text-blue-500 shrink-0 mt-0.5" size={18} />
+                <f.icon className="text-blue-500 shrink-0 mt-0.5" size={18} />
                 <div>
                   <strong className="text-gray-900 block mb-1 text-sm">
                     {f.title}
