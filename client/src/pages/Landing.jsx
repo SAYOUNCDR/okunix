@@ -18,7 +18,7 @@ const Landing = () => {
     }
   }, [user, loading, navigate]);
 
-  if (loading) return null; // Or a subtle loading spinner
+  if (loading) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

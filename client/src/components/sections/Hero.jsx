@@ -1,8 +1,12 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../common/Button";
+import LoginModal from "../auth/LoginModal";
+import RegisterModal from "../auth/RegisterModal";
 
 const Hero = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   return (
     <section className="pt-24 pb-16 pl-4 w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center overflow-x-hidden md:overflow-visible ">
       <div className="w-full lg:w-[45%] text-center lg:text-left z-20  shrink-0 pointer-events-none">
@@ -18,12 +22,13 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-row gap-4 justify-center lg:justify-start">
-            <Link to="/features">
-              <Button className="w-auto px-4! py-2! text-md! h-auto  bg-orange-600 text-white hover:bg-orange-700 hover:border-orange-700 shadow-lg shadow-orange-200/50 ">
-                Start Free Trial
-              </Button>
-            </Link>
-            <Link to="/features">
+            <Button
+              className="w-auto px-4! py-2! text-md! h-auto bg-orange-600 text-white hover:bg-orange-700 hover:border-orange-700 shadow-lg shadow-orange-200/50"
+              onClick={() => setIsLoginOpen(true)}
+            >
+              Start Free Trial
+            </Button>
+            <Link to="/docs">
               <Button
                 variant="ghost"
                 className="w-auto px-4! py-2! text-md! h-auto  bg-slate-300 text-gray-700 border border-gray-300 shadow-sm "
@@ -44,9 +49,26 @@ const Hero = () => {
           />
         </div>
       </div>
+
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSwitchToRegister={() => {
+          setIsLoginOpen(false);
+          setIsRegisterOpen(true);
+        }}
+      />
+
+      <RegisterModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+        onSwitchToLogin={() => {
+          setIsRegisterOpen(false);
+          setIsLoginOpen(true);
+        }}
+      />
     </section>
   );
 };
-
 
 export default Hero;

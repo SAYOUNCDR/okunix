@@ -13,7 +13,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-// Documentation navigation structure
+
 const SECTIONS = [
   {
     title: "Getting Started",
