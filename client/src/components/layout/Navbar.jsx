@@ -64,7 +64,7 @@ const Navbar = () => {
             className="hidden lg:flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-2"
           >
             <Github size={20} />
-            <span className="font-medium">4</span>
+            <span className="font-medium">7 Stars</span>
           </a>
 
           <Button

@@ -18,6 +18,7 @@ const UserSetting = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [isChangeEmailModalOpen, setIsChangeEmailModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isSendingReset, setIsSendingReset] = useState(false);
   const [resetSent, setResetSent] = useState(false);
 
@@ -45,6 +46,7 @@ const UserSetting = () => {
       await forgotPassword(user.email);
       setResetSent(true);
       setTimeout(() => setResetSent(false), 5000); // Hide success message after 5 seconds
+      setIsResetModalOpen(false);
     } catch (error) {
       console.error("Failed to send reset email:", error);
       alert("Failed to send password reset email. Please try again.");
@@ -121,11 +123,10 @@ const UserSetting = () => {
               </div>
               <div>
                 <button
-                  onClick={handleForgotPassword}
-                  disabled={isSendingReset}
+                  onClick={() => setIsResetModalOpen(true)}
                   className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-gray-50 shadow-sm"
                 >
-                  {isSendingReset ? "Sending..." : "Change password"}
+                  Change password
                 </button>
                 {resetSent && (
                   <p className="text-xs text-green-600 mt-2">
@@ -169,6 +170,18 @@ const UserSetting = () => {
           </div>
         </div>
       </main>
+
+      <DangerModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        title="Change Password"
+        description="We will send a secure password reset link to your registered email address."
+        confirmText="Send Reset Link"
+        message={`Are you sure you want to change your password, ${user?.username}?`}
+        onConfirm={handleForgotPassword}
+        isLoading={isSendingReset}
+        color="orange"
+      />
 
       <DangerModal
         isOpen={isDeleteModalOpen}

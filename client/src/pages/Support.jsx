@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import {
   Mail,
@@ -65,14 +66,15 @@ const Support = () => {
                   </p>
                 </div>
                 <div className="flex items-center text-sm font-medium bg-white/10 w-fit px-3 py-1.5 rounded-lg backdrop-blur-sm group-hover:bg-white/20 transition-colors">
-                  Join Server <ExternalLink size={14} className="ml-2" />
+                  Join Server (Coming Soon){" "}
+                  <ExternalLink size={14} className="ml-2" />
                 </div>
               </div>
             </a>
 
             {/* Docs - Self Serve */}
-            <a
-              href="#"
+            <Link
+              to="/docs"
               className="bg-white p-6 rounded-2xl border border-gray-200 hover:border-gray-300 transition-all shadow-sm  group flex flex-col justify-between"
             >
               <div>
@@ -92,7 +94,7 @@ const Support = () => {
                   →
                 </span>
               </div>
-            </a>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,7 +108,7 @@ const Support = () => {
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 text-sm">
-                  Telegram Channel
+                  Telegram Channel (Coming Soon)
                 </h3>
                 <p className="text-gray-500 text-xs mt-0.5">
                   Quick updates & chat

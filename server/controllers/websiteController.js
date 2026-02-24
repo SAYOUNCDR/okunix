@@ -3,7 +3,7 @@ const TrackedData = require("../models/trackedDataModal");
 
 exports.createWebsite = async (req, res) => {
   const { websiteName, domain } = req.body;
-  const userId = req.user.id; // Using 'id' from token payload
+  const userId = req.user.id;
 
   try {
     if (!websiteName || !domain) {
