@@ -8,7 +8,7 @@ const analyticsRoute = require("./routes/analyticsRoute");
 const app = express();
 
 // Trust proxy is required when behind Nginx/Load Balancers so req.ip and request-ip work correctly
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 
 // 1. Strict CORS for Dashboard (Login, Settings, Viewing Data)
 const allowedOrigins = [
