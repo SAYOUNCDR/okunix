@@ -5,6 +5,7 @@ module.exports = {
             name: "okunix-backend",
             script: "server.js",
             cwd: "/home/azureuser/projects/okunix/server",
+            node_args: "--max-old-space-size=512",
             env_file: "/home/azureuser/projects/okunix/server/.env",
             env: {
                 NODE_ENV: "production",
