@@ -90,6 +90,8 @@ jobs:
             
             # 4. Extract the new bundle
             tar -xzf deploy.tar.gz -C .
+
+            chmod -R 755 ~/projects/okunix/client-dist
             
             # 5. Inject Backend Secrets
             echo "${{ secrets.SERVER_ENV }}" > server/.env
@@ -111,6 +113,10 @@ jobs:
             LATEST_BACKUP=$(ls -t backup_*.tar.gz 2>/dev/null | head -1)
             if [ -n "$LATEST_BACKUP" ]; then
               tar -xzf "$LATEST_BACKUP" -C .
+              
+              # 🚀 NEW ADDITION: Ensure Nginx can read the rolled-back files too
+              chmod -R 755 ~/projects/okunix/client-dist
+              
               pm2 startOrReload ecosystem.config.js
               echo "✅ Successfully rolled back to $LATEST_BACKUP"
             else
