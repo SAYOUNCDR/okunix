@@ -34,6 +34,7 @@ import {
   getSourcesMetrics,
   getPagesMetrics,
 } from "../services/analyticsApi";
+import { getWebsite } from "../services/websiteApi";
 
 const DashboardDetail = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const DashboardDetail = () => {
   const [loadingStats, setLoadingStats] = useState(true);
   const [chartData, setChartData] = useState([]);
   const [loadingChart, setLoadingChart] = useState(true);
+  const [website, setWebsite] = useState(null);
 
   // New states for location and environment
   const [locationData, setLocationData] = useState({
@@ -126,9 +128,20 @@ const DashboardDetail = () => {
       }
     };
 
+    const fetchWebsiteDetail = async () => {
+      if (!websiteId) return;
+      try {
+        const res = await getWebsite(websiteId);
+        setWebsite(res.website);
+      } catch (error) {
+        console.error("Failed to fetch website details:", error);
+      }
+    };
+
     fetchStats();
     fetchChartData();
     fetchExtras();
+    fetchWebsiteDetail();
   }, [websiteId]);
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
@@ -148,17 +161,26 @@ const DashboardDetail = () => {
 
           <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div className="flex flex-col gap-1 min-w-0 w-full sm:w-auto">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                Dev Calendar
-              </h1>
-              <a
-                href="https://devcalendar.sayoun.studio"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-500 hover:text-gray-700 transition-colors text-xs sm:text-sm flex items-center gap-1 truncate"
-              >
-                devcalendar.sayoun.studio
-              </a>
+              {website ? (
+                <>
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                    {website.websiteName}
+                  </h1>
+                  <a
+                    href={`https://${website.domain}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-gray-500 hover:text-gray-700 transition-colors text-xs sm:text-sm flex items-center gap-1 truncate"
+                  >
+                    {website.domain}
+                  </a>
+                </>
+              ) : (
+                <div className="animate-pulse flex flex-col gap-2 py-1">
+                  <div className="h-7 bg-gray-200 rounded w-48"></div>
+                  <div className="h-4 bg-gray-200 rounded w-32"></div>
+                </div>
+              )}
             </div>
 
             <Button
