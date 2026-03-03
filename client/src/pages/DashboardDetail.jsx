@@ -182,14 +182,6 @@ const DashboardDetail = () => {
                 </div>
               )}
             </div>
-
-            <Button
-              onClick={() => navigate(`/dashboard/setting/${websiteId}`)}
-              className="flex items-center gap-2 w-full sm:w-auto justify-center"
-            >
-              <Cog size={16} />
-              Edit
-            </Button>
           </div>
         </header>
 
