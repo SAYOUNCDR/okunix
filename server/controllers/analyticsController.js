@@ -2,6 +2,24 @@ const mongoose = require("mongoose");
 const TrackedData = require("../models/trackedDataModal");
 const Website = require("../models/websiteModal");
 
+const parseRangeBounds = (rangeStr) => {
+    const match = (rangeStr || "24h").match(/^(\d+)([hdM])$/);
+    let durationMs = 0;
+    if (match) {
+        const value = parseInt(match[1]);
+        const unit = match[2];
+        if (unit === "h") durationMs = value * 60 * 60 * 1000;
+        else if (unit === "d") durationMs = value * 24 * 60 * 60 * 1000;
+        else if (unit === "M") durationMs = value * 30 * 24 * 60 * 60 * 1000; // rough month
+    } else {
+        durationMs = 24 * 60 * 60 * 1000; // Default 24h
+    }
+    const now = new Date();
+    const currentStart = new Date(now.getTime() - Math.abs(durationMs));
+    const previousStart = new Date(currentStart.getTime() - Math.abs(durationMs));
+    return { now, currentStart, previousStart, durationMs };
+};
+
 exports.getStats = async (req, res) => {
     try {
         const { websiteId } = req.params;
@@ -17,26 +35,11 @@ exports.getStats = async (req, res) => {
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
         // 2. Determine Date Ranges
-        const now = new Date();
-        let currentStartDate = new Date();
-        let previousStartDate = new Date();
-        let previousEndDate = new Date();
-
-        const match = range.match(/^(\d+)([hd])$/);
-        let durationMs = 0;
-
-        if (match) {
-            const value = parseInt(match[1]);
-            const unit = match[2];
-            durationMs = unit === "h" ? value * 60 * 60 * 1000 : value * 24 * 60 * 60 * 1000;
-        } else {
-            // Default 7 days fallback
-            durationMs = 7 * 24 * 60 * 60 * 1000;
-        }
-
-        currentStartDate = new Date(now.getTime() - durationMs);
-        previousEndDate = currentStartDate;
-        previousStartDate = new Date(currentStartDate.getTime() - durationMs);
+        const bounds = parseRangeBounds(range);
+        const { now, currentStart, previousStart } = bounds;
+        const currentStartDate = currentStart;
+        const previousEndDate = currentStart;
+        const previousStartDate = previousStart;
 
 
         // 3. Helper to Aggregate Stats for Date Range
@@ -182,15 +185,14 @@ exports.getActivityChart = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
-        // We want the last 7 days by default
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const { range } = req.query;
+        const { currentStart } = parseRangeBounds(range);
 
         const chartData = await TrackedData.aggregate([
             {
                 $match: {
                     websiteId: objectId,
-                    createdAt: { $gte: sevenDaysAgo }
+                    createdAt: { $gte: currentStart }
                 }
             },
             {
@@ -243,9 +245,12 @@ exports.getLocationMetrics = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
+        const { range } = req.query;
+        const { currentStart, now } = parseRangeBounds(range);
+
         // Group by visitorId first so we count Unique Visitors, using their last known location
         const visitorLocations = await TrackedData.aggregate([
-            { $match: { websiteId: objectId } },
+            { $match: { websiteId: objectId, createdAt: { $gte: currentStart, $lte: now } } },
             { $sort: { createdAt: 1 } },
             {
                 $group: {
@@ -311,8 +316,11 @@ exports.getEnvironmentMetrics = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
+        const { range } = req.query;
+        const { currentStart, now } = parseRangeBounds(range);
+
         const visitorEnvironments = await TrackedData.aggregate([
-            { $match: { websiteId: objectId } },
+            { $match: { websiteId: objectId, createdAt: { $gte: currentStart, $lte: now } } },
             { $sort: { createdAt: 1 } },
             {
                 $group: {
@@ -376,15 +384,14 @@ exports.getHeatmapData = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
-        // Limit to past 7 days to keep heatmap relevant to recent traffic
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const { range } = req.query;
+        const { currentStart, now } = parseRangeBounds(range);
 
         const heatmapStats = await TrackedData.aggregate([
             {
                 $match: {
                     websiteId: objectId,
-                    createdAt: { $gte: sevenDaysAgo }
+                    createdAt: { $gte: currentStart, $lte: now }
                 }
             },
             {
@@ -439,9 +446,12 @@ exports.getSourcesMetrics = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
+        const { range } = req.query;
+        const { currentStart, now } = parseRangeBounds(range);
+
         // Group by sessionId to get the first referrer of each session
         const sessionSources = await TrackedData.aggregate([
-            { $match: { websiteId: objectId } },
+            { $match: { websiteId: objectId, createdAt: { $gte: currentStart, $lte: now } } },
             { $sort: { createdAt: 1 } },
             {
                 $group: {
@@ -503,6 +513,9 @@ exports.getPagesMetrics = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
+        const { range } = req.query;
+        const { currentStart, now } = parseRangeBounds(range);
+
         // Helper to extract path
         const getPath = (fullUrl) => {
             try {
@@ -515,7 +528,7 @@ exports.getPagesMetrics = async (req, res) => {
 
         // 1. Top Paths (most pageviews)
         const pathStats = await TrackedData.aggregate([
-            { $match: { websiteId: objectId, event: "pageview" } },
+            { $match: { websiteId: objectId, event: "pageview", createdAt: { $gte: currentStart, $lte: now } } },
             { $group: { _id: "$url", count: { $sum: 1 } } }
         ]);
 
@@ -537,7 +550,7 @@ exports.getPagesMetrics = async (req, res) => {
 
         // 2. Entry and Exit Pages
         const sessionPages = await TrackedData.aggregate([
-            { $match: { websiteId: objectId, event: "pageview" } },
+            { $match: { websiteId: objectId, event: "pageview", createdAt: { $gte: currentStart, $lte: now } } },
             { $sort: { createdAt: 1 } },
             {
                 $group: {

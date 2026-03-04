@@ -51,6 +51,21 @@ const DashboardDetail = () => {
   const [chartData, setChartData] = useState([]);
   const [loadingChart, setLoadingChart] = useState(true);
   const [website, setWebsite] = useState(null);
+  const [timeRange, setTimeRange] = useState("Last 24 hours");
+
+  const getMappedRange = (rangeLabel) => {
+    switch (rangeLabel) {
+      case "Last 7 days":
+        return "7d";
+      case "Last 30 days":
+        return "30d";
+      case "Last 3 months":
+        return "3M";
+      case "Last 24 hours":
+      default:
+        return "24h";
+    }
+  };
 
   // New states for location and environment
   const [locationData, setLocationData] = useState({
@@ -75,11 +90,13 @@ const DashboardDetail = () => {
   const [loadingExtras, setLoadingExtras] = useState(true);
 
   useEffect(() => {
+    const mappedRange = getMappedRange(timeRange);
+
     const fetchStats = async () => {
       if (!websiteId) return;
       try {
         setLoadingStats(true);
-        const data = await getDashboardStats(websiteId);
+        const data = await getDashboardStats(websiteId, mappedRange);
         setStats(data);
       } catch (error) {
         // Error handled in service layer
@@ -92,7 +109,7 @@ const DashboardDetail = () => {
       if (!websiteId) return;
       try {
         setLoadingChart(true);
-        const data = await getActivityChart(websiteId);
+        const data = await getActivityChart(websiteId, mappedRange);
         setChartData(data);
       } catch (error) {
         // Error handled in service layer
@@ -107,11 +124,11 @@ const DashboardDetail = () => {
         setLoadingExtras(true);
         const [locData, envData, heatData, srcData, pgData] = await Promise.all(
           [
-            getLocationMetrics(websiteId),
-            getEnvironmentMetrics(websiteId),
-            getHeatmapData(websiteId),
-            getSourcesMetrics(websiteId),
-            getPagesMetrics(websiteId),
+            getLocationMetrics(websiteId, mappedRange),
+            getEnvironmentMetrics(websiteId, mappedRange),
+            getHeatmapData(websiteId, mappedRange),
+            getSourcesMetrics(websiteId, mappedRange),
+            getPagesMetrics(websiteId, mappedRange),
           ],
         );
         setLocationData(locData);
@@ -142,7 +159,7 @@ const DashboardDetail = () => {
     fetchChartData();
     fetchExtras();
     fetchWebsiteDetail();
-  }, [websiteId]);
+  }, [websiteId, timeRange]);
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
@@ -196,7 +213,7 @@ const DashboardDetail = () => {
                   </button>
                 </div>
                 <div className="w-full sm:w-auto">
-                  <TimeFilter />
+                  <TimeFilter value={timeRange} onChange={setTimeRange} />
                 </div>
               </div>
             </div>

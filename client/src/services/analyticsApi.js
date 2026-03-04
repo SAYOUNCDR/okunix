@@ -3,9 +3,9 @@ import api from "./api";
 /**
  * Fetch top-level dashboard statistics (Visitors, Visits, Views, Bounce Rate, Duration)
  */
-export const getDashboardStats = async (websiteId) => {
+export const getDashboardStats = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/stats/${websiteId}`);
+        const response = await api.get(`/analytics/stats/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch analytics stats:", error);
@@ -16,9 +16,9 @@ export const getDashboardStats = async (websiteId) => {
 /**
  * Fetch daily aggregation chart data for the last 7 days
  */
-export const getActivityChart = async (websiteId) => {
+export const getActivityChart = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/chart/${websiteId}`);
+        const response = await api.get(`/analytics/chart/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch analytics chart:", error);
@@ -29,9 +29,9 @@ export const getActivityChart = async (websiteId) => {
 /**
  * Fetch location metrics (Countries, Regions, Cities)
  */
-export const getLocationMetrics = async (websiteId) => {
+export const getLocationMetrics = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/location/${websiteId}`);
+        const response = await api.get(`/analytics/location/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch location analytics:", error);
@@ -42,9 +42,9 @@ export const getLocationMetrics = async (websiteId) => {
 /**
  * Fetch environment metrics (Browsers, OS, Devices)
  */
-export const getEnvironmentMetrics = async (websiteId) => {
+export const getEnvironmentMetrics = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/environment/${websiteId}`);
+        const response = await api.get(`/analytics/environment/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch environment analytics:", error);
@@ -55,9 +55,9 @@ export const getEnvironmentMetrics = async (websiteId) => {
 /**
  * Fetch traffic heatmap logic (returning default 7x24 arrays natively)
  */
-export const getHeatmapData = async (websiteId) => {
+export const getHeatmapData = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/heatmap/${websiteId}`);
+        const response = await api.get(`/analytics/heatmap/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch heatmap data:", error);
@@ -68,9 +68,9 @@ export const getHeatmapData = async (websiteId) => {
 /**
  * Fetch sources (referrers) metrics
  */
-export const getSourcesMetrics = async (websiteId) => {
+export const getSourcesMetrics = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/sources/${websiteId}`);
+        const response = await api.get(`/analytics/sources/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch sources metrics:", error);
@@ -81,9 +81,9 @@ export const getSourcesMetrics = async (websiteId) => {
 /**
  * Fetch top paths, entry pages, and exit pages
  */
-export const getPagesMetrics = async (websiteId) => {
+export const getPagesMetrics = async (websiteId, range = "24h") => {
     try {
-        const response = await api.get(`/analytics/pages/${websiteId}`);
+        const response = await api.get(`/analytics/pages/${websiteId}?range=${range}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch pages metrics:", error);
