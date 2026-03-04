@@ -224,6 +224,21 @@ const DashboardDetail = () => {
     fetchExtras();
     fetchWebsiteDetail();
   }, [websiteId, timeRange, chartFilter, timeOffset]);
+
+  const getEmptyChartText = () => {
+    if (timeOffset > 0) {
+      if (timeRange === "Last 24 hours")
+        return "No data available for this date.";
+      if (timeRange === "Last 7 days")
+        return "No data available for this week.";
+      if (timeRange === "Last 30 days")
+        return "No data available for this month.";
+      if (timeRange === "Last 3 months")
+        return "No data available for this period.";
+    }
+    return `No activity data for the ${timeRange.toLowerCase()}.`;
+  };
+
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
@@ -292,7 +307,10 @@ const DashboardDetail = () => {
                 <div className="w-full sm:w-auto">
                   <TimeFilter
                     value={timeRange}
-                    onChange={setTimeRange}
+                    onChange={(val) => {
+                      setTimeRange(val);
+                      setTimeOffset(0);
+                    }}
                     customDisplay={getActiveDateLabel()}
                   />
                 </div>
@@ -406,9 +424,7 @@ const DashboardDetail = () => {
                   }
                 />
               ) : (
-                <p className="text-gray-500">
-                  No activity data for the last 7 days.
-                </p>
+                <p className="text-gray-500 text-sm">{getEmptyChartText()}</p>
               )}
             </div>
           </div>
