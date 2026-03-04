@@ -53,6 +53,47 @@ const DashboardDetail = () => {
   const [chartFilter, setChartFilter] = useState("Day");
   const [website, setWebsite] = useState(null);
   const [timeRange, setTimeRange] = useState("Last 24 hours");
+  const [timeOffset, setTimeOffset] = useState(0);
+
+  // Parse range into duration for UI calculation, similar to backend parseRangeBounds
+  const getDurationMs = (rangeStr) => {
+    const match = (rangeStr || "24h").match(/^(\d+)([hdM])$/);
+    let durationMs = 0;
+    if (match) {
+      const value = parseInt(match[1]);
+      const unit = match[2];
+      if (unit === "h") durationMs = value * 60 * 60 * 1000;
+      else if (unit === "d") durationMs = value * 24 * 60 * 60 * 1000;
+      else if (unit === "M") durationMs = value * 30 * 24 * 60 * 60 * 1000;
+    } else {
+      durationMs = 24 * 60 * 60 * 1000;
+    }
+    return durationMs;
+  };
+
+  const getActiveDateLabel = () => {
+    if (timeOffset === 0) return timeRange;
+    const mappedRange = getMappedRange(timeRange);
+    const durationMs = getDurationMs(mappedRange);
+
+    const now = new Date();
+    const rangeEnd = new Date(now.getTime() - timeOffset * durationMs);
+    const rangeStart = new Date(rangeEnd.getTime() - durationMs);
+
+    // Format e.g., "Mar 2, 2026" or "Feb 28 - Mar 2, 2026" depending on range
+    const options = { month: "short", day: "numeric", year: "numeric" };
+
+    if (timeRange === "Last 24 hours") {
+      return rangeStart.toLocaleDateString("en-US", options);
+    } else {
+      const startStr = rangeStart.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+      const endStr = rangeEnd.toLocaleDateString("en-US", options);
+      return `${startStr} - ${endStr}`;
+    }
+  };
 
   const getMappedRange = (rangeLabel) => {
     switch (rangeLabel) {
@@ -94,6 +135,10 @@ const DashboardDetail = () => {
     timeRange === "Last 3 months" ? ["Day", "Month"] : ["Day", "Hour"];
 
   useEffect(() => {
+    setTimeOffset(0);
+  }, [timeRange]);
+
+  useEffect(() => {
     if (!chartOptions.includes(chartFilter)) {
       setChartFilter("Day");
     }
@@ -106,7 +151,11 @@ const DashboardDetail = () => {
       if (!websiteId) return;
       try {
         setLoadingStats(true);
-        const data = await getDashboardStats(websiteId, mappedRange);
+        const data = await getDashboardStats(
+          websiteId,
+          mappedRange,
+          timeOffset,
+        );
         setStats(data);
       } catch (error) {
         // Error handled in service layer
@@ -123,6 +172,7 @@ const DashboardDetail = () => {
           websiteId,
           mappedRange,
           chartFilter,
+          timeOffset,
         );
         setChartData(data);
       } catch (error) {
@@ -138,11 +188,11 @@ const DashboardDetail = () => {
         setLoadingExtras(true);
         const [locData, envData, heatData, srcData, pgData] = await Promise.all(
           [
-            getLocationMetrics(websiteId, mappedRange),
-            getEnvironmentMetrics(websiteId, mappedRange),
-            getHeatmapData(websiteId, mappedRange),
-            getSourcesMetrics(websiteId, mappedRange),
-            getPagesMetrics(websiteId, mappedRange),
+            getLocationMetrics(websiteId, mappedRange, timeOffset),
+            getEnvironmentMetrics(websiteId, mappedRange, timeOffset),
+            getHeatmapData(websiteId, mappedRange, timeOffset),
+            getSourcesMetrics(websiteId, mappedRange, timeOffset),
+            getPagesMetrics(websiteId, mappedRange, timeOffset),
           ],
         );
         setLocationData(locData);
@@ -173,7 +223,7 @@ const DashboardDetail = () => {
     fetchChartData();
     fetchExtras();
     fetchWebsiteDetail();
-  }, [websiteId, timeRange, chartFilter]);
+  }, [websiteId, timeRange, chartFilter, timeOffset]);
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
@@ -219,15 +269,32 @@ const DashboardDetail = () => {
 
               <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                 <div className="flex items-center gap-2 mr-auto sm:mr-0">
-                  <button className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg cursor-pointer hover:bg-gray-50 shadow-sm">
+                  <button
+                    onClick={() => setTimeOffset((prev) => prev + 1)}
+                    className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg cursor-pointer hover:bg-gray-50 shadow-sm"
+                  >
                     <ArrowLeft size={16} />
                   </button>
-                  <button className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium border border-slate-200 rounded-lg cursor-pointer hover:bg-gray-50 shadow-sm">
+                  <button
+                    onClick={() =>
+                      setTimeOffset((prev) => Math.max(0, prev - 1))
+                    }
+                    disabled={timeOffset === 0}
+                    className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 text-sm font-medium border rounded-lg transition-colors shadow-sm ${
+                      timeOffset === 0
+                        ? "border-slate-100 text-gray-300 cursor-not-allowed bg-gray-50/50"
+                        : "border-slate-200 text-gray-500 hover:text-gray-900 hover:bg-gray-50 cursor-pointer"
+                    }`}
+                  >
                     <ArrowRight size={16} />
                   </button>
                 </div>
                 <div className="w-full sm:w-auto">
-                  <TimeFilter value={timeRange} onChange={setTimeRange} />
+                  <TimeFilter
+                    value={timeRange}
+                    onChange={setTimeRange}
+                    customDisplay={getActiveDateLabel()}
+                  />
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-const TimeFilter = ({ value, onChange }) => {
+const TimeFilter = ({ value, onChange, customDisplay }) => {
   const [isOpen, setIsOpen] = useState(false);
   const options = [
     "Last 24 hours",
@@ -16,7 +16,9 @@ const TimeFilter = ({ value, onChange }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 h-9 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm min-w-35 justify-between"
       >
-        <span className="text-sm font-medium text-gray-700">{value}</span>
+        <span className="text-sm font-medium text-gray-700">
+          {customDisplay || value}
+        </span>
         <ChevronDown size={14} className="text-gray-500" />
       </div>
 

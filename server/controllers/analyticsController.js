@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const TrackedData = require("../models/trackedDataModal");
 const Website = require("../models/websiteModal");
 
-const parseRangeBounds = (rangeStr) => {
+const parseRangeBounds = (rangeStr, offsetStr = "0") => {
     const match = (rangeStr || "24h").match(/^(\d+)([hdM])$/);
     let durationMs = 0;
     if (match) {
@@ -14,16 +14,20 @@ const parseRangeBounds = (rangeStr) => {
     } else {
         durationMs = 24 * 60 * 60 * 1000; // Default 24h
     }
-    const now = new Date();
+
+    const offset = parseInt(offsetStr) || 0;
+    // 'now' represents the moving upper bound
+    const now = new Date(Date.now() - (offset * durationMs));
     const currentStart = new Date(now.getTime() - Math.abs(durationMs));
     const previousStart = new Date(currentStart.getTime() - Math.abs(durationMs));
-    return { now, currentStart, previousStart, durationMs };
+
+    return { now, currentStart, previousStart, durationMs, offset };
 };
 
 exports.getStats = async (req, res) => {
     try {
         const { websiteId } = req.params;
-        const { range = "7d" } = req.query; // Default to 7 days
+        const { range = "7d", offset = "0" } = req.query; // Default to 7 days
         const userId = req.user.id; // From verifyToken middleware
 
         // 1. Verify ownership of the website
@@ -35,7 +39,7 @@ exports.getStats = async (req, res) => {
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
         // 2. Determine Date Ranges
-        const bounds = parseRangeBounds(range);
+        const bounds = parseRangeBounds(range, offset);
         const { now, currentStart, previousStart } = bounds;
         const currentStartDate = currentStart;
         const previousEndDate = currentStart;
@@ -185,8 +189,8 @@ exports.getActivityChart = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
-        const { range, filter = "Day" } = req.query;
-        const { currentStart } = parseRangeBounds(range);
+        const { range, filter = "Day", offset = "0" } = req.query;
+        const { currentStart, now } = parseRangeBounds(range, offset);
 
         let groupStage;
         if (filter === "Hour") {
@@ -210,7 +214,7 @@ exports.getActivityChart = async (req, res) => {
             {
                 $match: {
                     websiteId: objectId,
-                    createdAt: { $gte: currentStart }
+                    createdAt: { $gte: currentStart, $lte: now }
                 }
             },
             {
