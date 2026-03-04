@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-const BarChart = ({ data = [] }) => {
+const BarChart = ({ data = [], filterType = "Day" }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
@@ -68,6 +68,19 @@ const BarChart = ({ data = [] }) => {
             },
             cornerRadius: 8,
             displayColors: true,
+            callbacks: {
+              title: (context) => {
+                const index = context[0].dataIndex;
+                const item = data[index];
+                if (
+                  (filterType === "Hour" || filterType === "Month") &&
+                  item.fullDate
+                ) {
+                  return item.fullDate;
+                }
+                return context[0].label;
+              },
+            },
           },
         },
         scales: {

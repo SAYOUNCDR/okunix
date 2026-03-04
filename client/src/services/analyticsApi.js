@@ -16,9 +16,9 @@ export const getDashboardStats = async (websiteId, range = "24h") => {
 /**
  * Fetch daily aggregation chart data for the last 7 days
  */
-export const getActivityChart = async (websiteId, range = "24h") => {
+export const getActivityChart = async (websiteId, range = "24h", filter = "Day") => {
     try {
-        const response = await api.get(`/analytics/chart/${websiteId}?range=${range}`);
+        const response = await api.get(`/analytics/chart/${websiteId}?range=${range}&filter=${filter}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch analytics chart:", error);

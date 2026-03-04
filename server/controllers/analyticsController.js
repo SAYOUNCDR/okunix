@@ -185,8 +185,26 @@ exports.getActivityChart = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(websiteId);
 
-        const { range } = req.query;
+        const { range, filter = "Day" } = req.query;
         const { currentStart } = parseRangeBounds(range);
+
+        let groupStage;
+        if (filter === "Hour") {
+            // Group by date and hour (YYYY-MM-DD HH:00)
+            groupStage = {
+                $dateToString: { format: "%Y-%m-%d %H:00", date: "$createdAt" }
+            };
+        } else if (filter === "Month") {
+            // Group by month (YYYY-MM)
+            groupStage = {
+                $dateToString: { format: "%Y-%m", date: "$createdAt" }
+            };
+        } else {
+            // Default to Day
+            groupStage = {
+                $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+            };
+        }
 
         const chartData = await TrackedData.aggregate([
             {
@@ -196,9 +214,8 @@ exports.getActivityChart = async (req, res) => {
                 }
             },
             {
-                // Group by Date string (YYYY-MM-DD)
                 $group: {
-                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    _id: groupStage,
                     totalViews: {
                         $sum: { $cond: [{ $eq: ["$event", "pageview"] }, 1, 0] }
                     },
@@ -206,7 +223,6 @@ exports.getActivityChart = async (req, res) => {
                 }
             },
             {
-                // Format the output
                 $project: {
                     _id: 0,
                     date: "$_id",
@@ -214,17 +230,26 @@ exports.getActivityChart = async (req, res) => {
                     Visitors: { $size: "$uniqueVisitors" }
                 }
             },
-            { $sort: { date: 1 } } // Sort chronologically
+            { $sort: { date: 1 } }
         ]);
 
-        // Format Dates (e.g., "2026-02-14" to "Feb 14")
         const formattedData = chartData.map(item => {
-            const dateObj = new Date(item.date);
-            const formattedDate = dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-            return {
-                ...item,
-                date: formattedDate
-            };
+            if (filter === "Hour") {
+                // "2026-02-14 14:00" -> label: "2:00 PM", fullDate: "2:00 PM - Feb 14, 2026"
+                const dateObj = new Date(item.date);
+                const formattedDate = dateObj.toLocaleTimeString("en-US", { hour: "numeric", hour12: true });
+                const fullDate = `${formattedDate} - ${dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+                return { ...item, date: formattedDate, fullDate };
+            } else if (filter === "Month") {
+                // "2026-02" -> "Feb 2026"
+                const dateObj = new Date(`${item.date}-01T00:00:00Z`);
+                const formattedDate = dateObj.toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+                return { ...item, date: formattedDate, fullDate: formattedDate };
+            } else {
+                const dateObj = new Date(item.date);
+                const formattedDate = dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                return { ...item, date: formattedDate };
+            }
         });
 
         res.status(200).json(formattedData);

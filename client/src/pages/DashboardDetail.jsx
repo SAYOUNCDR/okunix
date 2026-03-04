@@ -50,6 +50,7 @@ const DashboardDetail = () => {
   const [loadingStats, setLoadingStats] = useState(true);
   const [chartData, setChartData] = useState([]);
   const [loadingChart, setLoadingChart] = useState(true);
+  const [chartFilter, setChartFilter] = useState("Day");
   const [website, setWebsite] = useState(null);
   const [timeRange, setTimeRange] = useState("Last 24 hours");
 
@@ -89,6 +90,15 @@ const DashboardDetail = () => {
   );
   const [loadingExtras, setLoadingExtras] = useState(true);
 
+  const chartOptions =
+    timeRange === "Last 3 months" ? ["Day", "Month"] : ["Day", "Hour"];
+
+  useEffect(() => {
+    if (!chartOptions.includes(chartFilter)) {
+      setChartFilter("Day");
+    }
+  }, [timeRange, chartOptions, chartFilter]);
+
   useEffect(() => {
     const mappedRange = getMappedRange(timeRange);
 
@@ -109,7 +119,11 @@ const DashboardDetail = () => {
       if (!websiteId) return;
       try {
         setLoadingChart(true);
-        const data = await getActivityChart(websiteId, mappedRange);
+        const data = await getActivityChart(
+          websiteId,
+          mappedRange,
+          chartFilter,
+        );
         setChartData(data);
       } catch (error) {
         // Error handled in service layer
@@ -159,7 +173,7 @@ const DashboardDetail = () => {
     fetchChartData();
     fetchExtras();
     fetchWebsiteDetail();
-  }, [websiteId, timeRange]);
+  }, [websiteId, timeRange, chartFilter]);
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-geist">
       <Sidebar />
@@ -304,15 +318,26 @@ const DashboardDetail = () => {
           <div className="mt-6 sm:mt-8 bg-white p-4 sm:p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Activity</h3>
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <ChartFilter />
-              </div>
+              {timeRange !== "Last 24 hours" && (
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <ChartFilter
+                    value={chartFilter}
+                    onChange={setChartFilter}
+                    options={chartOptions}
+                  />
+                </div>
+              )}
             </div>
             <div className="h-64 sm:h-80 w-full flex items-center justify-center">
               {loadingChart ? (
                 <p className="text-gray-500">Loading chart...</p>
               ) : chartData.length > 0 ? (
-                <BarChart data={chartData} />
+                <BarChart
+                  data={chartData}
+                  filterType={
+                    timeRange === "Last 24 hours" ? "Hour" : chartFilter
+                  }
+                />
               ) : (
                 <p className="text-gray-500">
                   No activity data for the last 7 days.
