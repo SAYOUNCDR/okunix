@@ -276,7 +276,7 @@ const WebsiteSetting = () => {
 
           <div></div>
 
-          <div className="mt-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+          <div className="my-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h3 className="text-red-600">Danger Zone</h3>
             <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t border-gray-50 pt-4">
               <div>

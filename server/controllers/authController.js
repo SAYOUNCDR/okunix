@@ -7,9 +7,16 @@ const crypto = require("crypto");
 const sanitize = require("mongo-sanitize");
 const { userSchema, loginSchema } = require("../config/zod");
 const sendEmail = require("../lib/email");
-const { getVerificationEmailTemplate, getResetPasswordEmailTemplate } = require("../lib/emailTemplates");
+const {
+  getVerificationEmailTemplate,
+  getResetPasswordEmailTemplate,
+} = require("../lib/emailTemplates");
 const { getEmailVerifiedPage, getErrorPage } = require("../lib/htmlPages");
-const { generateAccessToken, generateRefreshToken, generateEmailVerificationToken } = require("../lib/token");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  generateEmailVerificationToken,
+} = require("../lib/token");
 
 function getAppUrl() {
   if (process.env.NODE_ENV === "development") {
@@ -23,10 +30,14 @@ function getFrontendUrl(req) {
   let frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 
   // Allowed dynamic domains
-  const allowedDomains = ["https://okunix.tech", "https://okunix.sayoun.studio", "http://localhost:5173"];
+  const allowedDomains = [
+    "https://okunix.tech",
+    "https://okunix.sayoun.studio",
+    "http://localhost:5173",
+  ];
 
-  if (origin && allowedDomains.some(domain => origin.startsWith(domain))) {
-    frontendUrl = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+  if (origin && allowedDomains.some((domain) => origin.startsWith(domain))) {
+    frontendUrl = origin.endsWith("/") ? origin.slice(0, -1) : origin;
   }
   return frontendUrl;
 }
@@ -96,6 +107,12 @@ exports.verifyEmail = async (req, res) => {
     return res.status(400).send(getErrorPage("Verification token is missing"));
   }
 
+  // Determine frontend URL for redirection
+  const isProduction = process.env.NODE_ENV === "production";
+  const frontendRedirectUrl =
+    process.env.FRONTEND_URL ||
+    (isProduction ? "https://okunix.tech" : "http://localhost:5173");
+
   try {
     const payload = jwt.verify(token, process.env.EMAIL_VERIFICATION_SECRET);
 
@@ -107,12 +124,8 @@ exports.verifyEmail = async (req, res) => {
     }
 
     if (user.isEmailVerified) {
-      // If already verified, still show success page but maybe just redirect immediately
-      return res.send(
-        getEmailVerifiedPage(
-          process.env.FRONTEND_URL || "http://localhost:5173",
-        ),
-      );
+      // If already verified, still show success page
+      return res.send(getEmailVerifiedPage(frontendRedirectUrl));
     }
 
     user.isEmailVerified = true;
@@ -120,9 +133,7 @@ exports.verifyEmail = async (req, res) => {
 
     // Redirect to frontend dashboard or login page
     // We send a nice HTML page that does the redirect via JS/Meta refresh
-    res.send(
-      getEmailVerifiedPage(process.env.FRONTEND_URL || "http://localhost:5173"),
-    );
+    res.send(getEmailVerifiedPage(frontendRedirectUrl));
   } catch (error) {
     res
       .status(500)
@@ -307,7 +318,6 @@ exports.deleteAccount = async (req, res) => {
   }
 };
 
-
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
@@ -315,7 +325,8 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(404).json({
-        message: "If an account with this email exists, we'll send you a link to reset your password."
+        message:
+          "If an account with this email exists, we'll send you a link to reset your password.",
       });
     }
 
@@ -334,12 +345,11 @@ exports.forgotPassword = async (req, res) => {
     await sendEmail(email, "Reset your password - Okunix", emailTemplate);
 
     res.status(200).json({ message: "Password reset link sent successfully" });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 exports.resetPassword = async (req, res) => {
   try {
@@ -349,7 +359,10 @@ exports.resetPassword = async (req, res) => {
     }
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-    const user = await User.findOne({ resetPasswordToken: hashedToken, resetPasswordExpires: { $gt: Date.now() } });
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
     if (!user) {
       return res.status(400).json({ message: "Invalid or expired token" });
     }
@@ -363,12 +376,11 @@ exports.resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: "Password reset successfully" });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 exports.changeEmail = async (req, res) => {
   try {
@@ -392,12 +404,16 @@ exports.changeEmail = async (req, res) => {
     const normalizedEmail = newEmail.toLowerCase();
 
     if (normalizedEmail === user.email) {
-      return res.status(400).json({ message: "New email must be different from current email" });
+      return res
+        .status(400)
+        .json({ message: "New email must be different from current email" });
     }
 
     const emailExists = await User.findOne({ email: normalizedEmail });
     if (emailExists) {
-      return res.status(400).json({ message: "Email is already in use by another account" });
+      return res
+        .status(400)
+        .json({ message: "Email is already in use by another account" });
     }
 
     user.email = normalizedEmail;
@@ -413,7 +429,11 @@ exports.changeEmail = async (req, res) => {
     const verifyUrl = `${getAppUrl()}/api/auth/verify-email?token=${verificationToken}`;
     const emailTemplate = getVerificationEmailTemplate(verifyUrl);
 
-    await sendEmail(normalizedEmail, "Verify your new email - Okunix", emailTemplate);
+    await sendEmail(
+      normalizedEmail,
+      "Verify your new email - Okunix",
+      emailTemplate,
+    );
 
     // Clear the current session cookies since the token version changed
     const isProduction = process.env.NODE_ENV === "production";
@@ -424,12 +444,12 @@ exports.changeEmail = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Email changed successfully. Please verify your new email and log in again.",
-      requireLogout: true
+      message:
+        "Email changed successfully. Please verify your new email and log in again.",
+      requireLogout: true,
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
