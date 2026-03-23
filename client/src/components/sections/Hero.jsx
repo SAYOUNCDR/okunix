@@ -12,13 +12,13 @@ const Hero = () => {
       <div className="w-full lg:w-[45%] text-center lg:text-left z-20  shrink-0 pointer-events-none">
         <div className="pointer-events-auto">
           <h1 className="text-4xl md:text-4xl font-extrabold text-gray-900 mb-12 leading-[1.1] tracking-tight">
-            Privacy-focused <br />
-            Analytics. Made simple.
+            Simple Analytics. <br />
+            Zero Compromise.
           </h1>
           <p className="text-lg md:text-md text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            Track your website traffic without compromise.{" "}
+            Track essential metrics without invading privacy.{" "}
             <br className="hidden md:block" />
-            No GDPR banners, just pure insights.
+            No banners. No noise. Just insights.
           </p>
 
           <div className="flex flex-row gap-4 justify-center lg:justify-start">

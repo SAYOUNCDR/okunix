@@ -9,9 +9,10 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { register, login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   // Password Validation Checkers
@@ -33,11 +34,8 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
     try {
       await register(name, email, password);
-      // Automatically login after registration or show message to check email
-      // For now, let's assume auto-login or redirect to login
-      await login(email, password);
-      onClose();
-      navigate("/dashboard");
+      setSuccess(true);
+      // Wait a moment so user can read success message? Or show success UI instead of form
     } catch (err) {
       // Check if it's a Zod validation error with field-level details
       if (err.response?.data?.error?.fieldErrors?.password) {
@@ -57,8 +55,64 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     }
   };
 
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setError("");
+    setSuccess(false);
+    setLoading(false);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  if (success) {
+    return (
+      <Modal isOpen={isOpen} onClose={handleClose} title="Check your email">
+        <div className="text-center py-6">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-green-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Verification link sent!
+          </h3>
+          <p className="text-gray-600 mb-6">
+            We've sent a verification link to{" "}
+            <span className="font-medium text-gray-900">{email}</span>. Please
+            check your inbox to activate your account.
+          </p>
+          <Button
+            variant="primary"
+            className="w-full"
+            onClick={() => {
+              handleClose();
+              onSwitchToLogin?.();
+            }}
+          >
+            Back to Login
+          </Button>
+        </div>
+      </Modal>
+    );
+  }
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create an account">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Create an account">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
           <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md">
@@ -76,6 +130,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="User name"
             required
+            disabled={loading}
           />
         </div>
 
@@ -90,6 +145,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
             placeholder="you@example.com"
             required
+            disabled={loading}
           />
         </div>
 
@@ -105,6 +161,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             placeholder="Min 6 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char"
             required
             minLength={6}
+            disabled={loading}
           />
 
           {password.length > 0 && (
@@ -157,7 +214,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           By creating an account, you agree to our{" "}
           <Link
             to="/terms"
-            onClick={onClose}
+            onClick={handleClose}
             className="text-orange-600 hover:text-orange-700"
           >
             Terms of Service
@@ -165,7 +222,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           and{" "}
           <Link
             to="/privacy"
-            onClick={onClose}
+            onClick={handleClose}
             className="text-orange-600 hover:text-orange-700"
           >
             Privacy Policy
@@ -173,8 +230,14 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           .
         </div>
 
-        <Button type="submit" variant="primary" className="w-full mt-2">
-          Create Account
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full mt-2"
+          loading={loading}
+          disabled={loading}
+        >
+          {loading ? "Creating Account..." : "Create Account"}
         </Button>
 
         <p className="text-center text-sm text-gray-600 mt-4">
@@ -182,7 +245,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           <button
             type="button"
             onClick={() => {
-              onClose();
+              handleClose();
               onSwitchToLogin?.();
             }}
             className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"
