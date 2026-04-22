@@ -1,11 +1,16 @@
 <div align="center">
   <h1>Okunix Analytics</h1>
   <p>A lightweight, privacy-focused analytics engine built for modern web applications.</p>
-  
-  <a href="https://okunix.tech">Website Link 1</a> •
-  <a href="https://okunix.sayoun.studio">Website Link 2</a> •
-  <a href="https://github.com/SAYOUNCDR/okunix">GitHub Repository</a> •
-  <a href="./API.md">API Reference</a>
+
+<a href="https://okunix.tech">Website Link 1</a> •
+<a href="https://okunix.sayoun.studio">Website Link 2</a> •
+<a href="https://github.com/SAYOUNCDR/okunix">GitHub Repository</a> •
+<a href="./API.md">API Reference</a>
+
+</div>
+
+<div align="center">
+  <img src="./client/public/Okunix.webp" alt="Okunix Analytics Dashboard" width="800" />
 </div>
 
 <br />
